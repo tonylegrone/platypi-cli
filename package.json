@@ -1,0 +1,28 @@
+{
+    "name": "platypi-cli",
+    "version": "0.0.1",
+    "description": "A command line interface for working with PlatypusTS projects.",
+    "author": "Donald Jones <donald@getplatypi.com>",
+    "homepage": "http://getplatypi.com",
+    "main": "cli.js",
+    "preferGlobal": true,
+    "scripts": { },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Platypi/platypi-cli.git"
+    },
+    "keywords": [
+        "platypi",
+        "platypusts",
+        "typescript",
+        "framework"
+    ],
+    "license": "GPL v3.0",
+    "bugs": {
+        "url": "https://github.com/Platypi/platypi-cli/issues"
+    },
+    "dependencies": {
+        "cmd-colors": "latest",
+        "simple-progress-bar": "latest"
+    }
+}
