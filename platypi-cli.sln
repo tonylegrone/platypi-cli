@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "platypi-cli", "platypi-cli\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{723AB3FA-B1C8-4F1B-9A72-366EF5871BCB}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		package.json = package.json
 	EndProjectSection
 EndProject
