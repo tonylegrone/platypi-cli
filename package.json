@@ -4,7 +4,7 @@
     "description": "A command line interface for working with PlatypusTS projects.",
     "author": "Donald Jones <donald@getplatypi.com>",
     "homepage": "http://getplatypi.com",
-    "main": "cli.js",
+    "main": "platypi.js",
     "preferGlobal": true,
     "scripts": { },
     "repository": {
@@ -22,7 +22,15 @@
         "url": "https://github.com/Platypi/platypi-cli/issues"
     },
     "dependencies": {
+        "commander": "latest",
         "cmd-colors": "latest",
         "simple-progress-bar": "latest"
+    },
+    "devDependencies": {
+        "tsd": "latest",
+        "grunt":  "latest",
+        "grunt-shell": "latest",
+        "grunt-tslint": "latest",
+        "grunt-typescript": "latest"
     }
 }
