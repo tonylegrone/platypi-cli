@@ -1,6 +1,4 @@
-﻿import util = require('util');
-
-var colors = require('cmd-colors');
+﻿var colors = require('cmd-colors');
 
 export var label = (labelMsg: string) => {
     var labelColor = new colors().magentaBright;
