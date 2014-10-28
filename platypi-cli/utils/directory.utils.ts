@@ -18,8 +18,8 @@ export var dirToArray = (directory?: string): Array<string> => {
 export var upOneLevel = (directory?: string): string => {
     var c: Array<string> = dirToArray(directory);
 
-    if (c.length > 1) {
-        c.slice(0, c.length - 1);
+    if (c.length > 0) {
+        c = c.slice(0, c.length - 1);
     }
 
     return c.join(path.sep);
