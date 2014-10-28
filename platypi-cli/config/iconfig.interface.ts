@@ -11,11 +11,11 @@
         public?: string;
         cordova?: string;
         viewcontrols?: Array<IViewControl>;
-        injectables: Array<IInjectable>;
-        services: Array<IService>;
-        models: Array<IModel>;
-        templatecontrols: Array<ITemplateControl>;
-        attributecontrols: Array<IAttributeControl>;
+        injectables?: Array<IInjectable>;
+        services?: Array<IService>;
+        models?: Array<IModel>;
+        templatecontrols?: Array<ITemplateControl>;
+        attributecontrols?: Array<IAttributeControl>;
     }
 
     export interface IViewControl {
