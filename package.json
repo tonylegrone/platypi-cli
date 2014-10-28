@@ -24,7 +24,8 @@
     "dependencies": {
         "commander": "latest",
         "cmd-colors": "latest",
-        "simple-progress-bar": "latest"
+        "simple-progress-bar": "latest",
+        "prompt": "latest"
     },
     "devDependencies": {
         "tsd": "latest",
