@@ -3,8 +3,11 @@
 import commander = require('commander');
 import msg = require('./helpers/msg.helper');
 import configfinder = require('./config/config.finder');
+import configGenerator = require('./generators/platypiconfig.generator');
+import promises = require('es6-promise');
 
 var package = require('../package.json'),
+    Promise = promises.Promise,
     prompt = require('prompt'),
     progressbar = require('simple-progress-bar'),
     controlTypes = ['viewcontrol', 'injectable', 'repository', 'service', 'model', 'templatecontrol', 'attributecontrol'],
@@ -47,4 +50,7 @@ msg.log('Version ' + package.version);
 msg.log('Now entering interactive project generation...');
 
 // use prompt to fill in platypi.json properties
-
+configGenerator().then((config) => {
+    platypiConfig = config;
+    msg.log('Config file created, generating project structure...');
+});
