@@ -25,7 +25,8 @@
         "commander": "latest",
         "cmd-colors": "latest",
         "simple-progress-bar": "latest",
-        "prompt": "latest"
+        "prompt": "latest",
+        "es6-promise": "latest"
     },
     "devDependencies": {
         "tsd": "latest",
