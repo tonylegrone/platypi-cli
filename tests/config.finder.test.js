@@ -1,6 +1,6 @@
 var should = require('should'),
     finder = require('../platypi-cli/config/config.finder'),
-    fs = require('fs');;
+    fs = require('fs');
 
 describe('finder', function () {
     it('should be a function', function () {
