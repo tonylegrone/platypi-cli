@@ -32,6 +32,9 @@
         "grunt":  "latest",
         "grunt-shell": "latest",
         "grunt-tslint": "latest",
-        "grunt-typescript": "latest"
+        "grunt-typescript": "latest",
+        "grunt-simple-mocha": "latest",
+        "should":  "latest",
+        "mocha":  "latest"
     }
 }
