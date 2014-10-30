@@ -8,15 +8,18 @@ describe('finder', function () {
     });
 
     describe('no config', function () {
-        it('should throw an exception', function () {
-            finder().then(function (config) {
-                // success
+        var error = null;
 
-                done();
+        before(function (done) {
+            finder().then(function () {
             }, function (err) {
-                throw err;
+                error = err;
                 done();
-            }).should.throw();
+            });
+        });
+
+        it('should reject promise', function () {
+            should.exist(error);
         });
     });
 
@@ -26,26 +29,43 @@ describe('finder', function () {
             type: 'mobile',
             author: 'Donald Jones'
         },
-            exists = false;
+            exists = false,
+            error = null;
 
         before(function (done) {
             // anti-pattern, but necessary to preserve user created json
-            if (!fs.existsSync('platypi.json')) {
+            fs.exists('platypi.json', function (exist) {
+                if (exist) {
+                    exists = true;
+                    finder().then(function (c) {
+                        console.log(c);
+                        done();
+                    }, function (err) {
+                        error = err;
+                        done();
+                    });
+                    done();
+                    return;
+                }
+
                 fs.writeFile('platypi.json', JSON.stringify(config), function (err) {
                     if (err) {
                         console.log(err);
                     }
-                    done();
+                    fs.exists('platypi.json', function (exist2) {
+                        finder().then(function (c) {
+                            done();
+                        }, function (err) {
+                            error = err;
+                            done();
+                        });
+                    });
                 });
-            } else {
-                exists = true;
-            }
+            });
         });
 
-        it('should not throw an exception', function () {
-            (function () {
-                finder();
-            }).should.not.throw();
+        it('should not reject promise', function () {
+            should.not.exist(error);
         });
 
         after(function () {
@@ -56,38 +76,50 @@ describe('finder', function () {
     });
 
     describe('with config in parent (recursive search)', function () {
-        // anti-pattern, but necessary to preserve user created json
-        if (!fs.existsSync('../platypi.json')) {
-            var config = {
+        var exists = false,
+            config = {
                 name: 'project',
                 type: 'mobile',
                 author: 'Donald Jones'
-            };
+            },
+            error = null,
+            found = null;
 
-            before(function (done) {
+
+        before(function (done) {
+            // anti-pattern, but necessary to preserve user created json
+            fs.exists('../platypi.json', function (exist) {
+                if (exist) {
+                    exists = true;
+                    done();
+                    return;
+                }
+
                 fs.writeFile('../platypi.json', JSON.stringify(config), function (err) {
                     if (err) {
                         console.log(err);
                     }
-                    done();
+                    fs.exists('../platypi.json', function (exist2) {
+                        console.log('wrote to: ' + path.resolve('../'));
+                        finder().then(function () {
+                            done();
+                        }, function (err) {
+                            error = err;
+                            done();
+                        });
+                    });
                 });
             });
+        });
 
-            it('should not throw an exception', function () {
-                (function () {
-                    finder();
-                }).should.not.throw();
-            });
+        it('should not reject promise', function () {
+            should.not.exist(error);
+        });
 
-            after(function () {
+        after(function () {
+            if (!exists) {
                 fs.unlink('../platypi.json');
-            });
-        } else {
-            it('should not throw an exception', function () {
-                (function () {
-                    finder();
-                }).should.not.throw();
-            });
-        }
+            }
+        });
     });
 });
