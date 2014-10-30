@@ -19,14 +19,10 @@ export var dirToArray = (directory?: string): Array<string> => {
 /*
  * Returns the directory level above the current working directory as a string.
  */
-export var upOneLevel = (directory?: string): string => {
-    var c: Array<string> = dirToArray(directory);
+export var upOneLevel = (directory: string = process.cwd()): string => {
+    var upOne = path.resolve(directory, '../');
 
-    if (c.length > 0) {
-        c = c.slice(0, c.length - 1);
-    }
-
-    return c.join(path.sep);
+    return upOne;
 };
 
 /*
