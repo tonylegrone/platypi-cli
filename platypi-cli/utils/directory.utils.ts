@@ -1,4 +1,8 @@
 ﻿import path = require('path');
+import fs = require('fs');
+import promises = require('es6-promise');
+
+var Promise = promises.Promise;
 
 /*
  * Returns the current working directory as an array of strings in order.
@@ -23,4 +27,19 @@ export var upOneLevel = (directory?: string): string => {
     }
 
     return c.join(path.sep);
+};
+
+/*
+ * Returns the appdata path relative to the host OS
+ */
+export var appDataDir = (): Thenable<string> => {
+    return new Promise((resolve, reject) => {
+        var appdata = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + 'Library/Preference' : '/var/local');
+
+        appdata = appdata + '/platypi-cli';
+
+        fs.mkdir(appdata, (err) => {
+            resolve(appdata);
+        });
+    });
 };
