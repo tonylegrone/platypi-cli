@@ -26,6 +26,17 @@ describe('directory utils', function () {
             var parent = path.resolve('../');
             directory.upOneLevel().should.eql(parent);
         });
+
+        it('should go all the way to root', function () {
+            var current = path.resolve('.'),
+                root = path.resolve('/');
+
+            while (path.relative(current, '/') !== '') {
+                current = directory.upOneLevel(current);
+            }
+
+            current.should.equal(root);
+        });
     });
 
     describe('appDataDir', function () {
