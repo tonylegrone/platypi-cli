@@ -9,8 +9,13 @@ describe('finder', function () {
 
     describe('no config', function () {
         it('should throw an exception', function () {
-            (function () {
-                finder();
+            finder().then(function (config) {
+                // success
+
+                done();
+            }, function (err) {
+                throw err;
+                done();
             }).should.throw();
         });
     });
@@ -20,15 +25,21 @@ describe('finder', function () {
             name: 'project',
             type: 'mobile',
             author: 'Donald Jones'
-        };
+        },
+            exists = false;
 
         before(function (done) {
-            fs.writeFile('platypi.json', JSON.stringify(config), function (err) {
-                if (err) {
-                    console.log(err);
-                }
-                done();
-            });
+            // anti-pattern, but necessary to preserve user created json
+            if (!fs.existsSync('platypi.json')) {
+                fs.writeFile('platypi.json', JSON.stringify(config), function (err) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    done();
+                });
+            } else {
+                exists = true;
+            }
         });
 
         it('should not throw an exception', function () {
@@ -38,7 +49,9 @@ describe('finder', function () {
         });
 
         after(function () {
-            fs.unlink('platypi.json');
+            if (!exists) {
+                fs.unlink('platypi.json');
+            }
         });
     });
 
