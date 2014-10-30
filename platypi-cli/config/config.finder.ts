@@ -1,43 +1,44 @@
 ﻿/// <reference path="../_references.d.ts" />
 
 import path = require('path');
+import fs = require('fs');
 import utils = require('../utils/directory.utils');
 import validator = require('./config.validator');
+import promises = require('es6-promise');
 
-var cwd = process.cwd();
+var cwd = process.cwd(),
+    Promise = promises.Promise;
 
-var findConfig = (name = 'platypi.json'): config.IPlatypi => {
-    var platypi: config.IPlatypi = null;
-
-    try {
-        platypi = require('platypi.json');
-    } catch (e) {
-        platypi = lookUpForConfig(name, cwd);
-    }
-
-    return platypi;
+var findConfig = (name = 'platypi.json'): Thenable<config.IPlatypi> => {
+    return lookUpForConfig(name, cwd);
 };
 
-var lookUpForConfig = (name: string, currentDirectory: string): config.IPlatypi => {
-    if (currentDirectory && currentDirectory !== '') {
-        currentDirectory = path.normalize(currentDirectory);
+var lookUpForConfig = (name: string, currentDirectory: string): Thenable<config.IPlatypi> => {
+    return new Promise((resolve, reject) => {
+        if (currentDirectory && currentDirectory !== '') {
+            currentDirectory = path.normalize(currentDirectory);
 
-        var config = null;
+            var config = null;
 
-        try {
-            config = require(path.join(currentDirectory, name));
-        } catch (e) {
+            fs.readFile(path.join(currentDirectory, name), 'utf8', (err, data) => {
+                if (err) {
+                    reject(err);
+                }
 
+                if (data) {
+                    config = JSON.parse(data);
+                }
+
+                if (config && validator(config)) {
+                    resolve(config);
+                }
+
+                lookUpForConfig(name, utils.upOneLevel(currentDirectory));
+            });
+        } else {
+            reject('Valid Platypi.json not found.');
         }
-
-        if (config && validator(config)) {
-            return config;
-        }
-
-        lookUpForConfig(name, utils.upOneLevel(currentDirectory));
-    } else {
-        throw new Error('Valid Platypi.json not found.');
-    }
+    });
 };
 
 export = findConfig; 

@@ -13,12 +13,6 @@ var package = require('../package.json'),
     controlTypes = ['viewcontrol', 'injectable', 'repository', 'service', 'model', 'templatecontrol', 'attributecontrol'],
     platypiConfig: config.IPlatypi = null;
 
-try {
-    platypiConfig = configfinder();
-} catch (e) {
-    
-}
-
 commander
     .version(package.version)
     .usage('[command] [parameters..]')
@@ -32,7 +26,13 @@ commander
     .command('add <type> [name] [registered name]')
     .description('Add a new control to your project. Types: [' + controlTypes.reduce((a, b) => { return a + ', ' + b; }) + ']')
     .action((type, name, registeredname) => {
-        process.exit(0);
+        configfinder().then((config) => {
+            platypiConfig = config;
+            process.exit(0);
+        }, (err) => {
+            msg.error(err);
+            process.exit(1);
+        });
     });
 
 commander.parse(process.argv);
