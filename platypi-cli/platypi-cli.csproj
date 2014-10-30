@@ -47,7 +47,7 @@
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
-    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
+    <TypeScriptModuleKind>commonjs</TypeScriptModuleKind>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptTarget>ES5</TypeScriptTarget>
@@ -55,5 +55,21 @@
     <TypeScriptSourceMap>false</TypeScriptSourceMap>
     <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
   </PropertyGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="config\config.finder.ts" />
+    <TypeScriptCompile Include="config\config.validator.ts" />
+    <TypeScriptCompile Include="config\iconfig.interface.ts" />
+    <TypeScriptCompile Include="generators\platypiconfig.generator.ts" />
+    <TypeScriptCompile Include="helpers\github.helper.ts" />
+    <TypeScriptCompile Include="helpers\msg.helper.ts" />
+    <TypeScriptCompile Include="platypi.ts" />
+    <TypeScriptCompile Include="typings\commander\commander.d.ts" />
+    <TypeScriptCompile Include="typings\es6-promise\es6-promise.d.ts" />
+    <TypeScriptCompile Include="typings\node\node.d.ts" />
+    <TypeScriptCompile Include="typings\tsd.d.ts" />
+    <TypeScriptCompile Include="utils\directory.utils.ts" />
+    <TypeScriptCompile Include="_references.d.ts" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets')" />
 </Project>
