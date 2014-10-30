@@ -56,6 +56,7 @@ describe('finder', function () {
     });
 
     describe('with config in parent (recursive search)', function () {
+        // anti-pattern, but necessary to preserve user created json
         if (!fs.existsSync('../platypi.json')) {
             var config = {
                 name: 'project',
