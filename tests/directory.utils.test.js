@@ -27,4 +27,18 @@ describe('directory utils', function () {
             directory.upOneLevel().should.eql(parent);
         });
     });
+
+    describe('appDataDir', function () {
+        var dirPath = '';
+        before(function () {
+            directory.appDataDir().then(function (path) {
+                dirPath = path;
+                done();
+            });
+        });
+
+        it('should create an app dir in the OS appdata dir', function () {
+            dirPath.should.not.equal('');
+        });
+    });
 });

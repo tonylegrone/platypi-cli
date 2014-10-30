@@ -2,7 +2,8 @@ var should = require('should'),
     fs = require('fs'),
     http = require('https'),
     package = require('../package.json'),
-    helper = require('../platypi-cli/helpers/github.helper').helper;
+    helper = require('../platypi-cli/helpers/github.helper').helper,
+    directory = require('../platypi-cli/utils/directory.utils');
 
 describe('github helper', function () {
     it('should be an object', function () {
@@ -30,21 +31,27 @@ describe('github helper', function () {
     });
 
     describe('downloadRepo', function () {
+        var appPath = '';
         before(function (done) {
-            helper.downloadRepo().then(function () {
-                done();
+            directory.appDataDir().then(function (path) {
+                appPath = path;
+                fs.unlink(appPath + '/cache/' + package.version + '.tar.gz');
+                helper.downloadRepo(appPath).then(function () {
+                    done();
+                });
             });
         });
 
         it('should create a cache dir', function () {
-            fs.stat('../cache/', function (err, stats) {
+            fs.stat(appPath + '/cache/', function (err, stats) {
+                appPath.should.not.equal('');
                 stats.should.be.an.Object;
                 stats.isDirectory().should.be.true;
             });
         });
 
         it('should download an archive of templates', function () {
-            fs.stat('../cache/' + package.version + '.tar.gz', function (err, stats) {
+            fs.stat(appPath + '/cache/' + package.version + '.tar.gz', function (err, stats) {
                 stats.should.be.an.Object;
                 stats.isFile().should.be.true;
             });            
