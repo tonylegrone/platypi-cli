@@ -2,10 +2,10 @@ var should = require('should') // jshint ignore:line
     , fs = require('fs')
     , http = require('https')
     , package = require('../package.json')
-    , helper = require('../platypi-cli/helpers/github.helper').helper
+    , helper = require('../platypi-cli/helpers/template.helper').helper
     , directory = require('../platypi-cli/utils/directory.utils');
 
-describe('github helper', function () {
+describe('template helper', function () {
     it('should be an object', function () {
         helper.should.be.an.Object;
     });

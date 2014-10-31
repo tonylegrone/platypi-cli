@@ -9,7 +9,7 @@ var package = require('../../package.json')
     , baseUrl = 'https://github.com/Platypi/platypi-cli-templates/archive/'
     , Promise = promises.Promise;
 
-export class GithubHelper {
+export class TemplateHelper {
     private __getUrl() {
         return util.format('%s%s%s', baseUrl, package.version, '.zip');
     }
@@ -44,4 +44,4 @@ export class GithubHelper {
     }
 }
 
-export var helper = new GithubHelper();
+export var helper = new TemplateHelper();
