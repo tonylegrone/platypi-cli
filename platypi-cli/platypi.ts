@@ -2,7 +2,7 @@
 
 import commander = require('commander');
 import msg = require('./helpers/msg.helper');
-import configfinder = require('./config/config.finder');
+import ConfigFinder = require('./config/config.finder');
 import configGenerator = require('./generators/platypiconfig.generator');
 import promises = require('es6-promise');
 
@@ -26,7 +26,8 @@ commander
     .command('add <type> [name] [registered name]')
     .description('Add a new control to your project. Types: [' + controlTypes.reduce((a, b) => { return a + ', ' + b; }) + ']')
     .action((type, name, registeredname) => {
-        configfinder().then((config) => {
+        var finder = new ConfigFinder();
+        finder.findConfig().then((config) => {
             platypiConfig = config;
             process.exit(0);
         }, (err) => {

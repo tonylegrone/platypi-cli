@@ -8,45 +8,50 @@ import promises = require('es6-promise');
 
 var cwd = process.cwd(),
     Promise = promises.Promise,
-    root = path.resolve('/'),
-    __currentDirectory = cwd,
-    __name = 'platypi.json',
-    __last = '',
-    __promises = [],
-    __found = false;
+    root = path.resolve('/');
 
-var findConfig = (name = __name, currentDirectory = cwd): Thenable<config.IPlatypi> => {
-    __last = '';
+class ConfigFinder {
     __promises = [];
-    __found = false;
-    while (currentDirectory !== root) {
-        __promises.push(readJson(name, currentDirectory));
-        currentDirectory = utils.upOneLevel(currentDirectory);
-        __last = currentDirectory;
+    __fns = [];
+    __last = '';
+
+    readJson(name: string, currentDirectory: string): Thenable<any> {
+        return new Promise((resolve, reject) => {
+            fs.readFile(path.join(currentDirectory, name), 'utf8', (err, data) => {
+                if (data) {
+                    resolve(JSON.parse(data));
+                } 
+
+                resolve();
+            });
+        });
     }
 
-    return Promise.all(__promises).then((results) => {
-        return results[0];
-    });
-};
-
-var readJson = (name: string, currentDirectory: string) => {
-    if (currentDirectory === __last) {
-        if (__found) {
-            return Promise.resolve();
+    findConfig(name = 'platypi.json', currentDirectory = cwd): Thenable<config.IPlatypi> {
+        while (currentDirectory !== root) {
+            // console.log(currentDirectory);
+            this.__promises.push(this.readJson.bind(this, name, currentDirectory));
+            this.__last = currentDirectory;
+            currentDirectory = utils.upOneLevel(currentDirectory);
         }
-        return Promise.reject('No file found');
-    }
-    fs.readFile(path.join(currentDirectory, name), 'utf8', lookUpForConfig);
-};
 
-var lookUpForConfig = (err, data) => {
-    if (data) {
-        __found = true;
-        return Promise.resolve(JSON.parse(data));
-    }
+        this.__promises.forEach((v, i, a) => {
+            this.__fns.push(v());
+        });
 
-    return Promise.resolve();
-};
+        return Promise.all(this.__fns).then((results) => {
+            var filtered = results.filter((value, index, array) => {
+                return (value !== undefined);
+            });
 
-export = findConfig; 
+            if (filtered.length < 1) {
+                return Promise.reject('Not found.');
+            }
+
+            return Promise.resolve(filtered[0]);
+        });
+
+    }    
+}
+
+export = ConfigFinder;
