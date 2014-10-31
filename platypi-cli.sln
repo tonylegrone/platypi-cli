@@ -1,14 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+# Visual Studio Express 2013 for Web
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "platypi-cli", "platypi-cli\platypi-cli.csproj", "{81B0F21A-464B-429F-B904-F6782C2BDE3C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{723AB3FA-B1C8-4F1B-9A72-366EF5871BCB}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		Gruntfile.js = Gruntfile.js
+		jshint.json = jshint.json
 		package.json = package.json
+		platypi-cli\tsd.json = platypi-cli\tsd.json
+		tslint.json = tslint.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A4787835-84F9-4422-A57A-9D1394561FB0}"
