@@ -30,7 +30,7 @@ export var upOneLevel = (directory: string = process.cwd()): string => {
  */
 export var appDataDir = (): Thenable<string> => {
     return new Promise((resolve, reject) => {
-        var appdata = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + 'Library/Preference' : '/var/local');
+        var appdata = process.env.APPDATA || (process.platform === 'darwin' ? process.env.HOME + 'Library/Preference' : '/var/local');
 
         appdata = appdata + '/platypi-cli';
 

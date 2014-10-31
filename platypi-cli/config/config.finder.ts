@@ -16,7 +16,7 @@ class ConfigFinder {
             fs.readFile(path.join(currentDirectory, name), 'utf8', (err, data) => {
                 if (data) {
                     resolve(JSON.parse(data));
-                } 
+                }
 
                 resolve();
             });
@@ -46,7 +46,7 @@ class ConfigFinder {
 
             return Promise.resolve(filtered[0]);
         });
-    }    
+    }
 }
 
 export = ConfigFinder;
