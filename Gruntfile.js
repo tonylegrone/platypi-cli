@@ -18,7 +18,7 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json')
         , shell: {
             tsd: {
-                command: path.normalize('./node_modules/.bin/tsd') + ' update -so --config tsd.json'
+                command: path.normalize('./node_modules/.bin/tsd') + ' update -so --config ./platypi-cli/tsd.json'
             }
         }
         , tslint: {

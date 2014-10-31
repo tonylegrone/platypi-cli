@@ -1,42 +1,43 @@
 {
-    "name": "platypi-cli",
-    "version": "0.0.1",
-    "description": "A command line interface for working with PlatypusTS projects.",
-    "author": "Donald Jones <donald@getplatypi.com>",
-    "homepage": "http://getplatypi.com",
-    "main": "platypi.js",
-    "preferGlobal": true,
-    "scripts": { },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Platypi/platypi-cli.git"
-    },
-    "keywords": [
-        "platypi",
-        "platypusts",
-        "typescript",
-        "framework"
-    ],
-    "license": "GPL v3.0",
-    "bugs": {
-        "url": "https://github.com/Platypi/platypi-cli/issues"
-    },
-    "dependencies": {
-        "commander": "latest",
-        "cmd-colors": "latest",
-        "simple-progress-bar": "latest",
-        "prompt": "latest",
-        "es6-promise": "latest"
-    },
-    "devDependencies": {
-        "tsd": "latest",
-        "grunt":  "latest",
-        "grunt-shell": "latest",
-        "grunt-tslint": "latest",
-        "grunt-typescript": "latest",
-        "grunt-mocha-test": "latest",
-        "grunt-contrib-jshint": "latest",
-        "should":  "latest",
-        "mocha":  "latest"
-    }
+  "name": "platypi-cli",
+  "version": "0.0.1",
+  "description": "A command line interface for working with PlatypusTS projects.",
+  "author": "Donald Jones <donald@getplatypi.com>",
+  "homepage": "http://getplatypi.com",
+  "main": "platypi.js",
+  "preferGlobal": true,
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Platypi/platypi-cli.git"
+  },
+  "keywords": [
+    "platypi",
+    "platypusts",
+    "typescript",
+    "framework"
+  ],
+  "license": "GPL v3.0",
+  "bugs": {
+    "url": "https://github.com/Platypi/platypi-cli/issues"
+  },
+  "dependencies": {
+    "cmd-colors": "0.1.3",
+    "commander": "2.5.0",
+    "es6-promise": "2.0.0",
+    "prompt": "0.2.14",
+    "simple-progress-bar": "0.3.6",
+    "tar-fs": "1.2.0"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-mocha-test": "^0.12.2",
+    "grunt-shell": "^1.1.1",
+    "grunt-tslint": "^0.4.4",
+    "grunt-typescript": "^0.3.8",
+    "mocha": "^2.0.1",
+    "should": "^4.1.0",
+    "tsd": "^0.6.0-beta.3"
+  }
 }
