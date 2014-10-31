@@ -19,7 +19,7 @@ class BaseService {
                 };
 
             if (authtoken) {
-                httpOptions.headers['Authorization'] = 'token ' + authtoken;
+                (<any>httpOptions.headers).Authorization = 'token ' + authtoken;
             }
 
             request.get(httpOptions, (err, res, body) => {
@@ -42,7 +42,7 @@ class BaseService {
                 };
 
             if (authtoken) {
-                httpOptions.headers['Authorization'] = 'token ' + authtoken;
+                (<any>httpOptions.headers).Authorization = 'token ' + authtoken;
             }
 
             request(url, httpOptions).pipe(fs.createWriteStream(savePath))

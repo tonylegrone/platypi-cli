@@ -1,11 +1,7 @@
 ﻿/// <reference path="../../_references.d.ts" />
 
-import request = require('request');
-import promises = require('es6-promise');
 import BaseService = require('../base.service');
 import util = require('util');
-
-var Promise = promises.Promise;
 
 class GithubService extends BaseService {
 
