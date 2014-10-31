@@ -68,7 +68,7 @@ describe('github helper', function () {
         });
 
         it('should download an archive of templates', function () {
-            fs.stat(appPath + '/cache/' + package.version + '.tar.gz', function (err, stats) {
+            fs.stat(appPath + '/cache/archives/' + package.version + '.tar.gz', function (err, stats) {
                 stats.should.be.an.Object;
                 stats.isFile().should.be.true;
             });            

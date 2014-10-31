@@ -16,8 +16,8 @@ export class GithubHelper {
 
     downloadRepo(path: string): Thenable<string> {
         return new Promise((resolve, reject) => {
-            fs.mkdir(path + '/cache', (err) => {
-                var filepath = util.format('%s%s%s', path + '/cache/', package.version, '.tar.gz');
+            fs.mkdir(path + '/cache/archives', (err) => {
+                var filepath = util.format('%s%s%s', path + '/cache/archives/', package.version, '.tar.gz');
                 http.get(this.__getUrl(), (res: any) => {
                     var data = '';
                     res.setEncoding('binary');
