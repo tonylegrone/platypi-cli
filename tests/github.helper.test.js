@@ -23,16 +23,16 @@ describe('github helper', function () {
     
     describe('_getUrl', function () {
         it('should be a function', function () {
-            helper._getUrl.should.be.a.Function;
+            helper.__getUrl.should.be.a.Function;
         });
 
         it('should return a url using the current cli version', function () {
-            helper._getUrl(package.version).should.containEql(package.version);
+            helper.__getUrl(package.version).should.containEql(package.version);
         });
 
         describe('the url', function () {
             it('should be valid & accessible for downloading templates', function () {
-                var url = helper._getUrl(package.version);
+                var url = helper.__getUrl(package.version);
 
                 http.get(url, function (res) {
                     res.statusCode.should.equal(302);

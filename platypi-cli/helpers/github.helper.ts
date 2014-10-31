@@ -10,7 +10,7 @@ var package = require('../../package.json')
     , Promise = promises.Promise;
 
 export class GithubHelper {
-    private _getUrl() {
+    private __getUrl() {
         return util.format('%s%s%s', baseUrl, package.version, '.tar.gz');
     }
 
@@ -18,7 +18,7 @@ export class GithubHelper {
         return new Promise((resolve, reject) => {
             fs.mkdir(path + '/cache', (err) => {
                 var filepath = util.format('%s%s%s', path + '/cache/', package.version, '.tar.gz');
-                http.get(this._getUrl(), (res: any) => {
+                http.get(this.__getUrl(), (res: any) => {
                     var data = '';
                     res.setEncoding('binary');
 
