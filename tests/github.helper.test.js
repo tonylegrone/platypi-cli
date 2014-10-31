@@ -1,13 +1,24 @@
-var should = require('should'),
-    fs = require('fs'),
-    http = require('https'),
-    package = require('../package.json'),
-    helper = require('../platypi-cli/helpers/github.helper').helper,
-    directory = require('../platypi-cli/utils/directory.utils');
+var should = require('should')
+    , fs = require('fs')
+    , http = require('https')
+    , package = require('../package.json')
+    , helper = require('../platypi-cli/helpers/github.helper').helper
+    , directory = require('../platypi-cli/utils/directory.utils');
 
 describe('github helper', function () {
     it('should be an object', function () {
         helper.should.be.an.Object;
+    });
+
+    describe('package.json', function () {
+        it('should be an object', function () {
+            should.exist(package);
+            package.should.be.an.Object;
+        });
+
+        it('should contain a version number', function () {
+            should.exist(package.version);
+        });
     });
     
     describe('_getUrl', function () {
@@ -31,11 +42,16 @@ describe('github helper', function () {
     });
 
     describe('downloadRepo', function () {
+        // override timeout value since this is downloading from github and slow connections are possible
+        setTimeout(10000);
+
         var appPath = '';
         before(function (done) {
             directory.appDataDir().then(function (path) {
                 appPath = path;
-                fs.unlink(appPath + '/cache/' + package.version + '.tar.gz');
+                fs.unlink(appPath + '/cache/' + package.version + '.tar.gz', function (err) {
+                    // didn't exist or lack permissions (not important for this test)
+                });
                 helper.downloadRepo(appPath).then(function () {
                     done();
                 });
