@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = function (grunt) {
-    tsFiles = [
+    var tsFiles = [
         './platypi-cli/*.ts',
         './platypi-cli/**/*.ts'
     ]
@@ -29,6 +29,12 @@ module.exports = function (grunt) {
                 src: tsFiles.concat(lintIgnore)
             }
         }
+        , jshint: {
+            options: {
+                jshintrc: 'jshint.json'
+            }
+            , all: ['Gruntfile.js'].concat(tests)
+        }
         , typescript: {
             options: {
                 module: 'commonjs',
@@ -50,10 +56,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-typescript');
     grunt.loadNpmTasks('grunt-mocha-test');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+
+    grunt.registerTask('lint', ['tslint','jshint']);
 
     grunt.registerTask('test', ['mochaTest']);
 
-    grunt.registerTask('build', ['shell:tsd', 'tslint', 'typescript', 'test']);
+    grunt.registerTask('build', ['shell:tsd', 'lint', 'typescript', 'test']);
 
     grunt.registerTask('default', ['build']);
 

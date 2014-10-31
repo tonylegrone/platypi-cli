@@ -35,6 +35,7 @@
         "grunt-tslint": "latest",
         "grunt-typescript": "latest",
         "grunt-mocha-test": "latest",
+        "grunt-contrib-jshint": "latest",
         "should":  "latest",
         "mocha":  "latest"
     }
