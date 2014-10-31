@@ -1,4 +1,4 @@
-var should = require('should')
+var should = require('should') // jshint ignore:line
     , fs = require('fs')
     , http = require('https')
     , package = require('../package.json')
@@ -51,6 +51,7 @@ describe('github helper', function () {
                 appPath = path;
                 fs.unlink(appPath + '/cache/' + package.version + '.tar.gz', function (err) {
                     // didn't exist or lack permissions (not important for this test)
+                    console.log(err);
                 });
                 helper.downloadRepo(appPath).then(function () {
                     done();

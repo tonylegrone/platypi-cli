@@ -1,4 +1,4 @@
-var should = require('should')
+var should = require('should') // jshint ignore:line
     , path = require('path')
     , directory = require('../platypi-cli/utils/directory.utils');
 
@@ -44,7 +44,6 @@ describe('directory utils', function () {
         before(function (done) {
             directory.appDataDir().then(function (path) {
                 dirPath = path;
-                console.log('path: ' + dirPath)
                 done();
             });
         });
