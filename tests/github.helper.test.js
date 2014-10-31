@@ -49,9 +49,11 @@ describe('github helper', function () {
         before(function (done) {
             directory.appDataDir().then(function (path) {
                 appPath = path;
-                fs.unlink(appPath + '/cache/' + package.version + '.tar.gz', function (err) {
+                fs.unlink(appPath + '/cache/archives/' + package.version + '.zip', function (err) {
                     // didn't exist or lack permissions (not important for this test)
-                    console.log(err);
+                    if (err) {
+                        console.log(err);
+                    }
                 });
                 helper.downloadRepo(appPath).then(function () {
                     done();
@@ -68,7 +70,7 @@ describe('github helper', function () {
         });
 
         it('should download an archive of templates', function () {
-            fs.stat(appPath + '/cache/archives/' + package.version + '.tar.gz', function (err, stats) {
+            fs.stat(appPath + '/cache/archives/' + package.version + '.zip', function (err, stats) {
                 stats.should.be.an.Object;
                 stats.isFile().should.be.true;
             });            

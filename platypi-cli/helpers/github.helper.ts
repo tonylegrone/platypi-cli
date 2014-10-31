@@ -11,13 +11,13 @@ var package = require('../../package.json')
 
 export class GithubHelper {
     private __getUrl() {
-        return util.format('%s%s%s', baseUrl, package.version, '.tar.gz');
+        return util.format('%s%s%s', baseUrl, package.version, '.zip');
     }
 
     downloadRepo(path: string): Thenable<string> {
         return new Promise((resolve, reject) => {
             fs.mkdir(path + '/cache/archives', (err) => {
-                var filepath = util.format('%s%s%s', path + '/cache/archives/', package.version, '.tar.gz');
+                var filepath = util.format('%s%s%s', path + '/cache/archives/', package.version, '.zip');
                 http.get(this.__getUrl(), (res: any) => {
                     var data = '';
                     res.setEncoding('binary');
