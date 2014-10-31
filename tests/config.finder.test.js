@@ -1,7 +1,7 @@
-var should = require('should'),
-    ConfigFinder = require('../platypi-cli/config/config.finder'),
-    fs = require('fs'),
-    testFile = 'test123123.json';
+var should = require('should')
+    , ConfigFinder = require('../platypi-cli/config/config.finder')
+    , fs = require('fs')
+    , testFile = 'test123123.json';
 
 describe('finder', function () {
     it('should be a function', function () {
@@ -29,14 +29,14 @@ describe('finder', function () {
     });
 
     describe('with config', function () {
-        var config = {
-            name: 'project',
-            type: 'mobile',
-            author: 'Donald Jones'
-        },
-            exists = false,
-            error = '',
-            result = {};
+        var exists = false
+            , error = ''
+            , result = {}
+            , config = {
+                name: 'project',
+                type: 'mobile',
+                author: 'Donald Jones'
+            };
 
         before(function (done) {
             var finder = new ConfigFinder();
@@ -71,14 +71,14 @@ describe('finder', function () {
     });
 
     describe('with config in parent (recursive)', function () {
-        var config = {
-            name: 'project',
-            type: 'mobile',
-            author: 'Donald Jones'
-        },
-            exists = false,
-            error = '',
-            result = {};
+        var exists = false
+            , error = ''
+            , result = {}
+            , config = {
+                name: 'project',
+                type: 'mobile',
+                author: 'Donald Jones'
+            };
 
         before(function (done) {
             var finder = new ConfigFinder();

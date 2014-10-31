@@ -6,15 +6,11 @@ import utils = require('../utils/directory.utils');
 import validator = require('./config.validator');
 import promises = require('es6-promise');
 
-var cwd = process.cwd(),
-    Promise = promises.Promise,
-    root = path.resolve('/');
+var cwd = process.cwd()
+    , Promise = promises.Promise
+    , root = path.resolve('/');
 
 class ConfigFinder {
-    __promises = [];
-    __fns = [];
-    __last = '';
-
     readJson(name: string, currentDirectory: string): Thenable<any> {
         return new Promise((resolve, reject) => {
             fs.readFile(path.join(currentDirectory, name), 'utf8', (err, data) => {
@@ -28,29 +24,28 @@ class ConfigFinder {
     }
 
     findConfig(name = 'platypi.json', currentDirectory = cwd): Thenable<config.IPlatypi> {
+        var lookupPromises = [];
+
         while (currentDirectory !== root) {
-            // console.log(currentDirectory);
-            this.__promises.push(this.readJson.bind(this, name, currentDirectory));
-            this.__last = currentDirectory;
+            lookupPromises.push(this.readJson.bind(this, name, currentDirectory));
             currentDirectory = utils.upOneLevel(currentDirectory);
         }
 
-        this.__promises.forEach((v, i, a) => {
-            this.__fns.push(v());
+        var fns = lookupPromises.map((promise) => {
+            return promise();
         });
 
-        return Promise.all(this.__fns).then((results) => {
+        return Promise.all(fns).then((results: Array<config.IPlatypi>) => {
             var filtered = results.filter((value, index, array) => {
-                return (value !== undefined);
+                return (value !== undefined && validator(value));
             });
 
             if (filtered.length < 1) {
-                return Promise.reject('Not found.');
+                return Promise.reject('A valid platypi config file was not found.');
             }
 
             return Promise.resolve(filtered[0]);
         });
-
     }    
 }
 
