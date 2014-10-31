@@ -5,9 +5,9 @@ import http = require('https');
 import util = require('util');
 import promises = require('es6-promise');
 
-var package = require('../../package.json'),
-    baseUrl = 'https://github.com/Platypi/platypi-cli-templates/archive/',
-    Promise = promises.Promise;
+var package = require('../../package.json')
+    , baseUrl = 'https://github.com/Platypi/platypi-cli-templates/archive/'
+    , Promise = promises.Promise;
 
 export class GithubHelper {
     private _getUrl() {
