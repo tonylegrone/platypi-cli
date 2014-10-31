@@ -27,6 +27,7 @@
     "commander": "^2.5.0",
     "es6-promise": "^2.0.0",
     "prompt": "^0.2.14",
+    "request": "^2.47.0",
     "simple-progress-bar": "^0.3.6"
   },
   "devDependencies": {
