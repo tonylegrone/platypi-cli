@@ -41,9 +41,10 @@ describe('directory utils', function () {
 
     describe('appDataDir', function () {
         var dirPath = '';
-        before(function () {
+        before(function (done) {
             directory.appDataDir().then(function (path) {
                 dirPath = path;
+                console.log('path: ' + dirPath)
                 done();
             });
         });
