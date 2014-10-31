@@ -4,10 +4,8 @@ import commander = require('commander');
 import msg = require('./helpers/msg.helper');
 import ConfigFinder = require('./config/config.finder');
 import configGenerator = require('./generators/platypiconfig.generator');
-import promises = require('es6-promise');
 
 var package = require('../package.json')
-//    , Promise = promises.Promise
 //    , progressbar = require('simple-progress-bar')
     , controlTypes = ['viewcontrol', 'injectable', 'repository', 'service', 'model', 'templatecontrol', 'attributecontrol']
     , platypiConfig: config.IPlatypi = null;
