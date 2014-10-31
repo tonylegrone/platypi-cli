@@ -2,8 +2,8 @@
 import fs = require('fs');
 import promises = require('es6-promise');
 
-var prompt = require('prompt'),
-    Promise = promises.Promise;
+var prompt = require('prompt')
+    , Promise = promises.Promise;
 
 var generateConfig = (): Thenable<config.IPlatypi> => {
     var schema = {
@@ -14,25 +14,25 @@ var generateConfig = (): Thenable<config.IPlatypi> => {
                 pattern: /^[^\s]+$/,
                 message: 'Spaces not allowed in name.',
                 required: true
-            },
-            description: {
+            }
+            , description: {
                 description: 'Project Description',
                 type: 'string'
-            },
-            author: {
+            }
+            , author: {
                 description: 'Project Author',
                 type: 'string',
                 required: true
-            },
-            email: {
+            }
+            , email: {
                 description: 'Contact Email',
                 type: 'string'
-            },
-            website: {
+            }
+            , website: {
                 description: 'Project Website',
                 type: 'string'
-            },
-            type: {
+            }
+            , type: {
                 description: 'Project Type',
                 default: 'web',
                 type: 'string',
