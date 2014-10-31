@@ -1,6 +1,6 @@
-var should = require('should'),
-    path = require('path'),
-    directory = require('../platypi-cli/utils/directory.utils');
+var should = require('should')
+    , path = require('path')
+    , directory = require('../platypi-cli/utils/directory.utils');
 
 describe('directory utils', function () {
     it('should be an object', function () {
@@ -28,8 +28,8 @@ describe('directory utils', function () {
         });
 
         it('should go all the way to root', function () {
-            var current = path.resolve('.'),
-                root = path.resolve('/');
+            var current = path.resolve('.')
+                , root = path.resolve('/');
 
             while (path.relative(current, '/') !== '') {
                 current = directory.upOneLevel(current);
@@ -48,7 +48,7 @@ describe('directory utils', function () {
             });
         });
 
-        it('should create an app dir in the OS appdata dir', function () {
+        it('should create or return an app dir in the OS appdata dir', function () {
             dirPath.should.not.equal('');
         });
     });
