@@ -112,4 +112,30 @@ describe('finder', function () {
         });
     });
 
+
+    describe('with config NOT in parent (recursive)', function () {
+        var error = ''
+            , result = {};
+
+        before(function (done) {
+            var finder = new ConfigFinder();
+            finder.findConfig('../' + testFile).then(function (c) {
+                console.log(c);
+                result = c;
+                done();
+            }, function (err) {
+                console.log(err);
+                error = err;
+                done();
+            });
+        });
+
+        it('should reject promise', function () {
+            error.should.not.equal('');
+        });
+
+        it('should equal input', function () {
+            result.should.eql({});
+        });
+    });
 });
