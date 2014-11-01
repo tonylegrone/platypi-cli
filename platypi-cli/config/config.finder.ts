@@ -11,41 +11,30 @@ var cwd = process.cwd()
     , root = path.resolve('/');
 
 class ConfigFinder {
-    readJson(name: string, currentDirectory: string): Thenable<any> {
-        return new Promise((resolve, reject) => {
-            fs.readFile(path.join(currentDirectory, name), 'utf8', (err, data) => {
-                if (data) {
-                    resolve(JSON.parse(data));
-                }
-
-                resolve();
-            });
+    findConfig(name = 'platypi.json', currentDirectory = cwd): Thenable<config.IPlatypi> {
+        return this.readFileRecursive(name, currentDirectory).then((result) => {
+            if (result && validator(result)) {
+                return result;
+            } else {
+                return 'A valid platypi config file was not found.';
+            }
         });
     }
 
-    findConfig(name = 'platypi.json', currentDirectory = cwd): Thenable<config.IPlatypi> {
-        var lookupPromises = [];
-
-        while (currentDirectory !== root) {
-            lookupPromises.push(this.readJson.bind(this, name, currentDirectory));
-            currentDirectory = utils.upOneLevel(currentDirectory);
-        }
-
-        var fns = lookupPromises.map((promise) => {
-            return promise();
-        });
-
-        return Promise.all(fns).then((results: Array<config.IPlatypi>) => {
-            var filtered = results.filter((value, index, array) => {
-                return (value !== undefined && validator(value));
+    readFileRecursive(name: string, currentDirectory: string): Thenable<any> {
+        return new Promise((resolve, reject) => {
+            var filePath = path.join(currentDirectory, name);
+            fs.readFile(filePath, 'utf8', (err, data) => {
+                if (data) {
+                    return resolve(JSON.parse(data));
+                } else  if (currentDirectory === root) {
+                    return reject('not found');
+                } else {
+                    return resolve(this.readFileRecursive(name, utils.upOneLevel(currentDirectory)));
+                }
             });
-
-            if (filtered.length < 1) {
-                return Promise.reject('A valid platypi config file was not found.');
-            }
-
-            return Promise.resolve(filtered[0]);
         });
+
     }
 }
 
