@@ -120,11 +120,9 @@ describe('finder', function () {
         before(function (done) {
             var finder = new ConfigFinder();
             finder.findConfig('../' + testFile).then(function (c) {
-                console.log(c);
                 result = c;
                 done();
             }, function (err) {
-                console.log(err);
                 error = err;
                 done();
             });

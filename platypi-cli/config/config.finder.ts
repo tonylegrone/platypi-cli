@@ -12,13 +12,7 @@ var cwd = process.cwd()
 
 class ConfigFinder {
     findConfig(name = 'platypi.json', currentDirectory = cwd): Thenable<config.IPlatypi> {
-        return this.readFileRecursive(name, currentDirectory).then((result) => {
-            if (result && validator(result)) {
-                return result;
-            } else {
-                return 'A valid platypi config file was not found.';
-            }
-        });
+        return this.readFileRecursive(name, currentDirectory);
     }
 
     readFileRecursive(name: string, currentDirectory: string): Thenable<any> {
@@ -26,9 +20,15 @@ class ConfigFinder {
             var filePath = path.join(currentDirectory, name);
             fs.readFile(filePath, 'utf8', (err, data) => {
                 if (data) {
-                    return resolve(JSON.parse(data));
+                    var config: config.IPlatypi = JSON.parse(data);
+
+                    if (validator(config)) {
+                        return resolve(JSON.parse(data));
+                    } else {
+                        return reject('A valid platypi config file was not found.');
+                    }
                 } else  if (currentDirectory === root) {
-                    return reject('not found');
+                    return reject('A valid platypi config file was not found.');
                 } else {
                     return resolve(this.readFileRecursive(name, utils.upOneLevel(currentDirectory)));
                 }
