@@ -46,10 +46,12 @@ class BaseService {
             }
 
             request(url, httpOptions).pipe(fs.createWriteStream(savePath))
-                .on('finish', () => {
+                .on('close', () => {
                     return resolve(savePath);
                 })
-                .on('error', reject);
+                .on('error', (err) => {
+                    return reject(err);
+                });
 
         });
     }
