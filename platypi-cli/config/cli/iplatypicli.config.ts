@@ -1,7 +1,8 @@
 ﻿module config {
     interface IPlatypiCliConfig {
+        version: string;
         templates: {
-            lastUpdated: Date;
+            lastUpdated?: Date;
             projects: {
                 mobile: string;
                 web: string;
@@ -13,7 +14,7 @@
                     model: string;
                     repository: string;
                     service: string;
-                    template: string;
+                    templatecontrol: string;
                 };
                 mobile: {
                     viewcontrol: string;
