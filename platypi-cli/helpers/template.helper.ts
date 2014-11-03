@@ -1,46 +1,63 @@
 ﻿/// <reference path="../_references.d.ts" />
 
 import fs = require('fs');
-import http = require('https');
 import util = require('util');
+import path = require('path');
 import promises = require('es6-promise');
+import GithubService = require('../services/github/github.service');
 
 var package = require('../../package.json')
-    , baseUrl = 'https://github.com/Platypi/platypi-cli-templates/archive/'
     , Promise = promises.Promise;
 
 export class TemplateHelper {
-    private __getUrl() {
-        return util.format('%s%s%s', baseUrl, package.version, '.zip');
-    }
 
-    downloadRepo(path: string): Thenable<string> {
+    private __makeCacheDir(appDataFolderPath: string): Thenable<string> {
         return new Promise((resolve, reject) => {
-            fs.mkdir(path + '/cache/archives', (err) => {
-                var filepath = util.format('%s%s%s', path + '/cache/archives/', package.version, '.zip');
-                http.get(this.__getUrl(), (res: any) => {
-                    var data = '';
-                    res.setEncoding('binary');
+            var cacheFolder = path.normalize(util.format('%s/%s', appDataFolderPath, 'cache'));
 
-                    res.on('data', (chunk) => {
-                        data += chunk;
-                    });
+            fs.mkdir(cacheFolder, (err) => {
+                if (err) {
+                    if (err.code === 'EEXIST') {
+                        // path already exists
+                        return resolve(cacheFolder);
+                    } else {
+                        return reject(err);
+                    }
+                }
 
-                    res.on('error', (err) => {
-                        throw err;
-                    });
-
-                    res.on('end', () => {
-                        fs.writeFile(filepath, data, 'binary', (err) => {
-                            if (err) {
-                                throw err;
-                            }
-                            resolve(filepath);
-                        });
-                    });
-                });
+                return resolve(cacheFolder);
             });
         });
+    }
+
+    private __makeArchiveCacheDir(cacheFolderPath: string): Thenable<string> {
+        return new Promise((resolve, reject) => {
+            var archiveFolder = path.normalize(util.format('%s/%s/', cacheFolderPath, 'archives'));
+            fs.mkdir(archiveFolder, (err) => {
+                if (err) {
+                    if (err.code === 'EEXIST') {
+                        // path already exists
+                        return resolve(archiveFolder);
+                    } else {
+                        return reject(err);
+                    }
+                }
+
+                return resolve(archiveFolder);
+            });
+        });
+    }
+
+    __downloadTemplates(appDataDir: string): Thenable<string> {
+        return this.__makeCacheDir(appDataDir)
+            .then(this.__makeArchiveCacheDir)
+            .then((archivePath) => {
+                var version = package.version || '0.0.1'
+                    , filePath = path.normalize(util.format('%s/%s.%s', archivePath, version, 'zip'))
+                    , service = new GithubService();
+
+                return service.getRelease(version, filePath);
+            });
     }
 }
 
