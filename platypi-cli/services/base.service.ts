@@ -6,7 +6,7 @@ import fs = require('fs');
 
 var Promise = promises.Promise;
 
-class BaseService {
+class BaseService implements IBaseService {
     _get(host: string, path: string, authtoken?: string): Thenable<any> {
         return new Promise((resolve, reject) => {
             var userAgent = 'node.js'
@@ -55,6 +55,13 @@ class BaseService {
 
         });
     }
+
+    getRelease(version: string, savePath: string): Thenable<string> {
+        var location = '/';
+
+        return this._downloadFile(location, savePath);
+    }
+
 }
 
 export = BaseService;
