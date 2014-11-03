@@ -1,5 +1,5 @@
 var should = require('should') // jshint ignore:line
-    , ConfigFinder = require('../platypi-cli/config/config.finder')
+    , ConfigFinder = require('../../../platypi-cli/config/project/config.finder')
     , fs = require('fs')
     , testFile = 'test123123.json';
 

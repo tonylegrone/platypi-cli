@@ -1,8 +1,8 @@
-﻿/// <reference path="../_references.d.ts" />
+﻿/// <reference path="../../_references.d.ts" />
 
 import path = require('path');
 import fs = require('fs');
-import utils = require('../utils/directory.utils');
+import utils = require('../../utils/directory.utils');
 import validator = require('./config.validator');
 import promises = require('es6-promise');
 

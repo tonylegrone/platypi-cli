@@ -1,8 +1,8 @@
 var should = require('should') // jshint ignore:line
-    , package = require('../package.json')
-    , TemplateHelper = require('../platypi-cli/helpers/template.helper')
-    , GithubService = require('../platypi-cli/services/github/github.service')
-    , directory = require('../platypi-cli/utils/directory.utils');
+    , package = require('../../package.json')
+    , TemplateHelper = require('../../platypi-cli/helpers/template.helper')
+    , GithubService = require('../../platypi-cli/services/github/github.service')
+    , directory = require('../../platypi-cli/utils/directory.utils');
 
 describe('template helper', function () {
     var helper = new TemplateHelper(GithubService);

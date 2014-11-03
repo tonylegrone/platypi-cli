@@ -1,5 +1,5 @@
 var should = require('should') // jshint ignore:line
-    , validator = require('../platypi-cli/config/config.validator');
+    , validator = require('../../../platypi-cli/config/project/config.validator');
 
 describe('validator', function () {
     it('should be a function', function () {

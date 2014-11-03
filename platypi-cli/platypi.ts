@@ -2,7 +2,7 @@
 
 import commander = require('commander');
 import msg = require('./helpers/msg.helper');
-import ConfigFinder = require('./config/config.finder');
+import ConfigFinder = require('./config/project/config.finder');
 import configGenerator = require('./generators/platypiconfig.generator');
 
 var package = require('../package.json')

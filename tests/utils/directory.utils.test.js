@@ -1,6 +1,6 @@
 var should = require('should') // jshint ignore:line
     , path = require('path')
-    , directory = require('../platypi-cli/utils/directory.utils');
+    , directory = require('../../platypi-cli/utils/directory.utils');
 
 describe('directory utils', function () {
     it('should be an object', function () {
