@@ -1,9 +1,12 @@
 var should = require('should') // jshint ignore:line
     , package = require('../package.json')
-    , helper = require('../platypi-cli/helpers/template.helper').helper
+    , TemplateHelper = require('../platypi-cli/helpers/template.helper')
+    , GithubService = require('../platypi-cli/services/github/github.service')
     , directory = require('../platypi-cli/utils/directory.utils');
 
 describe('template helper', function () {
+    var helper = new TemplateHelper(GithubService);
+
     it('should be an object', function () {
         helper.should.be.an.Object;
     });
@@ -86,5 +89,27 @@ describe('template helper', function () {
             templatePath.should.not.equal('');
         });
         
+    });
+
+    describe('updateTemplates', function () {
+        var extractedTemplatePath = '';
+
+        before(function (done) {
+            directory.appDataDir()
+                .then(function (appDir) {
+                    return helper.updateTemplates(appDir);
+                })
+                .then(function (tmpPath) {
+                    extractedTemplatePath = tmpPath;
+                    done();
+                }, function (err) {
+                    throw err;
+                });
+        });
+
+        it('should download and extract the templates', function () {
+            extractedTemplatePath.should.not.equal('');
+        });
+
     });
 });
