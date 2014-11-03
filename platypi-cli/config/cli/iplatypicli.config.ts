@@ -1,5 +1,5 @@
-﻿module config {
-    interface IPlatypiCliConfig {
+﻿declare module config {
+    export interface IPlatypiCliConfig {
         version: string;
         templates: {
             lastUpdated?: Date;
