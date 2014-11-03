@@ -4,10 +4,12 @@ import fs = require('fs');
 import util = require('util');
 import path = require('path');
 import promises = require('es6-promise');
+import PlatypiCliConfig = require('../config/cli/platypicli.config');
 
 var package = require('../../package.json')
     , admzip = require('adm-zip')
-    , Promise = promises.Promise;
+    , Promise = promises.Promise
+    , cliConfig = PlatypiCliConfig.config;
 
 class TemplateHelper<T extends IBaseService> {
     service: T;
@@ -77,7 +79,15 @@ class TemplateHelper<T extends IBaseService> {
 
                 extractDir = path.normalize(util.format('%s/%s-%s', extractDir, 'platypi-cli-templates', package.version));
 
-                return extractDir;
+                var configPath = path.normalize(util.format('%s/%s', extractDir, 'cli.json'))
+                    , templateConfig: config.IPlatypiCliConfig = require(configPath);
+
+                cliConfig.config = templateConfig;
+                cliConfig.config.templates.lastUpdated = new Date();
+
+                return cliConfig.updateConfig().then(() => {
+                    return extractDir;
+                });
             });
     }
 }
