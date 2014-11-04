@@ -9,8 +9,8 @@ import promises = require('es6-promise');
 var Promise = promises.Promise;
 
 class BaseTemplateGenerator {
-    helper = null;
-    config = null;
+    helper: TemplateHelper<any> = null;
+    config: CliConfig.PlatypiCliConfig = null;
     location = null;
     _CONTROLNAME = '';
     instanceName = '';
@@ -53,7 +53,7 @@ class BaseTemplateGenerator {
 
     _resolveTemplateLocation(): string {
         if (!this.location) {
-            throw 'No location!';
+            // update templates
         }
 
         return path.normalize(path.resolve(this.location));
