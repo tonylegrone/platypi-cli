@@ -79,16 +79,20 @@ class TemplateHelper<T extends IBaseService> {
 
                 extractDir = path.normalize(util.format('%s/%s-%s', extractDir, 'platypi-cli-templates', package.version));
 
-                var configPath = path.normalize(util.format('%s/%s', extractDir, 'cli.json'))
-                    , templateConfig: config.IPlatypiCliConfig = require(configPath);
-
-                cliConfig.config = templateConfig;
-                cliConfig.config.templates.lastUpdated = new Date();
-
-                return cliConfig.updateConfig().then(() => {
+                return this.__updateConfig(extractDir).then(() => {
                     return extractDir;
                 });
             });
+    }
+
+    private __updateConfig(extractDir: string): Thenable<any> {
+        var configPath = path.normalize(util.format('%s/%s', extractDir, 'cli.json'))
+            , templateConfig: config.IPlatypiCliConfig = require(configPath);
+
+        cliConfig.config = templateConfig;
+        cliConfig.config.templates.lastUpdated = new Date();
+
+        return cliConfig.updateConfig();
     }
 }
 
