@@ -12,7 +12,7 @@ describe('Platypi-CLI Config', function () {
         var error = null;
 
         before(function (done) {
-            config.updateConfig().then(null,function(err) {
+            config.__updateConfig().then(null,function(err) {
                 error = err;
                 done();
             });
@@ -28,7 +28,7 @@ describe('Platypi-CLI Config', function () {
         var output = null;
 
         before(function (done) {
-            config.loadConfig().then(function (configOut) {
+            config.__loadConfig().then(function (configOut) {
                 output = configOut;
                 done();
             }, function (err) {
