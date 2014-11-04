@@ -10,19 +10,24 @@ export class PlatypiCliConfig {
     config: config.IPlatypiCliConfig = null;
     configPath: string = '';
 
-    setConfig(newConfig: config.IPlatypiCliConfig) {
-        this.config = newConfig;
+    setConfig(newConfig: config.IPlatypiCliConfig): Thenable<config.IPlatypiCliConfig> {
+        if (JSON.stringify(newConfig) === JSON.stringify(this.config)) {
+            return Promise.resolve(this.config);
+        } else {
+            this.config = newConfig;
+            return this.__updateConfig();
+        }
     }
 
     getConfig(): Thenable<config.IPlatypiCliConfig> {
         if (config) {
             return Promise.resolve(this.config);
         } else {
-            return this.loadConfig();
+            return this.__loadConfig();
         }
     }
 
-    loadConfig(): Thenable<config.IPlatypiCliConfig> {
+    private __loadConfig(): Thenable<config.IPlatypiCliConfig> {
         return new Promise((resolve, reject) => {
             dirutil.appDataDir().then((appDataDir) => {
                 var configPath = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));
@@ -40,7 +45,7 @@ export class PlatypiCliConfig {
         });
     }
 
-    updateConfig(): Thenable<config.IPlatypiCliConfig> {
+    private __updateConfig(): Thenable<config.IPlatypiCliConfig> {
         return new Promise((resolve, reject) => {
             dirutil.appDataDir().then((appDataDir) => {
                 var configPath = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));

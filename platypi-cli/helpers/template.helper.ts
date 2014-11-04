@@ -89,11 +89,11 @@ class TemplateHelper<T extends IBaseService> {
         var configPath = path.normalize(util.format('%s/%s', extractDir, 'cli.json'))
             , templateConfig: config.IPlatypiCliConfig = require(configPath);
 
-        cliConfig.config = templateConfig;
-        cliConfig.config.templates.lastUpdated = new Date();
-        cliConfig.config.templates.baseLocation = extractDir;
 
-        return cliConfig.updateConfig();
+        templateConfig.templates.lastUpdated = new Date();
+        templateConfig.templates.baseLocation = extractDir;
+
+        return cliConfig.setConfig(templateConfig);
     }
 }
 
