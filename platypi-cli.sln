@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Web
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "platypi-cli", "platypi-cli\platypi-cli.csproj", "{81B0F21A-464B-429F-B904-F6782C2BDE3C}"
 EndProject
@@ -16,11 +16,42 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A4787835-84F9-4422-A57A-9D1394561FB0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "services", "services", "{6418E840-998C-4BEA-B620-9808808A42DD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{54708709-10C3-4106-A1B3-F18EC95D7BB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "helpers", "helpers", "{ACE2CD03-FDA2-4F6F-AC3A-55EF273F49CC}"
 	ProjectSection(SolutionItems) = preProject
-		tests\config.finder.test.js = tests\config.finder.test.js
-		tests\config.validator.test.js = tests\config.validator.test.js
-		tests\directory.utils.test.js = tests\directory.utils.test.js
-		tests\template.helper.test.js = tests\template.helper.test.js
+		tests\helpers\template.helper.test.js = tests\helpers\template.helper.test.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "utils", "utils", "{9422EDB2-304A-4E76-AD83-9B12EDBB4EBD}"
+	ProjectSection(SolutionItems) = preProject
+		tests\utils\directory.utils.test.js = tests\utils\directory.utils.test.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{48576362-2EE2-480E-BD1F-BC45551F573F}"
+	ProjectSection(SolutionItems) = preProject
+		tests\config\project\config.finder.test.js = tests\config\project\config.finder.test.js
+		tests\config\project\config.validator.test.js = tests\config\project\config.validator.test.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{8E04A085-1A7A-4127-BCE1-7B2F5BE7367B}"
+	ProjectSection(SolutionItems) = preProject
+		tests\services\github.service.test.js = tests\services\github.service.test.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cli", "cli", "{9F0C8C81-E249-4727-9DDE-8E13AE2D6D78}"
+	ProjectSection(SolutionItems) = preProject
+		tests\config\cli\platypicli.config.test.js = tests\config\cli\platypicli.config.test.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "generators", "generators", "{6B64B0B1-E72E-48EF-969E-5152DABD196D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{051BDCF3-B6FB-4233-84DC-0F27726863FF}"
+	ProjectSection(SolutionItems) = preProject
+		tests\generators\templates\base.template.generator.test.js = tests\generators\templates\base.template.generator.test.js
 	EndProjectSection
 EndProject
 Global
@@ -36,5 +67,16 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6418E840-998C-4BEA-B620-9808808A42DD} = {A4787835-84F9-4422-A57A-9D1394561FB0}
+		{54708709-10C3-4106-A1B3-F18EC95D7BB7} = {A4787835-84F9-4422-A57A-9D1394561FB0}
+		{ACE2CD03-FDA2-4F6F-AC3A-55EF273F49CC} = {A4787835-84F9-4422-A57A-9D1394561FB0}
+		{9422EDB2-304A-4E76-AD83-9B12EDBB4EBD} = {A4787835-84F9-4422-A57A-9D1394561FB0}
+		{48576362-2EE2-480E-BD1F-BC45551F573F} = {54708709-10C3-4106-A1B3-F18EC95D7BB7}
+		{8E04A085-1A7A-4127-BCE1-7B2F5BE7367B} = {6418E840-998C-4BEA-B620-9808808A42DD}
+		{9F0C8C81-E249-4727-9DDE-8E13AE2D6D78} = {54708709-10C3-4106-A1B3-F18EC95D7BB7}
+		{6B64B0B1-E72E-48EF-969E-5152DABD196D} = {A4787835-84F9-4422-A57A-9D1394561FB0}
+		{051BDCF3-B6FB-4233-84DC-0F27726863FF} = {6B64B0B1-E72E-48EF-969E-5152DABD196D}
 	EndGlobalSection
 EndGlobal

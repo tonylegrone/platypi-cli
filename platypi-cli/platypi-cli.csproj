@@ -56,13 +56,20 @@
     <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
   </PropertyGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="config\config.finder.ts" />
-    <TypeScriptCompile Include="config\config.validator.ts" />
-    <TypeScriptCompile Include="config\iconfig.interface.ts" />
+    <TypeScriptCompile Include="config\cli\iplatypicli.config.ts" />
+    <TypeScriptCompile Include="config\cli\platypicli.config.ts" />
+    <TypeScriptCompile Include="config\project\config.finder.ts" />
+    <TypeScriptCompile Include="config\project\config.validator.ts" />
+    <TypeScriptCompile Include="config\project\iconfig.interface.ts" />
     <TypeScriptCompile Include="generators\platypiconfig.generator.ts" />
+    <TypeScriptCompile Include="generators\templates\base.template.generator.ts" />
+    <TypeScriptCompile Include="generators\templates\ienvironmentvariable.interface.ts" />
     <TypeScriptCompile Include="helpers\template.helper.ts" />
     <TypeScriptCompile Include="helpers\msg.helper.ts" />
     <TypeScriptCompile Include="platypi.ts" />
+    <TypeScriptCompile Include="services\base.service.ts" />
+    <TypeScriptCompile Include="services\github\github.service.ts" />
+    <TypeScriptCompile Include="services\ibase.service.ts" />
     <TypeScriptCompile Include="typings\commander\commander.d.ts" />
     <TypeScriptCompile Include="typings\es6-promise\es6-promise.d.ts" />
     <TypeScriptCompile Include="typings\node\node.d.ts" />
