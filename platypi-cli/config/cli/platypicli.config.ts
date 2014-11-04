@@ -7,36 +7,34 @@ export class PlatypiCliConfig {
     config: config.IPlatypiCliConfig = null;
     configPath: string = '';
 
-    loadConfig(): Thenable<config.IPlatypiCliConfig> {
+    loadConfig(): Thenable<any> {
         return dirutil.appDataDir().then((appDataDir) => {
-            var configPath = path.normalize(util.format('%s/%s/%s', appDataDir, 'cache', 'cli.json'));
-            return new Promise((resolve, reject) => {
-                fs.readFile(configPath, 'utf8', (err, data) => {
-                    if (err) {
-                        return reject(err);
-                    }
+            var configPath = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));
+            fs.readFile(configPath, 'utf8', (err, data) => {
+                if (err) {
+                    throw err;
+                }
 
-                    this.configPath = configPath;
-                    this.config = JSON.parse(data);
+                this.configPath = configPath;
+                this.config = JSON.parse(data);
 
-                    return resolve(this.config);
-                });
+                return this.config;
             });
         });
     }
 
-    updateConfig(): Thenable<config.IPlatypiCliConfig> {
-        return new Promise((resolve, reject) => {
-            if (!this.config || this.configPath === '') {
-                return reject('No config loaded!');
+    updateConfig(): Thenable<any> {
+        return dirutil.appDataDir().then((appDataDir) => {
+            var configPath = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));
+            if (!this.config) {
+                throw 'No config loaded!';
             }
-
-            fs.writeFile(this.configPath, JSON.stringify(this.config), (err) => {
+            fs.writeFile(configPath, JSON.stringify(this.config), (err) => {
                 if (err) {
-                    return reject(err);
+                    throw err;
                 }
-
-                return resolve(this.config);
+                this.configPath = configPath;
+                return this.config;
             });
         });
     }
