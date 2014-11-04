@@ -1,4 +1,7 @@
 var should = require('should') // jshint ignore:line
+    , path = require('path')
+    , fs = require('fs')
+    , util = require('util')
     , package = require('../../package.json')
     , TemplateHelper = require('../../platypi-cli/helpers/template.helper')
     , GithubService = require('../../platypi-cli/services/github/github.service')
@@ -92,11 +95,13 @@ describe('template helper', function () {
     });
 
     describe('updateTemplates', function () {
-        var extractedTemplatePath = '';
+        var extractedTemplatePath = ''
+            , appDataDir = '';
 
         before(function (done) {
             directory.appDataDir()
                 .then(function (appDir) {
+                    appDataDir = appDir;
                     return helper.updateTemplates(appDir);
                 })
                 .then(function (tmpPath) {
@@ -109,6 +114,20 @@ describe('template helper', function () {
 
         it('should download and extract the templates', function () {
             extractedTemplatePath.should.not.equal('');
+        });
+
+        it('should update the cli config file', function () {
+            var cliConfigFile = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));
+
+            fs.readFile(cliConfigFile, 'utf8', function (err, data) {
+                should.not.exist(err);
+
+                var config = JSON.parse(data);
+
+                should.exist(config);
+
+                config.version.should.exist;
+            });
         });
 
     });
