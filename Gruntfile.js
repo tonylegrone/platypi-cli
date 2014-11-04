@@ -49,6 +49,9 @@ module.exports = function (grunt) {
                 src: tests
             }
         }
+        , clean: {
+            test: ['./tests/generators/templates/testoutput']
+        }
     });
 
 
@@ -57,12 +60,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-typescript');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
     grunt.registerTask('lint', ['tslint','jshint']);
 
     grunt.registerTask('test', ['mochaTest']);
 
-    grunt.registerTask('build', ['shell:tsd', 'lint', 'typescript', 'test']);
+    grunt.registerTask('build', ['shell:tsd', 'lint', 'typescript', 'test', 'clean:test']);
 
     grunt.registerTask('default', ['build']);
 
