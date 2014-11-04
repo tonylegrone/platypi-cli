@@ -1,0 +1,31 @@
+{
+    "name": "%name%",
+    "version": "0.0.1",
+    "description": "%description%",
+    "author": "%author%",
+    "homepage": "%homepage%",
+    "dependencies": {
+        "platypus": "latest"
+    },
+    "devDependencies": {
+        "browserify": "latest",
+        "deamdify": "latest",
+        "grunt": "latest",
+        "grunt-browserify": "latest",
+        "grunt-cli": "latest",
+        "grunt-concurrent": "latest",
+        "grunt-contrib-clean": "latest",
+        "grunt-contrib-copy": "latest",
+        "grunt-contrib-cssmin": "latest",
+        "grunt-contrib-less": "latest",
+        "grunt-contrib-uglify": "latest",
+        "grunt-contrib-watch": "latest",
+        "grunt-exorcise": "latest",
+        "grunt-mkdir": "latest",
+        "grunt-nodemon": "latest",
+        "grunt-shell": "latest",
+        "grunt-tslint": "latest",
+        "grunt-typescript": "latest",
+        "tsd": "latest"
+    }
+}
