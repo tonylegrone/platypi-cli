@@ -69,8 +69,19 @@ class BaseTemplateGenerator {
 
     _handleFileName(baseName: string): string {
         var output = ''
-            , type = baseName.match(/\.(.*?)\./)[1]
             , fileType = baseName.slice(baseName.lastIndexOf('.') + 1);
+
+        var typeMatches = baseName.match(/\.(.*?)\./)
+            , type = null
+            , prefix = baseName.slice(0, baseName.indexOf('.'));
+
+        if (typeMatches && typeMatches.length > 0) {
+            type = typeMatches[1];
+        }
+
+        if (prefix.indexOf(type) < 0 || !type || type === '') {
+            return baseName;
+        }
 
         // preserve interface identifier
         if (baseName[0] === 'i') {
@@ -102,19 +113,45 @@ class BaseTemplateGenerator {
 
                         files.forEach((file) => {
                             var fullPath = path.join(templateLocation, file);
-                            templatePromises.push(this.__createTemplateFile(file, fullPath, newFolder));
-                        });
+                            fs.stat(fullPath, (err, stat) => {
+                                if (stat.isDirectory()) {
+                                    templatePromises.push(this.__createTemplateFolder(file, fullPath, newFolder));
+                                } else {
+                                    templatePromises.push(this.__createTemplateFile(file, fullPath, newFolder));
+                                }
 
-                        Promise.all(templatePromises).then((newfiles) => {
-                            resolve(newfiles);
-                        }, (err) => {
-                            reject(err);
+                                Promise.all(templatePromises).then((newfiles) => {
+                                    resolve(newfiles);
+                                }, (err) => {
+                                    reject(err);
+                                });
+                            });
                         });
-
                     });
                 } else {
                     return reject('No template files found.');
                 }
+            });
+        });
+    }
+
+    private __createTemplateFolder(folder: string, folderFullPath: string, destination: string): Thenable<string> {
+        return new Promise((resolve, reject) => {
+            fs.readdir(folderFullPath, (err, files) => {
+                var newFolder = path.join(destination, folder);
+
+                fs.mkdir(newFolder, (err) => {
+                    files.forEach((file) => {
+                        var fullPath = path.join(folderFullPath, file);
+                        fs.stat(fullPath, (err, stat) => {
+                            if (stat.isDirectory()) {
+                                return resolve(this.__createTemplateFolder(file, fullPath, newFolder));
+                            } else {
+                                return resolve(this.__createTemplateFile(file, fullPath, newFolder));
+                            }
+                        });
+                    });
+                });
             });
         });
     }
