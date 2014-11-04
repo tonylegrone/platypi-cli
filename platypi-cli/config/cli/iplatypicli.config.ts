@@ -2,6 +2,7 @@
     export interface IPlatypiCliConfig {
         version: string;
         templates: {
+            baseLocation?: string;
             lastUpdated?: Date;
             projects: {
                 mobile: string;
