@@ -91,6 +91,7 @@ class TemplateHelper<T extends IBaseService> {
 
         cliConfig.config = templateConfig;
         cliConfig.config.templates.lastUpdated = new Date();
+        cliConfig.config.templates.baseLocation = extractDir;
 
         return cliConfig.updateConfig();
     }
