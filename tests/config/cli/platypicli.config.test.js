@@ -8,22 +8,6 @@ describe('Platypi-CLI Config', function () {
         config.should.be.an.Object;
     });
 
-    describe('updateConfig', function () {
-        var error = null;
-
-        before(function (done) {
-            config.__updateConfig().then(null,function(err) {
-                error = err;
-                done();
-            });
-        });
-
-        it('should fail, no config loaded', function () {
-            should.exist(error);
-            error.should.equal('No config loaded!');
-        });
-    });
-
     describe('loadConfig', function () {
         var output = null;
 
