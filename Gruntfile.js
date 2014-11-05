@@ -49,6 +49,16 @@ module.exports = function (grunt) {
                 src: tests
             }
         }
+        , file_append: {
+            bin: {
+                // add #! for npm link to transpiled js
+                files: {
+                    './platypi-cli/platypi.js': {
+                        prepend: '#!/usr/bin/env node\r\n'
+                    }
+                }
+            }
+        }
     });
 
 
@@ -57,12 +67,13 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-typescript');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-file-append');
 
     grunt.registerTask('lint', ['tslint','jshint']);
 
     grunt.registerTask('test', ['mochaTest']);
 
-    grunt.registerTask('build', ['shell:tsd', 'lint', 'typescript', 'test']);
+    grunt.registerTask('build', ['shell:tsd', 'lint', 'typescript', 'test', 'file_append:bin']);
 
     grunt.registerTask('default', ['build']);
 
