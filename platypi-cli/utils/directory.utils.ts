@@ -57,6 +57,7 @@ export var deleteDirectoryRecursive = (fullPath: string) => {
                             , fileStats = fs.statSync(filePath);
 
                         if (fileStats.isDirectory()) {
+                            console.log('pushed dir' + filePath);
                             deletePromises.push(deleteDirectoryRecursive(filePath));
                         } else {
                             deletePromises.push(deleteWithPromise(filePath));
@@ -64,6 +65,7 @@ export var deleteDirectoryRecursive = (fullPath: string) => {
                     });
 
                     Promise.all(deletePromises).then(() => {
+                        console.log('resolved: ' + fullPath);
                         fs.rmdir(fullPath, (err) => {
                             if (err) {
                                 reject(err);
