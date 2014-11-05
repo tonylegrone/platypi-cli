@@ -1,10 +1,10 @@
 ﻿/// <reference path="../_references.d.ts" />
 
-import fs = require('fs');
 import util = require('util');
 import path = require('path');
 import promises = require('es6-promise');
 import PlatypiCliConfig = require('../config/cli/platypicli.config');
+import fileutils = require('../utils/file.utils');
 
 var package = require('../../package.json')
     , admzip = require('adm-zip')
@@ -23,19 +23,17 @@ class TemplateHelper<T extends IBaseService> {
         return new Promise((resolve, reject) => {
             var cacheFolder = path.normalize(util.format('%s/%s', appDataFolderPath, 'cache'));
 
-            fs.mkdir(cacheFolder, (err) => {
-                if (err) {
-                    if (err.code === 'EEXIST') {
-                        // path already exists
-                        this.cacheDir = cacheFolder;
-                        return resolve(cacheFolder);
-                    } else {
-                        return reject(err);
-                    }
-                }
-
+            fileutils.mkdir(cacheFolder).then(() => {
                 this.cacheDir = cacheFolder;
                 return resolve(cacheFolder);
+            }, (err) => {
+                if (err.code === 'EEXIST') {
+                    // path already exists
+                    this.cacheDir = cacheFolder;
+                    return resolve(cacheFolder);
+                } else {
+                    return reject(err);
+                }
             });
         });
     }
@@ -43,17 +41,15 @@ class TemplateHelper<T extends IBaseService> {
     private __makeArchiveCacheDir(cacheFolderPath: string): Thenable<string> {
         return new Promise((resolve, reject) => {
             var archiveFolder = path.normalize(util.format('%s/%s/', cacheFolderPath, 'archives'));
-            fs.mkdir(archiveFolder, (err) => {
-                if (err) {
-                    if (err.code === 'EEXIST') {
-                        // path already exists
-                        return resolve(archiveFolder);
-                    } else {
-                        return reject(err);
-                    }
-                }
-
+            fileutils.mkdir(archiveFolder).then(() => {
                 return resolve(archiveFolder);
+            }, (err) => {
+                if (err.code === 'EEXIST') {
+                    // path already exists
+                    return resolve(archiveFolder);
+                } else {
+                    return reject(err);
+                }
             });
         });
     }
