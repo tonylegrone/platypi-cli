@@ -2,10 +2,10 @@
 import GithubService = require('../../services/github/github.service');
 import CliConfig = require('../../config/cli/platypicli.config');
 import path = require('path');
-import fs = require('fs');
 import util = require('util');
 import promises = require('es6-promise');
 import dirutils = require('../../utils/directory.utils');
+import fileUtils = require('../../utils/file.utils');
 
 var Promise = promises.Promise;
 
@@ -54,31 +54,55 @@ class BaseTemplateGenerator {
         }
     }
 
-    /*
-     * Conditionally updates cached templates if they are too old
-     * returns base template location as a string in a promise
-     */
-    updateTemplates(): Thenable<config.IPlatypiCliConfig> {
-        return this._config.getConfig().then((cliConfig) => {
-            var lastUpdate = cliConfig.templates.lastUpdated,
-                maxAge = new Date();
+    private __createTemplateFolder(folder: string, folderFullPath: string, destination: string): Thenable<string> {
+        var createPromises = [];
+        return new Promise((resolve, reject) => {
+            return fileUtils.readdir(folderFullPath).then((files) => {
+                var newFolder = path.join(destination, folder);
 
-            maxAge.setHours(maxAge.getHours() - 12);
-
-            if (lastUpdate < maxAge) {
-                return dirutils.appDataDir().then((appDataDir) => {
-                    return dirutils.appDataDir()
-                        .then((appDataDir) => {
-                            return this._helper.updateTemplates(appDataDir);
-                        })
-                        .then((templateLocation) => {
-                            return cliConfig;
+                return fileUtils.mkdir(newFolder).then(() => {
+                    files.forEach((file) => {
+                        var fullPath = path.join(folderFullPath, file);
+                        fileUtils.stat(fullPath).then((stat) => {
+                            if (stat.isDirectory()) {
+                                createPromises.push(this.__createTemplateFolder(file, fullPath, newFolder));
+                            } else {
+                                createPromises.push(this.__createTemplateFile(file, fullPath, newFolder));
+                            }
                         });
+                    });
+                    Promise.all(createPromises).then(() => {
+                        resolve(newFolder);
+                    }, (err) => {
+                        reject(err);
+                    });
                 });
-            } else {
-                return Promise.resolve(cliConfig);
-            }
+            });
         });
+    }
+
+    private __createTemplateFile(file: string, templateFullPath: string, destination: string): Thenable<string> {
+        return new Promise((resolve, reject) => {
+            return fileUtils.readFile(templateFullPath, { encoding: 'utf8' }).then((data) => {
+                data = this.__fillEnvironmentVariables(data);
+
+                var newFilename = this._handleFileName(file)
+                    , newfullPath = path.join(destination, newFilename);
+
+                return fileUtils.writeFile(newfullPath, data).then(() => {
+                    return resolve(newfullPath);
+                });
+            });
+        });
+    }
+
+    private __fillEnvironmentVariables(data: string): string {
+        this.environmentVariables.forEach((variable) => {
+            var regex = new RegExp('%' + variable.name + '%', 'g');
+            data = data.replace(regex, variable.value);
+        });
+
+        return data;
     }
 
     _resolveTemplateLocation(): Thenable<string> {
@@ -138,20 +162,16 @@ class BaseTemplateGenerator {
         }
         return new Promise((resolve, reject) => {
             var templateLocation = this.location;
-            fs.readdir(templateLocation, (err, files) => {
-                if (err) {
-                    return reject(err);
-                }
-
+            fileUtils.readdir(templateLocation).then((files) => {
                 var newFolder = path.join(destination, this.instanceName);
 
                 if (files && files.length > 0) {
-                    fs.mkdir(newFolder, (err) => {
+                    fileUtils.mkdir(newFolder).then(() => {
                         var templatePromises = [];
 
                         files.forEach((file) => {
                             var fullPath = path.join(templateLocation, file);
-                            fs.stat(fullPath, (err, stat) => {
+                            fileUtils.stat(fullPath).then((stat) => {
                                 if (stat.isDirectory()) {
                                     templatePromises.push(this.__createTemplateFolder(file, fullPath, newFolder));
                                 } else {
@@ -173,58 +193,32 @@ class BaseTemplateGenerator {
         });
     }
 
-    private __createTemplateFolder(folder: string, folderFullPath: string, destination: string): Thenable<string> {
-        return new Promise((resolve, reject) => {
-            fs.readdir(folderFullPath, (err, files) => {
-                var newFolder = path.join(destination, folder);
+    /*
+     * Updates templates if the cache age is maxed.
+     * returns config
+     */
+    updateTemplates(): Thenable<config.IPlatypiCliConfig> {
+        return this._config.getConfig().then((cliConfig) => {
+            var lastUpdate = cliConfig.templates.lastUpdated,
+                maxAge = new Date();
 
-                fs.mkdir(newFolder, (err) => {
-                    files.forEach((file) => {
-                        var fullPath = path.join(folderFullPath, file);
-                        fs.stat(fullPath, (err, stat) => {
-                            if (stat.isDirectory()) {
-                                return resolve(this.__createTemplateFolder(file, fullPath, newFolder));
-                            } else {
-                                return resolve(this.__createTemplateFile(file, fullPath, newFolder));
-                            }
+            maxAge.setHours(maxAge.getHours() - 12);
+
+            if (lastUpdate < maxAge) {
+                return dirutils.appDataDir().then((appDataDir) => {
+                    return dirutils.appDataDir()
+                        .then((appDataDir) => {
+                            return this._helper.updateTemplates(appDataDir);
+                        })
+                        .then((templateLocation) => {
+                            return cliConfig;
                         });
-                    });
                 });
-            });
+            } else {
+                return Promise.resolve(cliConfig);
+            }
         });
     }
-
-    private __createTemplateFile(file: string, templateFullPath: string, destination: string): Thenable<string> {
-        return new Promise((resolve, reject) => {
-            fs.readFile(templateFullPath, 'utf8', (err, data) => {
-                if (err) {
-                    return reject(err);
-                }
-
-                data = this.__fillEnvironmentVariables(data);
-
-                var newFilename = this._handleFileName(file)
-                    , newfullPath = path.join(destination, newFilename);
-
-                fs.writeFile(newfullPath, data, (err) => {
-                    if (err) {
-                        return reject(err);
-                    }
-                    return resolve(newfullPath);
-                });
-            });
-        });
-    }
-
-    private __fillEnvironmentVariables(data: string): string {
-        this.environmentVariables.forEach((variable) => {
-            var regex = new RegExp('%' + variable.name + '%', 'g');
-            data = data.replace(regex, variable.value);
-        });
-
-        return data;
-    }
-
 }
 
 export = BaseTemplateGenerator;
