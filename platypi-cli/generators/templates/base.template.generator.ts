@@ -82,16 +82,14 @@ class BaseTemplateGenerator {
     }
 
     private __createTemplateFile(file: string, templateFullPath: string, destination: string): Thenable<string> {
-        return new Promise((resolve, reject) => {
-            return fileUtils.readFile(templateFullPath, { encoding: 'utf8' }).then((data) => {
-                data = this.__fillEnvironmentVariables(data);
+        return fileUtils.readFile(templateFullPath, { encoding: 'utf8' }).then((data) => {
+            data = this.__fillEnvironmentVariables(data);
 
-                var newFilename = this._handleFileName(file)
-                    , newfullPath = path.join(destination, newFilename);
+            var newFilename = this._handleFileName(file)
+                , newfullPath = path.join(destination, newFilename);
 
-                return fileUtils.writeFile(newfullPath, data).then(() => {
-                    return resolve(newfullPath);
-                });
+            return fileUtils.writeFile(newfullPath, data).then(() => {
+                return newfullPath;
             });
         });
     }
