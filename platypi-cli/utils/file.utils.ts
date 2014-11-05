@@ -48,3 +48,49 @@ export var deleteFile = (location: string): Thenable<any> => {
         });
     });
 };
+
+export var stat = (location: string): Thenable<fs.Stats> => {
+    return new Promise((resolve, reject) => {
+        fs.stat(location, (err, stats) => {
+            if (err) {
+                return reject(err);
+            }
+
+            return resolve(stats);
+        });
+    });
+};
+
+export var readdir = (path: string): Thenable<Array<string>> => {
+    return new Promise((resolve, reject) => {
+        fs.readdir(path, (err, files) => {
+            if (err) {
+                return reject(err);
+            }
+
+            return resolve(files);
+        });
+    });
+};
+
+export var mkdir = (path: string, mode?: any) => {
+    return new Promise((resolve, reject) => {
+        if (mode) {
+            fs.mkdir(path, mode, (err) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                resolve();
+            });
+        } else {
+            fs.mkdir(path, (err) => {
+                if (err) {
+                    return reject(err);
+                }
+
+                resolve();
+            });
+        }
+    });
+};
