@@ -3,7 +3,8 @@
 import commander = require('commander');
 import msg = require('./helpers/msg.helper');
 import ConfigFinder = require('./config/project/config.finder');
-import configGenerator = require('./generators/platypiconfig.generator');
+import ConfigGenerator = require('./generators/platypiconfig.generator');
+import ProjectGenerator = require('./generators/templates/project.template.generator');
 
 var package = require('../package.json')
 //    , progressbar = require('simple-progress-bar')
@@ -47,8 +48,26 @@ msg.label('Platypi Command Line Interface');
 msg.log('Version ' + package.version);
 msg.log('Now entering interactive project generation...');
 
-// use prompt to fill in platypi.json properties
-configGenerator().then((config) => {
-    platypiConfig = config;
-    msg.log('Config file created, generating project structure...');
+// generate project from command prompts
+ConfigGenerator().then((newConfig) => {
+    var environmentVariables: Array<config.IEnvironmentVariable> = []
+        , configKeys = Object.keys(newConfig);
+
+    configKeys.forEach((key) => {
+        var value = newConfig[key];
+        if (!(value instanceof Array)) {
+            var envVar: config.IEnvironmentVariable = {
+                name: key,
+                value: value
+            };
+            environmentVariables.push(envVar);
+        }
+    });
+
+    var projectGen = new ProjectGenerator(newConfig.type, environmentVariables);
+    return projectGen.generateProject(newConfig);
+}).then((path) => {
+    msg.log('New Project at: ' + path);
+}, (err) => {
+    msg.error(err);
 });
