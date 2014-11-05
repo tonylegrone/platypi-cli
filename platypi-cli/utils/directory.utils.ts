@@ -53,8 +53,9 @@ export var deleteDirectoryRecursive = (fullPath: string) => {
                         return reject(err);
                     }
                     files.forEach((file) => {
-                        var filePath = path.join(fullPath, file);
-                        var fileStats = fs.statSync(filePath);
+                        var filePath = path.join(fullPath, file)
+                            , fileStats = fs.statSync(filePath);
+
                         if (fileStats.isDirectory()) {
                             deletePromises.push(deleteDirectoryRecursive(filePath));
                         } else {
