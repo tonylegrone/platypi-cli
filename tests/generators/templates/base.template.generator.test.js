@@ -101,8 +101,13 @@ describe('Base Template Generator', function () {
             output.length.should.be.greaterThan(0);
         });
 
-        after(function () {
-            utils.deleteDirectoryRecursive(path.join(__dirname, './testoutput'));
+        after(function (done) {
+            utils.deleteDirectoryRecursive(path.join(__dirname, './testoutput')).then(function () {
+                done();
+            }, function (err) {
+                console.log(err);
+                done();
+            });
         });
     });
 
