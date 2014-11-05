@@ -1,5 +1,4 @@
 ﻿/// <reference path="../_references.d.ts" />
-import fs = require('fs');
 import promises = require('es6-promise');
 
 var prompt = require('prompt')
@@ -54,13 +53,7 @@ var generateConfig = (): Thenable<config.IPlatypi> => {
                 type: response.type
             };
 
-            fs.writeFile('platypi.json', JSON.stringify(config), (err) => {
-                if (err) {
-                    reject(err);
-                }
-
-                resolve(config);
-            });
+            resolve(config);
         });
     });
 };
