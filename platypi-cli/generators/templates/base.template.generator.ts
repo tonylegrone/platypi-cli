@@ -177,7 +177,7 @@ class BaseTemplateGenerator {
                                 }
 
                                 Promise.all(templatePromises).then((newfiles) => {
-                                    resolve(newfiles);
+                                    resolve(newFolder);
                                 }, (err) => {
                                     reject(err);
                                 });
