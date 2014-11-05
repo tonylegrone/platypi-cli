@@ -39,3 +39,62 @@ export var appDataDir = (): Thenable<string> => {
         });
     });
 };
+
+export var deleteDirectoryRecursive = (fullPath: string) => {
+    var deletePromises = [];
+    return new Promise((resolve, reject) => {
+        fs.stat(fullPath, (err, stats) => {
+            if (err) {
+                reject(err);
+            }
+            if (stats.isDirectory()) {
+                fs.readdir(fullPath, (err, files) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    files.forEach((file) => {
+                        var filePath = path.join(fullPath, file);
+                        var fileStats = fs.statSync(filePath);
+                        if (fileStats.isDirectory()) {
+                            deletePromises.push(deleteDirectoryRecursive(filePath));
+                        } else {
+                            deletePromises.push(deleteWithPromise(filePath));
+                        }
+                    });
+
+                    Promise.all(deletePromises).then(() => {
+                        fs.rmdir(fullPath, (err) => {
+                            if (err) {
+                                reject(err);
+                            }
+                            resolve();
+                        });
+                    }, (err) => {
+                        reject(err);
+                    });
+
+                });
+            } else {
+                console.log('here');
+                fs.unlink(fullPath, (err) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    return resolve();
+                });
+            }
+        });
+    });
+};
+
+export var deleteWithPromise = (filePath: string) => {
+    return new Promise((resolve, reject) => {
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                return reject(err);
+            }
+
+            resolve();
+        });
+    });
+};
