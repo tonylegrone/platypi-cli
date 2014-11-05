@@ -7,21 +7,21 @@ import promises = require('es6-promise');
 var Promise = promises.Promise;
 
 export class PlatypiCliConfig {
-    config: config.IPlatypiCliConfig = null;
+    private __config: config.IPlatypiCliConfig = null;
     configPath: string = '';
 
     setConfig(newConfig: config.IPlatypiCliConfig): Thenable<config.IPlatypiCliConfig> {
-        if (JSON.stringify(newConfig) === JSON.stringify(this.config)) {
-            return Promise.resolve(this.config);
+        if (JSON.stringify(newConfig) === JSON.stringify(this.__config)) {
+            return Promise.resolve(this.__config);
         } else {
-            this.config = newConfig;
+            this.__config = newConfig;
             return this.__updateConfig();
         }
     }
 
     getConfig(): Thenable<config.IPlatypiCliConfig> {
-        if (config) {
-            return Promise.resolve(this.config);
+        if (this.__config) {
+            return Promise.resolve(this.__config);
         } else {
             return this.__loadConfig();
         }
@@ -37,9 +37,9 @@ export class PlatypiCliConfig {
                     }
 
                     this.configPath = configPath;
-                    this.config = JSON.parse(data);
+                    this.__config = JSON.parse(data);
 
-                    resolve(this.config);
+                    resolve(this.__config);
                 });
             });
         });
@@ -49,16 +49,16 @@ export class PlatypiCliConfig {
         return new Promise((resolve, reject) => {
             dirutil.appDataDir().then((appDataDir) => {
                 var configPath = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));
-                if (!this.config) {
+                if (!this.__config) {
                     return reject('No config loaded!');
                 }
-                fs.writeFile(configPath, JSON.stringify(this.config), (err) => {
+                fs.writeFile(configPath, JSON.stringify(this.__config), (err) => {
                     if (err) {
                         throw err;
                     }
                     this.configPath = configPath;
 
-                    resolve(this.config);
+                    resolve(this.__config);
                 });
             });
         });
