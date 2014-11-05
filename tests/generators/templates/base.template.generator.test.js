@@ -13,7 +13,7 @@ describe('Base Template Generator', function () {
 
     environmentVariables.push(nameVar);
 
-    var generator = new BaseGenerator(environmentVariables);
+    var generator = new BaseGenerator('model', 'base', environmentVariables);
 
     it('should be an object', function () {
         should.exist(generator);
@@ -73,7 +73,7 @@ describe('Base Template Generator', function () {
     });
 
     describe('_copyTemplateTo', function () {
-        var projectTemplateGen = new BaseGenerator(environmentVariables);
+        var projectTemplateGen = new BaseGenerator('project', 'web', environmentVariables);
         projectTemplateGen.instanceName = 'test';
         var error = ''
             , output = [];
