@@ -1,7 +1,8 @@
 var should = require('should') // jshint ignore:line
     , BaseGenerator = require('../../../platypi-cli/generators/templates/base.template.generator')
     , fs = require('fs')
-    , path = require('path');
+    , path = require('path')
+    , utils = require('../../../platypi-cli/utils/directory.utils.js');
 
 describe('Base Template Generator', function () {
     var environmentVariables = []
@@ -98,6 +99,10 @@ describe('Base Template Generator', function () {
         it('should copy project template files', function () {
             error.should.equal('');
             output.length.should.be.greaterThan(0);
+        });
+
+        after(function () {
+            utils.deleteDirectoryRecursive(path.join(__dirname, './testoutput'));
         });
     });
 
