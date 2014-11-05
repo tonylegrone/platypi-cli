@@ -49,12 +49,13 @@ export class PlatypiCliConfig {
         return new Promise((resolve, reject) => {
             dirutil.appDataDir().then((appDataDir) => {
                 var configPath = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));
+
                 if (!this.__config) {
                     return reject('No config loaded!');
                 }
                 fs.writeFile(configPath, JSON.stringify(this.__config), (err) => {
                     if (err) {
-                        throw err;
+                        return reject(err);
                     }
                     this.configPath = configPath;
 
