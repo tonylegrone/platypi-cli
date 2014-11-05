@@ -5,20 +5,23 @@ import path = require('path');
 import fs = require('fs');
 import util = require('util');
 import promises = require('es6-promise');
+import dirutils = require('../../utils/directory.utils');
 
 var Promise = promises.Promise;
 
 class BaseTemplateGenerator {
-    helper: TemplateHelper<any> = null;
-    config: CliConfig.PlatypiCliConfig = null;
+    _helper: TemplateHelper<any> = null;
+    _config: CliConfig.PlatypiCliConfig = null;
     location = null;
-    _CONTROLNAME = '';
     instanceName = '';
 
-    constructor(private environmentVariables: Array<config.IEnvironmentVariable>) {
-        this.helper = new TemplateHelper(GithubService);
-        this.config = CliConfig.config;
+    constructor(private __controlName
+        , private __projectType
+        , private environmentVariables: Array<config.IEnvironmentVariable>) {
+        this._helper = new TemplateHelper(GithubService);
+        this._config = CliConfig.config;
         this.__handleEnvironmentVariables();
+        this._resolveTemplateLocation();
     }
 
     private __handleEnvironmentVariables() {
@@ -34,10 +37,10 @@ class BaseTemplateGenerator {
         });
 
         if (name === '') {
-            this.instanceName = this._CONTROLNAME;
+            this.instanceName = this.__controlName;
             this.environmentVariables.push({
                 name: 'name',
-                value: this._CONTROLNAME
+                value: this.__controlName
             });
         } else {
             this.instanceName = name;
@@ -51,16 +54,51 @@ class BaseTemplateGenerator {
         }
     }
 
-    _resolveTemplateLocation(): string {
-        if (!this.location) {
-            // update templates
-        }
+    /*
+     * Conditionally updates cached templates if they are too old
+     * returns base template location as a string in a promise
+     */
+    updateTemplates(): Thenable<config.IPlatypiCliConfig> {
+        return this._config.getConfig().then((cliConfig) => {
+            var lastUpdate = cliConfig.templates.lastUpdated,
+                maxAge = new Date();
 
-        return path.normalize(path.resolve(this.location));
+            maxAge.setHours(maxAge.getHours() - 12);
+
+            if (lastUpdate < maxAge) {
+                return dirutils.appDataDir().then((appDataDir) => {
+                    return dirutils.appDataDir()
+                        .then((appDataDir) => {
+                            return this._helper.updateTemplates(appDataDir);
+                        })
+                        .then((templateLocation) => {
+                            return cliConfig;
+                        });
+                });
+            } else {
+                return Promise.resolve(cliConfig);
+            }
+        });
+    }
+
+    _resolveTemplateLocation(): Thenable<string> {
+        if (!this.location) {
+            return this.updateTemplates().then((config) => {
+                if (this.__controlName === 'project') {
+                    this.location = path.join(config.templates.baseLocation, config.templates.projects[this.__projectType]);
+                    return this.location;
+                }
+
+                this.location = path.join(config.templates.baseLocation, config.templates.controls[this.__projectType][this.__controlName]);
+                return this.location;
+            });
+        } else {
+            return Promise.resolve(this.location);
+        }
     }
 
     _getControlName(): string {
-        return this._CONTROLNAME;
+        return this.__controlName;
     }
 
     _getInstanceName(): string {
@@ -99,7 +137,7 @@ class BaseTemplateGenerator {
             return Promise.reject('No location!');
         }
         return new Promise((resolve, reject) => {
-            var templateLocation = this._resolveTemplateLocation();
+            var templateLocation = this.location;
             fs.readdir(templateLocation, (err, files) => {
                 if (err) {
                     return reject(err);
