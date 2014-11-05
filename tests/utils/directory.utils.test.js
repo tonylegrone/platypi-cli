@@ -1,4 +1,5 @@
 var should = require('should') // jshint ignore:line
+    , fs = require('fs')
     , path = require('path')
     , directory = require('../../platypi-cli/utils/directory.utils');
 
@@ -52,4 +53,67 @@ describe('directory utils', function () {
             dirPath.should.not.equal('');
         });
     });
+
+    describe('deleteWithPromise', function () {
+        var error = null;
+
+        before(function (done) {
+            fs.writeFile('test.json', JSON.stringify({ test: 'test' }), function (err) {
+                if (err) {
+                    error = err;
+                    done();
+                }
+
+                directory.deleteWithPromise('test.json').then(function () {
+                    done();
+                }, function (err) {
+                    error = err;
+                    done();
+                });
+            });
+        });
+
+        it('should delete the test file', function () {
+            should.not.exist(error);
+        });
+    });
+
+    describe('deleteDirectoryRecursive', function () {
+        var error = '';
+
+        before(function (done) {
+            fs.mkdir('./testdir', function (err) {
+                if (err) {
+                    error = err;
+                    done();
+                }
+                fs.mkdir('./testdir/test1', function (err) {
+                    if (err) {
+                        error = err;
+                        done();
+                    }
+
+                    fs.writeFile('./testdir/test1/test.json', JSON.stringify({ test: 'test' }), function (err) {
+                        if (err) {
+                            error = err;
+                            done();
+                        }
+
+                        directory.deleteDirectoryRecursive('./testdir')
+                            .then(function () {
+                                done();
+                            }, function (err) {
+                                error = err;
+                                done();
+                            });
+                    });
+                });
+            });
+        });
+
+        it('should delete a directory with contents', function () {
+            error.should.equal('');
+        });
+    });
+
 });
