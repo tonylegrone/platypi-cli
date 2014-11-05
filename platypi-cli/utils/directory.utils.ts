@@ -75,7 +75,6 @@ export var deleteDirectoryRecursive = (fullPath: string) => {
 
                 });
             } else {
-                console.log('here');
                 fs.unlink(fullPath, (err) => {
                     if (err) {
                         return reject(err);
