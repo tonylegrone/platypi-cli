@@ -21,7 +21,6 @@ class BaseTemplateGenerator {
         this._helper = new TemplateHelper(GithubService);
         this._config = CliConfig.config;
         this.__handleEnvironmentVariables();
-        this._resolveTemplateLocation();
     }
 
     private __handleEnvironmentVariables() {
@@ -155,37 +154,32 @@ class BaseTemplateGenerator {
     }
 
     _copyTemplateTo(destination: string): Thenable<any> {
-        if (!this.location) {
-            return Promise.reject('No location!');
-        }
-        return new Promise((resolve, reject) => {
-            var templateLocation = this.location;
-            fileUtils.readdir(templateLocation).then((files) => {
+        return this._resolveTemplateLocation().then((templateLocation) => {
+            return fileUtils.readdir(templateLocation).then((files) => {
                 var newFolder = path.join(destination, this.instanceName);
 
                 if (files && files.length > 0) {
-                    fileUtils.mkdir(newFolder).then(() => {
+                    return fileUtils.mkdir(newFolder).then(() => {
                         var templatePromises = [];
 
                         files.forEach((file) => {
                             var fullPath = path.join(templateLocation, file);
-                            fileUtils.stat(fullPath).then((stat) => {
+                            return fileUtils.stat(fullPath).then((stat) => {
                                 if (stat.isDirectory()) {
                                     templatePromises.push(this.__createTemplateFolder(file, fullPath, newFolder));
                                 } else {
                                     templatePromises.push(this.__createTemplateFile(file, fullPath, newFolder));
                                 }
-
-                                Promise.all(templatePromises).then((newfiles) => {
-                                    resolve(newFolder);
-                                }, (err) => {
-                                    reject(err);
-                                });
                             });
+                        });
+                        return Promise.all(templatePromises).then((newfiles) => {
+                            return newFolder;
+                        }, (err) => {
+                            throw err;
                         });
                     });
                 } else {
-                    return reject('No template files found.');
+                    throw 'No template files found.';
                 }
             });
         });
