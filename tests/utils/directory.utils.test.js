@@ -54,30 +54,6 @@ describe('directory utils', function () {
         });
     });
 
-    describe('deleteWithPromise', function () {
-        var error = null;
-
-        before(function (done) {
-            fs.writeFile('test.json', JSON.stringify({ test: 'test' }), function (err) {
-                if (err) {
-                    error = err;
-                    done();
-                }
-
-                directory.deleteWithPromise('test.json').then(function () {
-                    done();
-                }, function (err) {
-                    error = err;
-                    done();
-                });
-            });
-        });
-
-        it('should delete the test file', function () {
-            should.not.exist(error);
-        });
-    });
-
     describe('deleteDirectoryRecursive', function () {
         var error = '';
 
