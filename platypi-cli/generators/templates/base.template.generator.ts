@@ -99,6 +99,8 @@ class BaseTemplateGenerator {
             data = data.replace(regex, variable.value);
         });
 
+        data = data.replace(/%.*?%/g, '');
+
         return data;
     }
 
