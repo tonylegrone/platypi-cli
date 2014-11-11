@@ -19,6 +19,7 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
             }
 
             projectConfig.public = publicPath;
+            projectConfig.root = folder;
 
             return fileutils.writeFile(configPath, JSON.stringify(projectConfig)).then(() => {
                 return folder;
