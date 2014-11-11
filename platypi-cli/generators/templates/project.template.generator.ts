@@ -1,7 +1,6 @@
 ﻿/// <reference path="../../_references.d.ts" />
 
 import BaseTemplateGenerator = require('./base.template.generator');
-import fileutils = require('../../utils/file.utils');
 import path = require('path');
 
 class ProjectTemplateGenerator extends BaseTemplateGenerator {
@@ -9,7 +8,7 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
         super('project', type, environmentVariables);
     }
 
-    generateProject(projectConfig: config.IPlatypi, configPath?: string): Thenable<string> {
+    generateProject(projectConfig?: config.IPlatypi, configPath?: string): Thenable<string> {
         console.log('Extracting templates to: ' + process.cwd());
         return this._copyTemplateTo(process.cwd()).then((folder) => {
             var publicPath = path.join(folder, 'public');
@@ -21,7 +20,7 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
             projectConfig.public = publicPath;
             projectConfig.root = folder;
 
-            return fileutils.writeFile(configPath, JSON.stringify(projectConfig)).then(() => {
+            return projectConfig.save(configPath).then(() => {
                 return folder;
             });
         });
