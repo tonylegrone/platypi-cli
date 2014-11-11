@@ -14,8 +14,19 @@
         injectables?: Array<IInjectable>;
         services?: Array<IService>;
         models?: Array<IModel>;
+        repositories?: Array<IRepository>;
         templatecontrols?: Array<ITemplateControl>;
         attributecontrols?: Array<IAttributeControl>;
+
+        addViewControl(name: string, type: string, registeredName?: string);
+        addInjectable(name: string, type: string, registeredName?: string);
+        addService(name: string, type: string, registeredName?: string);
+        addModel(name: string, type: string, registeredName?: string);
+        addRepository(name: string, type: string, registeredName?: string);
+        addTemplateControl(name: string, type: string, registeredName?: string);
+        addAttributeControl(name: string, type: string, registeredName?: string);
+
+        save(configPath: string): Thenable<string>;
     }
 
     export interface IViewControl {
