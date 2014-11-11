@@ -3,166 +3,166 @@ import fileutils = require('../../utils/file.utils');
 
 class Config implements config.IPlatypi {
     // required
-    private __name: string = 'New Platypi Project';
+    name: string = 'New Platypi Project';
 
-    get name(): string {
-        return this.__name;
+    get Name(): string {
+        return this.name;
     }
 
-    set name(value: string) {
-        this.__name = value;
+    set Name(value: string) {
+        this.name = value;
     }
 
-    private __author = 'Platypi';
+    author = 'Platypi';
 
-    get author(): string {
-        return this.__author;
+    get Author(): string {
+        return this.author;
     }
 
-    set author(value: string) {
-        this.__author = value;
+    set Author(value: string) {
+        this.author = value;
     }
 
-    private __type = 'web';
+    type = 'web';
 
-    get type(): string {
-        return this.__type;
+    get Type(): string {
+        return this.type;
     }
 
-    set type(value: string) {
-        this.__type = value.toLowerCase();
+    set Type(value: string) {
+        this.type = value.toLowerCase();
     }
 
     // optional
 
-    private __description = 'A new PlatypusTS project.';
+    description: string = 'A new PlatypusTS project.';
 
-    get description(): string {
-        return this.__description;
+    get Description(): string {
+        return this.description;
     }
 
-    set description(value: string) {
-        this.__description = value;
+    set Description(value: string) {
+        this.description = value;
     }
 
-    private __email;
+    email: string;
 
-    get email(): string {
-        return this.__email;
+    get Email(): string {
+        return this.email;
     }
 
-    set email(value: string) {
-        this.__email = value;
+    set Email(value: string) {
+        this.email = value;
     }
 
-    private __homepage = 'http://getplatypi.com';
+    homepage: string = 'http://getplatypi.com';
 
-    get homepage(): string {
-        return this.__homepage;
+    get Homepage(): string {
+        return this.homepage;
     }
 
-    set homepage(value: string) {
-        this.__homepage = value;
+    set Homepage(value: string) {
+        this.homepage = value;
     }
 
-    private __root;
+    root: string;
 
-    get root(): string {
-        return this.__root;
+    get Root(): string {
+        return this.root;
     }
 
-    set root(value: string) {
-        this.__root = path.normalize(value);
+    set Root(value: string) {
+        this.root = path.normalize(value);
     }
 
-    private __public;
+    public: string;
 
-    get public(): string {
-        return this.__public;
+    get Public(): string {
+        return this.public;
     }
 
-    set public(value: string) {
-        this.__public = path.normalize(value);
+    set Public(value: string) {
+        this.public = path.normalize(value);
     }
 
-    private __cordova;
+    cordova: string;
 
-    get cordova(): string {
-        return this.__cordova;
+    get Cordova(): string {
+        return this.cordova;
     }
 
-    set cordova(value: string) {
-        this.__cordova = path.normalize(value);
+    set Cordova(value: string) {
+        this.cordova = path.normalize(value);
     }
 
-    private __viewcontrols: Array<config.IViewControl> = new Array();
+    viewcontrols: Array<config.IViewControl> = new Array();
 
-    get viewcontrols(): Array<config.IViewControl> {
-        return this.__viewcontrols;
+    get ViewControls(): Array<config.IViewControl> {
+        return this.viewcontrols;
     }
 
-    set viewcontrols(value: Array<config.IViewControl>) {
-        this.__viewcontrols = value;
+    set ViewControls(value: Array<config.IViewControl>) {
+        this.viewcontrols = value;
     }
 
-    private __injectables: Array<config.IInjectable> = new Array();
+    injectables: Array<config.IInjectable> = new Array();
 
-    get injectables(): Array<config.IInjectable> {
-        return this.__injectables;
+    get Injectables(): Array<config.IInjectable> {
+        return this.injectables;
     }
 
-    set injectables(value: Array<config.IInjectable>) {
-        this.__injectables = value;
-    }
-    
-    private __services: Array<config.IService> = new Array();
-
-    get services(): Array<config.IService> {
-        return this.__services;
+    set Injectables(value: Array<config.IInjectable>) {
+        this.injectables = value;
     }
 
-    set services(value: Array<config.IService>) {
-        this.__services = value;
+    services: Array<config.IService> = new Array();
+
+    get Services(): Array<config.IService> {
+        return this.services;
     }
 
-    private __repositories: Array<config.IRepository> = new Array();
-
-    get repositories(): Array<config.IRepository> {
-        return this.__repositories;
+    set Services(value: Array<config.IService>) {
+        this.services = value;
     }
 
-    set repositories(value: Array<config.IRepository>) {
-        this.__repositories = value;
+    repositories: Array<config.IRepository> = new Array();
+
+    get Repositories(): Array<config.IRepository> {
+        return this.repositories;
     }
 
-    private __models: Array<config.IModel> = new Array();
-
-    get models(): Array<config.IModel> {
-        return this.__services;
+    set Repositories(value: Array<config.IRepository>) {
+        this.repositories = value;
     }
 
-    set models(value: Array<config.IModel>) {
-        this.__services = value;
+    models: Array<config.IModel> = new Array();
+
+    get Models(): Array<config.IModel> {
+        return this.services;
     }
 
-    private __templatecontrols: Array<config.ITemplateControl> = new Array();
-
-    get templatecontrols(): Array<config.ITemplateControl> {
-        return this.__templatecontrols;
+    set Models(value: Array<config.IModel>) {
+        this.services = value;
     }
 
-    set templatecontrols(value: Array<config.ITemplateControl>) {
-        this.__templatecontrols = value;
+    templatecontrols: Array<config.ITemplateControl> = new Array();
+
+    get TemplateControls(): Array<config.ITemplateControl> {
+        return this.templatecontrols;
     }
 
-    private __attributecontrols: Array<config.IAttributeControl> = new Array();
-
-    get attributecontrols(): Array<config.IAttributeControl> {
-        return this.__attributecontrols;
+    set TemplateControls(value: Array<config.ITemplateControl>) {
+        this.templatecontrols = value;
     }
 
-    set attributecontrols(value: Array<config.IAttributeControl>) {
-        this.__attributecontrols = value;
+    attributecontrols: Array<config.IAttributeControl> = new Array();
+
+    get AttributeControls(): Array<config.IAttributeControl> {
+        return this.attributecontrols;
+    }
+
+    set AttributeControls(value: Array<config.IAttributeControl>) {
+        this.attributecontrols = value;
     }
 
     save(configPath: string): Thenable<string> {
@@ -175,7 +175,7 @@ class Config implements config.IPlatypi {
             type: type,
             registeredName: registeredName || name
         };
-        this.__viewcontrols.push(newViewControl);
+        this.ViewControls.push(newViewControl);
     }
 
     addInjectable(name: string, type: string, registeredName?: string) {
@@ -184,7 +184,7 @@ class Config implements config.IPlatypi {
             type: type,
             registeredName: registeredName || name
         };
-        this.__injectables.push(newInjectable);
+        this.injectables.push(newInjectable);
     }
 
     addService(name: string, type: string, registeredName?: string) {
@@ -193,7 +193,7 @@ class Config implements config.IPlatypi {
             type: type,
             registeredName: registeredName || name
         };
-        this.__services.push(newService);
+        this.services.push(newService);
     }
 
     addModel(name: string, type: string, registeredName?: string) {
@@ -202,7 +202,7 @@ class Config implements config.IPlatypi {
             type: type,
             registeredName: registeredName || name
         };
-        this.__models.push(newModel);
+        this.models.push(newModel);
     }
 
     addTemplateControl(name: string, type: string, registeredName?: string) {
@@ -211,7 +211,7 @@ class Config implements config.IPlatypi {
             type: type,
             registeredName: registeredName || name
         };
-        this.__templatecontrols.push(newTemplateControl);
+        this.templatecontrols.push(newTemplateControl);
     }
 
     addAttributeControl(name: string, type: string, registeredName?: string) {
@@ -220,7 +220,7 @@ class Config implements config.IPlatypi {
             type: type,
             registeredName: registeredName || name
         };
-        this.__attributecontrols.push(newAttributeControl);
+        this.attributecontrols.push(newAttributeControl);
     }
 
     addRepository(name: string, type: string, registeredName?: string) {
@@ -229,12 +229,12 @@ class Config implements config.IPlatypi {
             type: type,
             registeredName: registeredName || name
         };
-        this.__repositories.push(newRepository);
+        this.repositories.push(newRepository);
     }
 
     static CreateNewMobileConfig(): config.IPlatypi {
         var mobileConfig = new Config();
-        mobileConfig.type = 'mobile';
+        mobileConfig.Type = 'mobile';
 
         // TODO: this should be configurable in the template version
         mobileConfig.addModel('base', 'model');
@@ -253,7 +253,7 @@ class Config implements config.IPlatypi {
 
     static CreateNewWebConfig(): config.IPlatypi {
         var webConfig = new Config();
-        webConfig.type = 'web';
+        webConfig.Type = 'web';
 
         // TODO: this should be configurable in the template version
         webConfig.addModel('base', 'model');
