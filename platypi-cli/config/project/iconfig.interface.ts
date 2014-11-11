@@ -5,7 +5,7 @@
         description?: string;
         author: string;
         email?: string;
-        website?: string;
+        homepage?: string;
         type: string;
         root?: string;
         public?: string;

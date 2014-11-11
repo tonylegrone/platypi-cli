@@ -49,7 +49,7 @@ var generateConfig = (): Thenable<config.IPlatypi> => {
                 description: response.description,
                 author: response.author,
                 email: response.email,
-                website: response.website,
+                homepage: response.website,
                 type: response.type
             };
 
