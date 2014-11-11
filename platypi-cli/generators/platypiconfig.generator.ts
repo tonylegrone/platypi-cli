@@ -1,5 +1,6 @@
 ﻿/// <reference path="../_references.d.ts" />
 import promises = require('es6-promise');
+import PlatypiConfig = require('../config/project/platypi.config');
 
 var prompt = require('prompt')
     , Promise = promises.Promise;
@@ -44,14 +45,15 @@ var generateConfig = (): Thenable<config.IPlatypi> => {
 
     return new Promise((resolve, reject) => {
         prompt.get(schema, (err, response) => {
-            var config: config.IPlatypi = {
-                name: response.name,
-                description: response.description,
-                author: response.author,
-                email: response.email,
-                homepage: response.website,
-                type: response.type
-            };
+            var config: config.IPlatypi = (response.type === 'web' ? PlatypiConfig.CreateNewWebConfig()
+                : PlatypiConfig.CreateNewMobileConfig());
+
+            config.name = response.name;
+            config.description = response.description;
+            config.author = response.author;
+            config.email = response.email;
+            config.homepage = response.homepage;
+            config.type = response.type;
 
             resolve(config);
         });
