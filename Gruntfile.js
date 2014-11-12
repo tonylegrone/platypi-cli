@@ -19,6 +19,9 @@ module.exports = function (grunt) {
         , shell: {
             tsd: {
                 command: path.normalize('./node_modules/.bin/tsd') + ' update -so --config ./platypi-cli/tsd.json'
+            },
+            link: {
+                command: 'npm link'
             }
         }
         , tslint: {
@@ -73,7 +76,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', ['mochaTest']);
 
-    grunt.registerTask('build', ['shell:tsd', 'lint', 'typescript', 'test', 'file_append:bin']);
+    grunt.registerTask('build', ['shell:tsd', 'lint', 'typescript', 'test', 'file_append:bin', 'shell:link']);
 
     grunt.registerTask('default', ['build']);
 
