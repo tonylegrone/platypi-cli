@@ -6,6 +6,7 @@ import util = require('util');
 import promises = require('es6-promise');
 import dirutils = require('../../utils/directory.utils');
 import fileUtils = require('../../utils/file.utils');
+import fs = require('fs');
 
 var Promise = promises.Promise;
 
@@ -14,6 +15,8 @@ class BaseTemplateGenerator {
     _config: CliConfig.PlatypiCliConfig = null;
     location = null;
     instanceName = '';
+    fileUtils = fileUtils;
+    dirUtils = dirutils;
 
     constructor(private __controlName
         , private __projectType
@@ -58,23 +61,23 @@ class BaseTemplateGenerator {
         return new Promise((resolve, reject) => {
             return fileUtils.readdir(folderFullPath).then((files) => {
                 var newFolder = path.join(destination, folder);
-
                 return fileUtils.mkdir(newFolder).then(() => {
                     files.forEach((file) => {
                         var fullPath = path.join(folderFullPath, file);
-                        fileUtils.stat(fullPath).then((stat) => {
-                            if (stat.isDirectory()) {
-                                createPromises.push(this.__createTemplateFolder(file, fullPath, newFolder));
-                            } else {
-                                createPromises.push(this.__createTemplateFile(file, fullPath, newFolder));
-                            }
-                        });
+                        var stat = fs.statSync(fullPath);
+                        if (stat.isDirectory()) {
+                            createPromises.push(this.__createTemplateFolder(file, fullPath, newFolder));
+                        } else {
+                            createPromises.push(this.__createTemplateFile(file, fullPath, newFolder));
+                        }
                     });
                     Promise.all(createPromises).then(() => {
                         resolve(newFolder);
                     }, (err) => {
                         reject(err);
                     });
+                }, (err) => {
+                    reject(err);
                 });
             });
         });
@@ -166,13 +169,12 @@ class BaseTemplateGenerator {
 
                         files.forEach((file) => {
                             var fullPath = path.join(templateLocation, file);
-                            return fileUtils.stat(fullPath).then((stat) => {
-                                if (stat.isDirectory()) {
-                                    templatePromises.push(this.__createTemplateFolder(file, fullPath, newFolder));
-                                } else {
-                                    templatePromises.push(this.__createTemplateFile(file, fullPath, newFolder));
-                                }
-                            });
+                            var stat = fs.statSync(fullPath);
+                            if (stat.isDirectory()) {
+                                templatePromises.push(this.__createTemplateFolder(file, fullPath, newFolder));
+                            } else {
+                                templatePromises.push(this.__createTemplateFile(file, fullPath, newFolder));
+                            }
                         });
                         return Promise.all(templatePromises).then((newfiles) => {
                             return newFolder;
