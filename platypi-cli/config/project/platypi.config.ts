@@ -270,7 +270,7 @@ class Config implements config.IPlatypi {
         return webConfig;
     }
 
-    static load(configPath: string): Thenable<config.IPlatypi> {
+    static loadFromFile(configPath: string): Thenable<config.IPlatypi> {
         return fileutils.readFile(configPath, { encoding: 'utf8' }).then((data) => {
             var configData: config.IPlatypi = JSON.parse(data)
                 , parsedConfig = new Config()
@@ -284,6 +284,17 @@ class Config implements config.IPlatypi {
         }, (err) => {
             throw err;
         });
+    }
+
+    static loadFromObject(configData: config.IPlatypi): config.IPlatypi {
+        var parsedConfig = new Config()
+            , keys = Object.keys(configData);
+
+        keys.forEach((key) => {
+            parsedConfig[key] = configData[key] || parsedConfig[key];
+        });
+
+        return parsedConfig;
     }
 
 }
