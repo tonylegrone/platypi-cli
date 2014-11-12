@@ -52,7 +52,6 @@ commander
         var projectGen = new ProjectGenerator(newConfig.type, environmentVariables);
         projectGen.generateProject(newConfig).then((path) => {
             msg.log('New Project at: ' + path);
-            process.exit(0);
         }, (err) => {
             msg.error(err);
             process.exit(1);
@@ -88,7 +87,6 @@ commander
 
         }).then((path) => {
             msg.log('New Project at: ' + path);
-            process.exit(0);
         }, (err) => {
             msg.error(err);
             process.exit(0);
