@@ -56,32 +56,24 @@ class BaseTemplateGenerator {
     }
 
     private __createTemplateFolder(folder: string, folderFullPath: string, destination: string): Thenable<string> {
-        var createPromises = [];
-        return new Promise((resolve, reject) => {
-            return fileUtils.readdir(folderFullPath).then((files) => {
-                var newFolder = path.join(destination, folder);
-                return fileUtils.mkdir(newFolder).then(() => {
-                    createPromises = files.map((file) => {
-                        return new Promise((resolve, reject) => {
-                            var fullPath = path.join(folderFullPath, file);
+        return fileUtils.readdir(folderFullPath).then((files) => {
+            var newFolder = path.join(destination, folder);
+            return fileUtils.mkdir(newFolder).then(() => {
+                return Promise.all(<Array<Promise<string>>>files.map((file) => {
+                    var fullPath = path.join(folderFullPath, file);
 
-                            fileUtils.stat(fullPath).then((stat) => {
-                                if (stat.isDirectory()) {
-                                    resolve(this.__createTemplateFolder(file, fullPath, newFolder));
-                                } else {
-                                    resolve(this.__createTemplateFile(file, fullPath, newFolder));
-                                }
-                            });
-                        });
+                    return fileUtils.stat(fullPath).then((stat) => {
+                        if (stat.isDirectory()) {
+                            return this.__createTemplateFolder(file, fullPath, newFolder);
+                        } else {
+                            return this.__createTemplateFile(file, fullPath, newFolder);
+                        }
                     });
-                    Promise.all(createPromises).then(() => {
-                        resolve(newFolder);
-                    }, (err) => {
-                        reject(err);
-                    });
-                }, (err) => {
-                    reject(err);
+                })).then(() => {
+                    return newFolder;
                 });
+            }, (err) => {
+                throw err;
             });
         });
     }
@@ -168,25 +160,18 @@ class BaseTemplateGenerator {
 
                 if (files && files.length > 0) {
                     return fileUtils.mkdir(newFolder).then(() => {
-                        var templatePromises = [];
 
-                        templatePromises = files.map((file) => {
-                            return new Promise((resolve, reject) => {
-                                var fullPath = path.join(templateLocation, file);
-                                fileUtils.stat(fullPath).then((stat) => {
-                                    if (stat.isDirectory()) {
-                                        resolve(this.__createTemplateFolder(file, fullPath, newFolder));
-                                    } else {
-                                        resolve(this.__createTemplateFile(file, fullPath, newFolder));
-                                    }
-                                });
+                        return Promise.all(<Array<Promise<string>>>files.map((file) => {
+                            var fullPath = path.join(templateLocation, file);
+                            return fileUtils.stat(fullPath).then((stat) => {
+                                if (stat.isDirectory()) {
+                                    return this.__createTemplateFolder(file, fullPath, newFolder);
+                                } else {
+                                    return this.__createTemplateFile(file, fullPath, newFolder);
+                                }
                             });
-                        });
-
-                        return Promise.all(templatePromises).then((newfiles) => {
+                        })).then(() => {
                             return newFolder;
-                        }, (err) => {
-                            throw err;
                         });
                     });
                 } else {
