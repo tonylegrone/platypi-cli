@@ -6,7 +6,6 @@ import util = require('util');
 import promises = require('es6-promise');
 import dirutils = require('../../utils/directory.utils');
 import fileUtils = require('../../utils/file.utils');
-import fs = require('fs');
 
 var Promise = promises.Promise;
 
@@ -62,14 +61,18 @@ class BaseTemplateGenerator {
             return fileUtils.readdir(folderFullPath).then((files) => {
                 var newFolder = path.join(destination, folder);
                 return fileUtils.mkdir(newFolder).then(() => {
-                    files.forEach((file) => {
-                        var fullPath = path.join(folderFullPath, file);
-                        var stat = fs.statSync(fullPath);
-                        if (stat.isDirectory()) {
-                            createPromises.push(this.__createTemplateFolder(file, fullPath, newFolder));
-                        } else {
-                            createPromises.push(this.__createTemplateFile(file, fullPath, newFolder));
-                        }
+                    createPromises = files.map((file) => {
+                        return new Promise((resolve, reject) => {
+                            var fullPath = path.join(folderFullPath, file);
+
+                            fileUtils.stat(fullPath).then((stat) => {
+                                if (stat.isDirectory()) {
+                                    resolve(this.__createTemplateFolder(file, fullPath, newFolder));
+                                } else {
+                                    resolve(this.__createTemplateFile(file, fullPath, newFolder));
+                                }
+                            });
+                        });
                     });
                     Promise.all(createPromises).then(() => {
                         resolve(newFolder);
@@ -167,15 +170,19 @@ class BaseTemplateGenerator {
                     return fileUtils.mkdir(newFolder).then(() => {
                         var templatePromises = [];
 
-                        files.forEach((file) => {
-                            var fullPath = path.join(templateLocation, file);
-                            var stat = fs.statSync(fullPath);
-                            if (stat.isDirectory()) {
-                                templatePromises.push(this.__createTemplateFolder(file, fullPath, newFolder));
-                            } else {
-                                templatePromises.push(this.__createTemplateFile(file, fullPath, newFolder));
-                            }
+                        templatePromises = files.map((file) => {
+                            return new Promise((resolve, reject) => {
+                                var fullPath = path.join(templateLocation, file);
+                                fileUtils.stat(fullPath).then((stat) => {
+                                    if (stat.isDirectory()) {
+                                        resolve(this.__createTemplateFolder(file, fullPath, newFolder));
+                                    } else {
+                                        resolve(this.__createTemplateFile(file, fullPath, newFolder));
+                                    }
+                                });
+                            });
                         });
+
                         return Promise.all(templatePromises).then((newfiles) => {
                             return newFolder;
                         }, (err) => {
