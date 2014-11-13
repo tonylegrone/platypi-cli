@@ -33,40 +33,36 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
 
     private __preserveStructure(publicPath: string): Thenable<any> {
         return this.__walkItOut(publicPath, publicPath).then((result) => {
-            this.projectStruct.forEach((directory) => {
+            Promise.all<Array<Promise<any>>>(this.projectStruct.map((directory) => {
                 var dirNormal = path.normalize(directory);
                 if (!result[dirNormal]) {
                     var fullPath = path.join(publicPath, dirNormal);
                     return this.fileUtils.mkdir(fullPath);
                 }
-            });
+            }));
         });
     }
 
     private __walkItOut(walkPath: string, publicPath: string): Thenable<Array<string>> {
-        return new Promise((resolve, reject) => {
-            var rtnArray = []
-                , promiseArray = [];
+        var rtnArray = [];
 
-            this.fileUtils.readdir(walkPath).then((listings) => {
-                promiseArray = listings.map((listing) => {
-                    var p = path.join(walkPath, listing);
-                    return this.fileUtils.stat(p).then((stats) => {
-                        if (stats.isDirectory()) {
-                            rtnArray.push(path.normalize(path.relative(publicPath, p)));
-                            return this.__walkItOut(p, publicPath);
-                        } else {
-                            return Promise.resolve([]);
-                        }
-                    });
+        return this.fileUtils.readdir(walkPath).then((listings) => {
+            return Promise.all(<Array<Promise<Array<string>>>>listings.map((listing) => {
+                var p = path.join(walkPath, listing);
+                return this.fileUtils.stat(p).then((stats) => {
+                    if (stats.isDirectory()) {
+                        rtnArray.push(path.normalize(path.relative(publicPath, p)));
+                        return this.__walkItOut(p, publicPath);
+                    } else {
+                        return <Thenable<Array<string>>>Promise.resolve<Array<string>>([]);
+                    }
                 });
-                Promise.all(promiseArray).then((results) => {
-                    results.forEach((result) => {
-                        rtnArray = rtnArray.concat(result);
-                    });
-                    resolve(rtnArray);
-                });
-            });
+            }));
+        })
+        .then((results) => {
+            return results.reduce((prev, curr) => {
+                return prev.concat(curr);
+            }, rtnArray);
         });
     }
 
