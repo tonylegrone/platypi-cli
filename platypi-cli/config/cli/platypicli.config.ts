@@ -2,6 +2,7 @@
 import path = require('path');
 import util = require('util');
 import dirutil = require('../../utils/directory.utils');
+import fileutil = require('../../utils/file.utils');
 import promises = require('es6-promise');
 
 var Promise = promises.Promise;
@@ -28,19 +29,13 @@ export class PlatypiCliConfig {
     }
 
     private __loadConfig(): Thenable<config.IPlatypiCliConfig> {
-        return new Promise((resolve, reject) => {
-            dirutil.appDataDir().then((appDataDir) => {
-                var configPath = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));
-                fs.readFile(configPath, 'utf8', (err, data) => {
-                    if (err) {
-                        return reject(err);
-                    }
+        return dirutil.appDataDir().then((appDataDir) => {
+            var configPath = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));
+            return fileutil.readFile(configPath, { encoding: 'utf8' }).then((data) => {
+                this.configPath = configPath;
+                this.__config = JSON.parse(data);
 
-                    this.configPath = configPath;
-                    this.__config = JSON.parse(data);
-
-                    resolve(this.__config);
-                });
+                return this.__config;
             });
         });
     }
