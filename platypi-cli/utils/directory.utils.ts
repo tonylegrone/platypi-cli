@@ -1,6 +1,6 @@
-﻿import fs = require('fs');
-import path = require('path');
+﻿import path = require('path');
 import promises = require('es6-promise');
+import fileutil = require('../utils/file.utils');
 import rmdir = require('rimraf');
 
 var Promise = promises.Promise;
@@ -30,16 +30,15 @@ export var upOneLevel = (directory: string = process.cwd()): string => {
  * Returns the appdata path relative to the host OS
  */
 export var appDataDir = (): Thenable<string> => {
-    return new Promise((resolve, reject) => {
-        var appdata = process.env.APPDATA || (process.platform === 'darwin'
-            ? path.join(process.env.HOME, 'Library/Preference')
-            : '/var/local');
+    var appdata = process.env.APPDATA || (process.platform === 'darwin'
+        ? path.join(process.env.HOME, 'Library/Application\ Support')
+        : '/var/local');
 
-        appdata = path.join(appdata, '/platypi-cli');
-
-        fs.mkdir(appdata, (err) => {
-            resolve(appdata);
-        });
+    appdata = path.join(appdata, '/platypi-cli');
+    return fileutil.mkdir(appdata).then((appdata) => {
+        return appdata;
+    }, (err) => {
+        return appdata;
     });
 };
 
