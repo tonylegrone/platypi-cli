@@ -158,7 +158,6 @@ class BaseTemplateGenerator {
 
     _copyTemplateTo(destination: string): Thenable<any> {
         return this._resolveTemplateLocation().then((templateLocation) => {
-            console.log('templateLocation: ' + templateLocation);
             return fileUtils.readdir(templateLocation).then((files) => {
                 var newFolder = path.join(destination, this.instanceName);
 
