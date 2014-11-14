@@ -5,6 +5,7 @@ import msg = require('./helpers/msg.helper');
 import ConfigFinder = require('./config/project/config.finder');
 import ConfigGenerator = require('./generators/platypiconfig.generator');
 import ProjectGenerator = require('./generators/templates/project.template.generator');
+import ViewControlGenerator = require('./generators/templates/viewcontrol.generator');
 import PlatypiConfig = require('./config/project/platypi.config');
 
 var package = require('../package.json')
@@ -53,6 +54,23 @@ commander
         projectGen.generateProject(newConfig).then((path) => {
             msg.log('New Project at: ' + path);
             process.exit(0);
+        }, (err) => {
+            msg.error(err);
+            process.exit(1);
+        });
+    });
+
+commander
+    .command('add viewcontrol [name] [ registered name]')
+    .description('Add a new ViewControl to an existing project.')
+    .action((name, registeredname) => {
+        var finder = new ConfigFinder();
+        finder.findConfig().then((config) => {
+            platypiConfig = config;
+            var controlGenerator = new ViewControlGenerator('viewcontrol', name, registeredname);
+            controlGenerator.generateViewControl(config).then((newPath) => {
+                msg.log('New ViewControl generated at: ' + newPath);
+            });
         }, (err) => {
             msg.error(err);
             process.exit(1);
