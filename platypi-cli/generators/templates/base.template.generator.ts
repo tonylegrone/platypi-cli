@@ -158,6 +158,7 @@ class BaseTemplateGenerator {
 
     _copyTemplateTo(destination: string): Thenable<any> {
         return this._resolveTemplateLocation().then((templateLocation) => {
+            console.log('templateLocation: ' + templateLocation);
             return fileUtils.readdir(templateLocation).then((files) => {
                 var newFolder = path.join(destination, this.instanceName);
 
@@ -197,13 +198,9 @@ class BaseTemplateGenerator {
 
             if (lastUpdate < maxAge) {
                 return dirutils.appDataDir().then((appDataDir) => {
-                    return dirutils.appDataDir()
-                        .then((appDataDir) => {
-                            return this._helper.updateTemplates(appDataDir);
-                        })
-                        .then((templateLocation) => {
-                            return cliConfig;
-                        });
+                    return this._helper.updateTemplates(appDataDir);
+                }).then((templateLocation) => {
+                    return cliConfig;
                 });
             } else {
                 return Promise.resolve(cliConfig);
