@@ -14,6 +14,7 @@ class BaseTemplateGenerator {
     _config: CliConfig.PlatypiCliConfig = null;
     location = null;
     instanceName = '';
+    registeredName = '';
     fileUtils = fileUtils;
     dirUtils = dirutils;
 
@@ -34,6 +35,7 @@ class BaseTemplateGenerator {
                 name = variable.value;
             } else if (variable.name === 'registername') {
                 registerName = variable.value;
+                this.registeredName = variable.value;
             }
         });
 
@@ -52,6 +54,7 @@ class BaseTemplateGenerator {
                 name: 'registername',
                 value: this.instanceName
             });
+            this.registeredName = this.instanceName;
         }
     }
 
