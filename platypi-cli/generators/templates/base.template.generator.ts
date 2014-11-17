@@ -164,7 +164,6 @@ class BaseTemplateGenerator {
 
                 if (files && files.length > 0) {
                     return fileUtils.mkdir(newFolder).then(() => {
-
                         return Promise.all(<Array<Promise<string>>>files.map((file) => {
                             var fullPath = path.join(templateLocation, file);
                             return fileUtils.stat(fullPath).then((stat) => {
@@ -174,9 +173,9 @@ class BaseTemplateGenerator {
                                     return this.__createTemplateFile(file, fullPath, newFolder);
                                 }
                             });
-                        })).then(() => {
-                            return newFolder;
-                        });
+                        }));
+                    }).then(() => {
+                        return newFolder;
                     });
                 } else {
                     throw 'No template files found.';

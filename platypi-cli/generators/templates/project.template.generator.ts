@@ -33,7 +33,7 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
 
     private __preserveStructure(publicPath: string): Thenable<any> {
         return this.__walkItOut(publicPath, publicPath).then((result) => {
-            Promise.all<Array<Promise<any>>>(this.projectStruct.map((directory) => {
+            return Promise.all<Array<Promise<any>>>(this.projectStruct.map((directory) => {
                 var dirNormal = path.normalize(directory);
                 if (!result[dirNormal]) {
                     var fullPath = path.join(publicPath, dirNormal);
