@@ -61,10 +61,12 @@
     <TypeScriptCompile Include="config\project\config.finder.ts" />
     <TypeScriptCompile Include="config\project\config.validator.ts" />
     <TypeScriptCompile Include="config\project\iconfig.interface.ts" />
+    <TypeScriptCompile Include="config\project\platypi.config.ts" />
     <TypeScriptCompile Include="generators\platypiconfig.generator.ts" />
     <TypeScriptCompile Include="generators\templates\base.template.generator.ts" />
     <TypeScriptCompile Include="generators\templates\ienvironmentvariable.interface.ts" />
     <TypeScriptCompile Include="generators\templates\project.template.generator.ts" />
+    <TypeScriptCompile Include="generators\templates\viewcontrol.generator.ts" />
     <TypeScriptCompile Include="helpers\template.helper.ts" />
     <TypeScriptCompile Include="helpers\msg.helper.ts" />
     <TypeScriptCompile Include="platypi.ts" />
