@@ -5,7 +5,8 @@ import msg = require('./helpers/msg.helper');
 import ConfigFinder = require('./config/project/config.finder');
 import ConfigGenerator = require('./generators/platypiconfig.generator');
 import ProjectGenerator = require('./generators/templates/project.template.generator');
-import ViewControlGenerator = require('./generators/templates/viewcontrol.generator');
+import ViewControlGenerator = require('./generators/templates/viewcontrol.template.generator');
+import InjectableGenerator = require('./generators/templates/injectable.template.generator');
 import PlatypiConfig = require('./config/project/platypi.config');
 
 var package = require('../package.json')
@@ -75,13 +76,15 @@ commander
 
                 type = type.toLowerCase().trim();
 
-                if (type.toLowerCase().trim() === 'viewcontrol') {
+                if (type=== 'viewcontrol') {
                     controlGenerator = new ViewControlGenerator(name, config.type, registeredname);
+                } if (type === 'injectable') {
+                    controlGenerator = new InjectableGenerator(name, registeredname);
                 } else {
                     throw 'Unknown control type.';
                 }
 
-                return controlGenerator.generateViewControl(config);
+                return controlGenerator.generate(config);
             })
             .then((newPath) => {
                 msg.log('New ' + type + ' generated at: ' + newPath);
