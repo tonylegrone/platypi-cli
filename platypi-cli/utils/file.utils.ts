@@ -4,62 +4,32 @@ import promises = require('es6-promise');
 var Promise = promises.Promise;
 
 export var writeFile = (filename: string, data: any): Thenable<string> => {
-    return new Promise((resolve, reject) => {
-        fs.writeFile(filename, data, (err) => {
-            if (err) {
-                return reject(err);
-            }
-
-            resolve(filename);
-        });
+    return asyncCall((resolver) => {
+        fs.writeFile(filename, data, resolver);
     });
 };
 
 export var readFile = (filename: string, options?: { encoding?: string; flag?: string; }): Thenable<any> => {
-    return new Promise((resolve, reject) => {
-        fs.readFile(filename, options, (err, data) => {
-            if (err) {
-                return reject(err);
-            }
-
-            return resolve(data);
-        });
+    return asyncCall((resolver) => {
+        fs.readFile(filename, options, resolver);
     });
 };
 
 export var deleteFile = (location: string): Thenable<any> => {
-    return new Promise((resolve, reject) => {
-        fs.unlink(location, (err) => {
-            if (err) {
-                return reject(err);
-            }
-
-            return resolve();
-        });
+    return asyncCall((resolver) => {
+        fs.unlink(location, resolver);
     });
 };
 
 export var stat = (location: string): Thenable<fs.Stats> => {
-    return new Promise((resolve, reject) => {
-        fs.stat(location, (err, stats) => {
-            if (err) {
-                return reject(err);
-            }
-
-            return resolve(stats);
-        });
+    return asyncCall((resolver) => {
+        fs.stat(location, resolver);
     });
 };
 
 export var readdir = (path: string): Thenable<Array<string>> => {
-    return new Promise((resolve, reject) => {
-        fs.readdir(path, (err, files) => {
-            if (err) {
-                return reject(err);
-            }
-
-            return resolve(files);
-        });
+    return asyncCall((resolver) => {
+        fs.readdir(path, resolver);
     });
 };
 
@@ -68,13 +38,23 @@ export var mkdir = (path: string, mode?: any) => {
         mode = parseInt('0777', 8) & (~process.umask());
     }
 
-    return new Promise((resolve, reject) => {
-        fs.mkdir(path, mode, (err) => {
-            if (err) {
-                return reject(err);
-            }
-
-            resolve();
-        });
+    return asyncCall((resolver) => {
+        fs.mkdir(path, mode, resolver);
     });
 };
+
+function asyncCall(method: (resolver: (err: NodeJS.ErrnoException, data?: any) => void) => void) {
+    return new Promise((resolve, reject) => {
+        method(resolver(resolve, reject));
+    });
+}
+
+function resolver(resolve: (data?: any) => void, reject: (err?: any) => void) {
+    return (err: NodeJS.ErrnoException, data?: any) => {
+        if (err) {
+            return reject(err);
+        }
+
+        resolve(data);
+    };
+}
