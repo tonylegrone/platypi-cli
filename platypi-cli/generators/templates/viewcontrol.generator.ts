@@ -5,9 +5,15 @@ import path = require('path');
 
 class ViewControlTemplateGenerator extends BaseTemplateGenerator {
     constructor(name: string, type: string, registeredName?: string) {
-        var environmentVariables: Array<config.IEnvironmentVariable> = [];
-        environmentVariables.push(<config.IEnvironmentVariable>{ name: 'name', value: name });
-        environmentVariables.push(<config.IEnvironmentVariable>{ name: 'registerName', value: registeredName || name });
+        var environmentVariables: Array<config.IEnvironmentVariable> = [
+            {
+                name: 'name',
+                value: name
+            },
+            {
+                name: 'registername',
+                value: (registeredName && registeredName !== '' ? registeredName : name)
+            }];
         super('viewcontrol', type, environmentVariables);
     }
 
@@ -20,7 +26,9 @@ class ViewControlTemplateGenerator extends BaseTemplateGenerator {
                 vcType = 'webviewcontrol';
             }
             projectConfig.addViewControl(this.instanceName, vcType, this.registeredName);
-            return newPath;
+            return projectConfig.save().then(() => {
+                return newPath;
+            });
         });
     }
 

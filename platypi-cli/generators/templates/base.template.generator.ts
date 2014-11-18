@@ -29,7 +29,6 @@ class BaseTemplateGenerator {
     private __handleEnvironmentVariables() {
         var name = ''
             , registerName = null;
-
         this.environmentVariables.forEach((variable) => {
             if (variable.name === 'name') {
                 name = variable.value;
