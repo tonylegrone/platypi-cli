@@ -61,39 +61,32 @@ commander
     });
 
 commander
-    .command('add viewcontrol [name] [ registered name]')
+    .command('add <type> <name>')
     .description('Add a new ViewControl to an existing project.')
-    .action((name, registeredname) => {
+    .option('-r, --registername [value]', 'Register Name for Control with the framework')
+    .action((type:string , name: string, options: any) => {
         var finder = new ConfigFinder();
         finder.findConfig()
             .then((config) => {
                 platypiConfig = config;
 
-                var controlGenerator = new ViewControlGenerator('viewcontrol', config.type, registeredname);
+                var registeredname = (<any>options).registername
+                    , controlGenerator = null;
+
+                if (type.toLowerCase().trim() === 'viewcontrol') {
+                    controlGenerator = new ViewControlGenerator(name, config.type, registeredname);
+                }
+
                 return controlGenerator.generateViewControl(config);
             })
             .then((newPath) => {
-                msg.log('New ViewControl generated at: ' + newPath);
+                msg.log('New ' + type + ' generated at: ' + newPath);
                 process.exit(0);
             }, (err) => {
                 msg.error(err);
                 process.exit(1);
             });
     });
-
-// commander
-//    .command('add <type> [name] [registered name]')
-//    .description('Add a new control to your project. Types: [' + controlTypes.reduce((a, b) => { return a + ', ' + b; }) + ']')
-//    .action((type, name, registeredname) => {
-//        var finder = new ConfigFinder();
-//        finder.findConfig().then((config) => {
-//            platypiConfig = config;
-//            process.exit(0);
-//        }, (err) => {
-//            msg.error(err);
-//            process.exit(1);
-//        });
-//    });
 
 commander
     .command('init')
