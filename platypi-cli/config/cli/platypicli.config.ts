@@ -29,25 +29,29 @@ export class PlatypiCliConfig {
     }
 
     private __loadConfig(): Thenable<config.IPlatypiCliConfig> {
+        var configPath: string;
+
         return dirutil.appDataDir().then((appDataDir) => {
-            var configPath = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));
-            return fileutil.readFile(configPath, { encoding: 'utf8' }).then((data) => {
+            configPath = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));
+            return fileutil.readFile(configPath, { encoding: 'utf8' });
+        })
+            .then((data) => {
                 this.configPath = configPath;
                 this.__config = JSON.parse(data);
 
                 return this.__config;
             });
-        });
     }
 
     private __updateConfig(): Thenable<config.IPlatypiCliConfig> {
-        return new Promise((resolve, reject) => {
-            dirutil.appDataDir().then((appDataDir) => {
-                var configPath = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));
+        return dirutil.appDataDir().then((appDataDir) => {
+            var configPath = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));
 
-                if (!this.__config) {
-                    return reject('No config loaded!');
-                }
+            if (!this.__config) {
+                throw 'No config loaded!';
+            }
+
+            return new Promise((resolve, reject) => {
                 fs.writeFile(configPath, JSON.stringify(this.__config), (err) => {
                     if (err) {
                         return reject(err);

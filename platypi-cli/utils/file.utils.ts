@@ -17,23 +17,13 @@ export var writeFile = (filename: string, data: any): Thenable<string> => {
 
 export var readFile = (filename: string, options?: { encoding?: string; flag?: string; }): Thenable<any> => {
     return new Promise((resolve, reject) => {
-        if (options) {
-            fs.readFile(filename, options, (err, data) => {
-                if (err) {
-                    return reject(err);
-                }
+        fs.readFile(filename, options, (err, data) => {
+            if (err) {
+                return reject(err);
+            }
 
-                return resolve(data);
-            });
-        } else {
-            fs.readFile(filename, (err, data) => {
-                if (err) {
-                    return reject(err);
-                }
-
-                return resolve(data);
-            });
-        }
+            return resolve(data);
+        });
     });
 };
 

@@ -22,11 +22,11 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
 
             projectConfig.public = publicPath;
             projectConfig.root = folder;
-
+            console.log('config path: ', configPath);
             return projectConfig.save(configPath).then(() => {
-                return this.__preserveStructure(publicPath).then(() => {
-                    return folder;
-                });
+                return this.__preserveStructure(publicPath);
+            }).then(() => {
+                return folder;
             });
         });
     }

@@ -76,7 +76,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', ['mochaTest']);
 
-    grunt.registerTask('build', ['shell:tsd', 'lint', 'typescript', 'test', 'file_append:bin', 'shell:link']);
+    grunt.registerTask('build', ['shell:tsd', 'lint', 'typescript', 'file_append:bin', 'shell:link']);
 
     grunt.registerTask('default', ['build']);
 
