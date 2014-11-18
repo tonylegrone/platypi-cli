@@ -199,11 +199,19 @@ class BaseTemplateGenerator {
                 return dirutils.appDataDir().then((appDataDir) => {
                     return this._helper.updateTemplates(appDataDir);
                 }).then((templateLocation) => {
-                    return cliConfig;
-                });
+                        return cliConfig;
+                    });
             } else {
                 return Promise.resolve(cliConfig);
             }
+        }, (err) => {
+            return dirutils.appDataDir().then((appDataDir) => {
+                return this._helper.updateTemplates(appDataDir);
+            }).then((templateLocation) => {
+                return this._config.getConfig().then((cliConfig) => {
+                    return cliConfig;
+                });
+            });
         });
     }
 }
