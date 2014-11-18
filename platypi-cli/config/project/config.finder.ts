@@ -5,6 +5,7 @@ import fs = require('fs');
 import utils = require('../../utils/directory.utils');
 import validator = require('./config.validator');
 import promises = require('es6-promise');
+import PlatypiConfig = require('./platypi.config');
 
 var cwd = process.cwd()
     , Promise = promises.Promise
@@ -23,7 +24,8 @@ class ConfigFinder {
                     var config: config.IPlatypi = JSON.parse(data);
 
                     if (validator(config)) {
-                        return resolve(JSON.parse(data));
+                        config = PlatypiConfig.loadFromObject(config);
+                        return resolve(config);
                     } else {
                         return reject('A valid platypi config file was not found.');
                     }
