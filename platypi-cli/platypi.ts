@@ -73,8 +73,12 @@ commander
                 var registeredname = (<any>options).registername
                     , controlGenerator = null;
 
+                type = type.toLowerCase().trim();
+
                 if (type.toLowerCase().trim() === 'viewcontrol') {
                     controlGenerator = new ViewControlGenerator(name, config.type, registeredname);
+                } else {
+                    throw 'Unknown control type.';
                 }
 
                 return controlGenerator.generateViewControl(config);
