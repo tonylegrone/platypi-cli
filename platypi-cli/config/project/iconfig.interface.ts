@@ -26,7 +26,7 @@
         addTemplateControl(name: string, type: string, registeredName?: string);
         addAttributeControl(name: string, type: string, registeredName?: string);
 
-        save(configPath: string): Thenable<string>;
+        save(configPath?: string): Thenable<string>;
     }
 
     export interface IViewControl {

@@ -2,6 +2,8 @@
 import fileutils = require('../../utils/file.utils');
 
 class Config implements config.IPlatypi {
+    private __configPath = '';
+
     // required
     name: string = 'New Platypi Project';
 
@@ -165,8 +167,9 @@ class Config implements config.IPlatypi {
         this.attributecontrols = value;
     }
 
-    save(configPath: string): Thenable<string> {
-        return fileutils.writeFile(configPath, JSON.stringify(this));
+    save(configPath?: string): Thenable<string> {
+        this.__configPath = (configPath && configPath !== '' ? path.normalize(configPath) : this.__configPath);
+        return fileutils.writeFile(this.__configPath, JSON.stringify(this));
     }
 
     addViewControl(name: string, type: string, registeredName?: string) {
@@ -280,19 +283,23 @@ class Config implements config.IPlatypi {
                 parsedConfig[key] = configData[key] || parsedConfig[key];
             });
 
+            parsedConfig.__configPath = configPath;
+
             return parsedConfig;
         }, (err) => {
             throw err;
         });
     }
 
-    static loadFromObject(configData: config.IPlatypi): config.IPlatypi {
+    static loadFromObject(configData: config.IPlatypi, configPath?: string): config.IPlatypi {
         var parsedConfig = new Config()
             , keys = Object.keys(configData);
 
         keys.forEach((key) => {
             parsedConfig[key] = configData[key] || parsedConfig[key];
         });
+
+        parsedConfig.__configPath = (configPath && configPath !== ''? path.normalize(configPath) : parsedConfig.__configPath);
 
         return parsedConfig;
     }
