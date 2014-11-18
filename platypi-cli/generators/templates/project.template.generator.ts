@@ -35,7 +35,7 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
         return this.__walkItOut(publicPath, publicPath).then((result) => {
             return Promise.all<Array<Promise<any>>>(this.projectStruct.map((directory) => {
                 var dirNormal = path.normalize(directory);
-                if (!result[dirNormal]) {
+                if (result.indexOf(dirNormal) < 0) {
                     var fullPath = path.join(publicPath, dirNormal);
                     return this.fileUtils.mkdir(fullPath);
                 }
