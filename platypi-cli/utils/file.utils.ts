@@ -64,23 +64,17 @@ export var readdir = (path: string): Thenable<Array<string>> => {
 };
 
 export var mkdir = (path: string, mode?: any) => {
+    if (!mode) {
+        mode = parseInt('0777', 8) & (~process.umask());
+    }
+
     return new Promise((resolve, reject) => {
-        if (mode) {
-            fs.mkdir(path, mode, (err) => {
-                if (err) {
-                    return reject(err);
-                }
+        fs.mkdir(path, mode, (err) => {
+            if (err) {
+                return reject(err);
+            }
 
-                resolve();
-            });
-        } else {
-            fs.mkdir(path, (err) => {
-                if (err) {
-                    return reject(err);
-                }
-
-                resolve();
-            });
-        }
+            resolve();
+        });
     });
 };

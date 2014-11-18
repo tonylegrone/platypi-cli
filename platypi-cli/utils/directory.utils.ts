@@ -35,6 +35,7 @@ export var appDataDir = (): Thenable<string> => {
         : '/var/local');
 
     appdata = path.join(appdata, '/platypi-cli');
+
     return fileutil.mkdir(appdata).then(() => {
         return appdata;
     }, (err) => {

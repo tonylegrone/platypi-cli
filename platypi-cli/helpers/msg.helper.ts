@@ -13,13 +13,12 @@ export var log = (logMsg: string) => {
 export var error = (errorMsg: string) => {
     var errorcolor = new colors().red,
         msgcolor = new colors().magenta;
-
-    process.stdout.write(errorcolor('Platypi-CLI Error: ') + msgcolor(JSON.stringify(errorMsg)) + '\n');
+    process.stdout.write(errorcolor('Platypi-CLI Error: ') + msgcolor(errorMsg.toString()) + '\n');
 };
 
 export var warning = (warningMsg: string) => {
     var errorcolor = new colors().blue,
         msgcolor = new colors().magenta;
 
-    process.stdout.write(errorcolor('Platypi-CLI Warning: ') + msgcolor(JSON.stringify(errorMsg)) + '\n');
+    process.stdout.write(errorcolor('Platypi-CLI Warning: ') + msgcolor(warningMsg.toString()) + '\n');
 };
