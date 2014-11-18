@@ -10,7 +10,7 @@ import PlatypiConfig = require('./config/project/platypi.config');
 
 var package = require('../package.json')
 // TODO:   , progressbar = require('simple-progress-bar')
-    , controlTypes = ['viewcontrol', 'injectable', 'repository', 'service', 'model', 'templatecontrol', 'attributecontrol']
+//    , controlTypes = ['viewcontrol', 'injectable', 'repository', 'service', 'model', 'templatecontrol', 'attributecontrol']
     , platypiConfig: config.IPlatypi = null;
 
 var identifyApplication = () => {
@@ -69,7 +69,7 @@ commander
             .then((config) => {
                 platypiConfig = config;
 
-                var controlGenerator = new ViewControlGenerator('viewcontrol', name, registeredname);
+                var controlGenerator = new ViewControlGenerator('viewcontrol', config.type, registeredname);
                 return controlGenerator.generateViewControl(config);
             })
             .then((newPath) => {
@@ -81,7 +81,7 @@ commander
             });
     });
 
-//commander
+// commander
 //    .command('add <type> [name] [registered name]')
 //    .description('Add a new control to your project. Types: [' + controlTypes.reduce((a, b) => { return a + ', ' + b; }) + ']')
 //    .action((type, name, registeredname) => {
