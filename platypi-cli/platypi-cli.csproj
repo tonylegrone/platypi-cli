@@ -65,8 +65,9 @@
     <TypeScriptCompile Include="generators\platypiconfig.generator.ts" />
     <TypeScriptCompile Include="generators\templates\base.template.generator.ts" />
     <TypeScriptCompile Include="generators\templates\ienvironmentvariable.interface.ts" />
+    <TypeScriptCompile Include="generators\templates\injectable.template.generator.ts" />
     <TypeScriptCompile Include="generators\templates\project.template.generator.ts" />
-    <TypeScriptCompile Include="generators\templates\viewcontrol.generator.ts" />
+    <TypeScriptCompile Include="generators\templates\viewcontrol.template.generator.ts" />
     <TypeScriptCompile Include="helpers\template.helper.ts" />
     <TypeScriptCompile Include="helpers\msg.helper.ts" />
     <TypeScriptCompile Include="platypi.ts" />
