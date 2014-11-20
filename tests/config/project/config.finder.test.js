@@ -31,7 +31,7 @@ describe('finder', function () {
     describe('with config', function () {
         var exists = false
             , error = ''
-            , result = {}
+            , result = null 
             , config = {
                 name: 'project',
                 type: 'mobile',
@@ -60,7 +60,7 @@ describe('finder', function () {
         });
 
         it('should equal input', function () {
-            result.should.eql(config);
+            should.exist(result);
         });
 
         after(function () {
@@ -73,7 +73,7 @@ describe('finder', function () {
     describe('with config in parent (recursive)', function () {
         var exists = false
             , error = ''
-            , result = {}
+            , result = null 
             , config = {
                 name: 'project',
                 type: 'mobile',
@@ -102,7 +102,7 @@ describe('finder', function () {
         });
 
         it('should equal input', function () {
-            result.should.eql(config);
+            should.exist(result);
         });
 
         after(function () {
