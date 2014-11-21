@@ -65,8 +65,11 @@ class TemplateHelper<T extends IBaseService> {
                 var extractDir = path.normalize(util.format('%s/%s', this.cacheDir, package.version));
                 var zip = admzip(zipLocation);
 
-                zip.extractAllTo(extractDir, true);
-
+                try {
+                    zip.extractAllTo(extractDir, true);
+                } catch (e) {
+                    throw e;
+                }
                 extractDir = path.normalize(util.format('%s/%s-%s', extractDir, 'platypi-cli-templates', package.version));
 
                 return this.__updateConfig(extractDir).then(() => {
@@ -76,14 +79,17 @@ class TemplateHelper<T extends IBaseService> {
     }
 
     private __updateConfig(extractDir: string): Thenable<any> {
-        var configPath = path.normalize(util.format('%s/%s', extractDir, 'cli.json'))
-            , templateConfig: config.IPlatypiCliConfig = require(configPath);
+        var configPath = path.normalize(util.format('%s/%s', extractDir, 'cli.json'));
 
+        return fileutils.readFile(configPath).then((configData) => {
+            var templateConfig = JSON.parse(configData);
 
-        templateConfig.templates.lastUpdated = new Date();
-        templateConfig.templates.baseLocation = extractDir;
+            templateConfig.templates.lastUpdated = new Date();
+            templateConfig.templates.baseLocation = extractDir;
 
-        return cliConfig.setConfig(templateConfig);
+            return cliConfig.setConfig(templateConfig);
+
+        });
     }
 }
 
