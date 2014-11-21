@@ -9,16 +9,13 @@ import ViewControlGenerator = require('./generators/templates/viewcontrol.templa
 import InjectableGenerator = require('./generators/templates/injectable.template.generator');
 import RepositoryGenerator = require('./generators/templates/repository.template.generator');
 import PlatypiConfig = require('./config/project/platypi.config');
+import globals = require('./globals');
 
-var package = require('../package.json')
-// TODO:   , progressbar = require('simple-progress-bar')
-//    , controlTypes = ['viewcontrol', 'injectable', 'repository', 'service', 'model', 'templatecontrol', 'attributecontrol']
-    , platypiConfig: config.IPlatypi = null;
-
-var identifyApplication = () => {
-    msg.label('Platypi Command Line Interface');
-    msg.log('Version ' + package.version);
-};
+var platypiConfig: config.IPlatypi = null
+    , identifyApplication = () => {
+        msg.label('Platypi Command Line Interface');
+        msg.log('Version ' + globals.package.version);
+    };
 
 var parseVariables = (newConfig: config.IPlatypi): Array<config.IEnvironmentVariable> => {
     var environmentVariables: Array<config.IEnvironmentVariable> = []
@@ -41,7 +38,7 @@ var parseVariables = (newConfig: config.IPlatypi): Array<config.IEnvironmentVari
 identifyApplication();
 
 commander
-    .version(package.version)
+    .version(globals.package.version)
     .usage('[command] [parameters..]')
     .command('create [type] [name]')
     .description('Create a new PlatypusTS project of type mobile or web. Default: web')
