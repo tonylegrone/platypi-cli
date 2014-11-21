@@ -183,3 +183,5 @@ dbconnection.json
 *.csproj
 *.sln
 *.vim
+*.swp
+*.swo
