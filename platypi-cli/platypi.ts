@@ -7,6 +7,7 @@ import ConfigGenerator = require('./generators/platypiconfig.generator');
 import ProjectGenerator = require('./generators/templates/project.template.generator');
 import ViewControlGenerator = require('./generators/templates/viewcontrol.template.generator');
 import InjectableGenerator = require('./generators/templates/injectable.template.generator');
+import RepositoryGenerator = require('./generators/templates/repository.template.generator');
 import PlatypiConfig = require('./config/project/platypi.config');
 
 var package = require('../package.json')
@@ -80,6 +81,8 @@ commander
                     controlGenerator = new ViewControlGenerator(name, config.type, registeredname);
                 } if (type === 'injectable') {
                     controlGenerator = new InjectableGenerator(name, registeredname);
+                } if (type === 'repository') {
+                    controlGenerator = new RepositoryGenerator(name, registeredname);
                 } else {
                     throw 'Unknown control type.';
                 }
