@@ -17,10 +17,9 @@ class RepositoryTemplateGenerator extends BaseTemplateGenerator {
         super('repository', 'base', environmentVariables);
     }
 
-
     generate(projectConfig: config.IPlatypi): Thenable<string> {
         console.log('Creating Repository...');
-        var repositoryPath = path.join(projectConfig.public, 'common/injectables');
+        var repositoryPath = path.join(projectConfig.public, 'common/repositories');
         return this._copyTemplateTo(repositoryPath).then((newPath) => {
             projectConfig.addRepository(this.instanceName, 'repository', this.registeredName);
             return projectConfig.save().then(() => {
