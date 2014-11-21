@@ -9,6 +9,7 @@ import ViewControlGenerator = require('./generators/templates/viewcontrol.templa
 import InjectableGenerator = require('./generators/templates/injectable.template.generator');
 import RepositoryGenerator = require('./generators/templates/repository.template.generator');
 import ServiceGenerator = require('./generators/templates/service.template.generator');
+import TemplateControlGenerator = require('./generators/templates/templatecontrol.template.generator');
 import PlatypiConfig = require('./config/project/platypi.config');
 import globals = require('./globals');
 
@@ -83,6 +84,8 @@ commander
                     controlGenerator = new RepositoryGenerator(name, registeredname);
                 } else if (type === 'service') {
                     controlGenerator = new ServiceGenerator(name, registeredname);
+                } else if (type === 'templatecontrol') {
+                    controlGenerator = new TemplateControlGenerator(name, registeredname);
                 } else {
                     throw 'Unknown control type.';
                 }
