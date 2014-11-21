@@ -11,6 +11,7 @@ import RepositoryGenerator = require('./generators/templates/repository.template
 import ServiceGenerator = require('./generators/templates/service.template.generator');
 import TemplateControlGenerator = require('./generators/templates/templatecontrol.template.generator');
 import ModelGenerator = require('./generators/templates/model.template.generator');
+import AttributeControlGenerator = require('./generators/templates/attributecontrol.template.generator');
 import PlatypiConfig = require('./config/project/platypi.config');
 import globals = require('./globals');
 
@@ -89,6 +90,8 @@ commander
                     controlGenerator = new TemplateControlGenerator(name, registeredname);
                 } else if (type === 'model') {
                     controlGenerator = new ModelGenerator(name, registeredname);
+                } else if (type === 'attributecontrol') {
+                    controlGenerator = new AttributeControlGenerator(name, registeredname);
                 } else {
                     throw 'Unknown control type.';
                 }
