@@ -6,6 +6,7 @@ import util = require('util');
 import promises = require('es6-promise');
 import dirutils = require('../../utils/directory.utils');
 import fileUtils = require('../../utils/file.utils');
+import globals = require('../../globals');
 
 var Promise = promises.Promise;
 
@@ -158,7 +159,6 @@ class BaseTemplateGenerator {
     _copyTemplateTo(destination: string): Thenable<any> {
         return this._resolveTemplateLocation().then((templateLocation) => {
             return fileUtils.readdir(templateLocation).then((files) => {
-
                 var newFolder = path.join(destination, this.instanceName);
 
                 if (files && files.length > 0) {
@@ -194,12 +194,14 @@ class BaseTemplateGenerator {
 
             maxAge.setHours(maxAge.getHours() - 12);
 
-            if (lastUpdate < maxAge) {
+            if (lastUpdate < maxAge || globals.package.version !== cliConfig.version) {
                 return dirutils.appDataDir().then((appDataDir) => {
                     return this._helper.updateTemplates(appDataDir);
                 }).then((templateLocation) => {
-                        return cliConfig;
+                    return this._config.getConfig().then((newConfig) => {
+                        return newConfig;
                     });
+                });
             } else {
                 return Promise.resolve(cliConfig);
             }
