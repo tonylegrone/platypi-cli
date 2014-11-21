@@ -8,6 +8,7 @@ import ProjectGenerator = require('./generators/templates/project.template.gener
 import ViewControlGenerator = require('./generators/templates/viewcontrol.template.generator');
 import InjectableGenerator = require('./generators/templates/injectable.template.generator');
 import RepositoryGenerator = require('./generators/templates/repository.template.generator');
+import ServiceGenerator = require('./generators/templates/service.template.generator');
 import PlatypiConfig = require('./config/project/platypi.config');
 import globals = require('./globals');
 
@@ -61,7 +62,7 @@ commander
 
 commander
     .command('add <type> <name>')
-    .description('Add a new ViewControl to an existing project.')
+    .description('Add a new control to an existing project.')
     .option('-r, --registername [value]', 'Register Name for Control with the framework')
     .action((type:string , name: string, options: any) => {
         var finder = new ConfigFinder();
@@ -80,6 +81,8 @@ commander
                     controlGenerator = new InjectableGenerator(name, registeredname);
                 } else if (type === 'repository') {
                     controlGenerator = new RepositoryGenerator(name, registeredname);
+                } else if (type === 'service') {
+                    controlGenerator = new ServiceGenerator(name, registeredname);
                 } else {
                     throw 'Unknown control type.';
                 }
