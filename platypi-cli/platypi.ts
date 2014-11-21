@@ -77,11 +77,11 @@ commander
 
                 type = type.toLowerCase().trim();
 
-                if (type=== 'viewcontrol') {
+                if (type === 'viewcontrol') {
                     controlGenerator = new ViewControlGenerator(name, config.type, registeredname);
-                } if (type === 'injectable') {
+                } else if (type === 'injectable') {
                     controlGenerator = new InjectableGenerator(name, registeredname);
-                } if (type === 'repository') {
+                } else if (type === 'repository') {
                     controlGenerator = new RepositoryGenerator(name, registeredname);
                 } else {
                     throw 'Unknown control type.';
