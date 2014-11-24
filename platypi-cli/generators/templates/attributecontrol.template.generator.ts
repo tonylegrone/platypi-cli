@@ -14,7 +14,7 @@ class AttributeControlTemplateGenerator extends BaseTemplateGenerator {
                 name: 'registername',
                 value: (registeredName && registeredName !== '' ? registeredName : name)
             }];
-        super('attribute', 'base', environmentVariables);
+	    super('attribute', 'base', environmentVariables);
     }
 
     generate(projectConfig: config.IPlatypi): Thenable<string> {
