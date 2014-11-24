@@ -90,7 +90,7 @@ commander
                     controlGenerator = new TemplateControlGenerator(name, registeredname);
                 } else if (type === 'model') {
                     controlGenerator = new ModelGenerator(name, registeredname);
-                } else if (type === 'attributecontrol') {
+                } else if (type === 'attribute') {
                     controlGenerator = new AttributeControlGenerator(name, registeredname);
                 } else {
                     throw 'Unknown control type.';
