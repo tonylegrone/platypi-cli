@@ -120,6 +120,16 @@ commander
     });
 
 commander
+    .command('cache-clean')
+    .description('Clean the CLI cache directory.')
+    .action(() => {
+        msg.log('Cleaning the cache directory...');
+        provider.clear().then(() => {
+            msg.log('Cache has been cleaned.');
+        });
+    });
+
+commander
     .command('init')
     .description('initialize a new Platypi project through a series of prompts.')
     .action(() => {
