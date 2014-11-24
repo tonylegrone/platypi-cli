@@ -113,7 +113,7 @@ commander
     .command('update')
     .description('Update the cached CLI files.')
     .action(() => {
-        msg.log('Updating cached template files...');
+        msg.log('Forcing template update...');
         provider.update().then(() => {
             msg.log('Templates Updated.');
         });
