@@ -1,5 +1,4 @@
-﻿import TemplateHelper = require('../../helpers/template.helper');
-import GithubService = require('../../services/github/github.service');
+﻿import TemplateProvider = require('../../providers/githubtemplate.provider');
 import CliConfig = require('../../config/cli/platypicli.config');
 import path = require('path');
 import util = require('util');
@@ -11,7 +10,7 @@ import globals = require('../../globals');
 var Promise = promises.Promise;
 
 class BaseTemplateGenerator {
-    _helper: TemplateHelper<any> = null;
+    _provider: providers.ITemplateProvider = null;
     _config: CliConfig.PlatypiCliConfig = null;
     location = null;
     instanceName = '';
@@ -22,7 +21,7 @@ class BaseTemplateGenerator {
     constructor(private __controlName
         , private __projectType
         , private environmentVariables: Array<config.IEnvironmentVariable>) {
-        this._helper = new TemplateHelper(GithubService);
+        this._provider = new TemplateProvider();
         this._config = CliConfig.config;
         this.__handleEnvironmentVariables();
     }
@@ -195,9 +194,7 @@ class BaseTemplateGenerator {
             maxAge.setHours(maxAge.getHours() - 12);
 
             if (lastUpdate < maxAge || globals.package.version !== cliConfig.version) {
-                return dirutils.appDataDir().then((appDataDir) => {
-                    return this._helper.updateTemplates(appDataDir);
-                }).then((templateLocation) => {
+                return this._provider.update().then((templateLocation) => {
                     return this._config.getConfig().then((newConfig) => {
                         return newConfig;
                     });
@@ -206,9 +203,7 @@ class BaseTemplateGenerator {
                 return Promise.resolve(cliConfig);
             }
         }, (err) => {
-            return dirutils.appDataDir().then((appDataDir) => {
-                return this._helper.updateTemplates(appDataDir);
-            }).then((templateLocation) => {
+            return this._provider.update().then((templateLocation) => {
                 return this._config.getConfig().then((cliConfig) => {
                     return cliConfig;
                 });
