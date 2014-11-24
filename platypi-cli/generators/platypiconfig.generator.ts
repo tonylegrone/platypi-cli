@@ -24,6 +24,11 @@ var generateConfig = (): Thenable<config.IPlatypi> => {
                 type: 'string',
                 required: true
             }
+            , version: {
+                description: 'Version',
+                type: 'string',
+                required: false
+            }
             , email: {
                 description: 'Contact Email',
                 type: 'string'
@@ -51,6 +56,7 @@ var generateConfig = (): Thenable<config.IPlatypi> => {
             config.name = response.name;
             config.description = response.description;
             config.author = response.author;
+            config.version = response.version;
             config.email = response.email;
             config.homepage = response.homepage;
             config.type = response.type;
