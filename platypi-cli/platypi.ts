@@ -12,10 +12,12 @@ import ServiceGenerator = require('./generators/templates/service.template.gener
 import TemplateControlGenerator = require('./generators/templates/templatecontrol.template.generator');
 import ModelGenerator = require('./generators/templates/model.template.generator');
 import AttributeControlGenerator = require('./generators/templates/attributecontrol.template.generator');
+import TemplateProvider = require('./providers/githubtemplate.provider');
 import PlatypiConfig = require('./config/project/platypi.config');
 import globals = require('./globals');
 
 var platypiConfig: config.IPlatypi = null
+    , provider = new TemplateProvider()
     , identifyApplication = () => {
         msg.label('Platypi Command Line Interface');
         msg.log('Version ' + globals.package.version);
@@ -105,6 +107,16 @@ commander
                 msg.error(err);
                 process.exit(1);
             });
+    });
+
+commander
+    .command('update')
+    .description('Update the cached CLI files.')
+    .action(() => {
+        msg.log('Updating cached template files...');
+        provider.update().then(() => {
+            msg.log('Templates Updated.');
+        });
     });
 
 commander

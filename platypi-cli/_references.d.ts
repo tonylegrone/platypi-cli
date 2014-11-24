@@ -3,4 +3,5 @@
 /// <reference path="services/ibase.service.ts" />
 /// <reference path="config/cli/iplatypicli.config.ts" />
 /// <reference path="generators/templates/ienvironmentvariable.interface.ts" />
- 
+/// <reference path="providers/itemplateprovider.interface.ts" />
+
