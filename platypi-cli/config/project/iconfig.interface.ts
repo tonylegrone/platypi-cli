@@ -7,6 +7,7 @@
         email?: string;
         homepage?: string;
         type: string;
+        version?: string;
         root?: string;
         public?: string;
         cordova?: string;
@@ -17,6 +18,7 @@
         repositories?: Array<IRepository>;
         templatecontrols?: Array<ITemplateControl>;
         attributecontrols?: Array<IAttributeControl>;
+        cliDepend?: string;
 
         addViewControl(name: string, type: string, registeredName?: string);
         addInjectable(name: string, type: string, registeredName?: string);

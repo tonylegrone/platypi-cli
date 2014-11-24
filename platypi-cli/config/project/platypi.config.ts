@@ -37,6 +37,16 @@ class Config implements config.IPlatypi {
 
     // optional
 
+    version: string = '0.0.1';
+
+    get Version(): string {
+        return this.version;
+    }
+
+    set Version(value: string) {
+        this.version = value;
+    }
+
     description: string = 'A new PlatypusTS project.';
 
     get Description(): string {
