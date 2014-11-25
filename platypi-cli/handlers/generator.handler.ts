@@ -1,36 +1,37 @@
-/// <reference path="_references.d.ts" />
+/// <reference path="../_references.d.ts" />
 
-import ProjectGenerator = require('./generators/templates/project.template.generator');
-import ViewControlGenerator = require('./generators/templates/viewcontrol.template.generator');
-import InjectableGenerator = require('./generators/templates/injectable.template.generator');
-import RepositoryGenerator = require('./generators/templates/repository.template.generator');
-import ServiceGenerator = require('./generators/templates/service.template.generator');
-import TemplateControlGenerator = require('./generators/templates/templatecontrol.template.generator');
-import ModelGenerator = require('./generators/templates/model.template.generator');
-import AttributeControlGenerator = require('./generators/templates/attributecontrol.template.generator');
+import ViewControlGenerator = require('../generators/templates/viewcontrol.template.generator');
+import InjectableGenerator = require('../generators/templates/injectable.template.generator');
+import RepositoryGenerator = require('../generators/templates/repository.template.generator');
+import ServiceGenerator = require('../generators/templates/service.template.generator');
+import TemplateControlGenerator = require('../generators/templates/templatecontrol.template.generator');
+import ModelGenerator = require('../generators/templates/model.template.generator');
+import AttributeControlGenerator = require('../generators/templates/attributecontrol.template.generator');
 
 module GeneratorHandler {
-    export getGenerator = (controlName: string) => {
-        var controlGenerator: generators.ITemplateGenerator = null;
+    export var getGenerator = (controlName: string, instanceName: string, registeredname: string, configType: string) => {
+        var controlGenerator: generators.ITemplateGenerator = null
+            , type = controlName;
+
         if (type === 'viewcontrol') {
-            controlGenerator = new ViewControlGenerator(name, config.type, registeredname);
+            controlGenerator = new ViewControlGenerator(instanceName, configType, registeredname);
         } else if (type === 'injectable') {
-            controlGenerator = new InjectableGenerator(name, registeredname);
+            controlGenerator = new InjectableGenerator(instanceName, registeredname);
         } else if (type === 'repository') {
-            controlGenerator = new RepositoryGenerator(name, registeredname);
+            controlGenerator = new RepositoryGenerator(instanceName, registeredname);
         } else if (type === 'service') {
-            controlGenerator = new ServiceGenerator(name, registeredname);
+            controlGenerator = new ServiceGenerator(instanceName, registeredname);
         } else if (type === 'templatecontrol') {
-            controlGenerator = new TemplateControlGenerator(name, registeredname);
+            controlGenerator = new TemplateControlGenerator(instanceName, registeredname);
         } else if (type === 'model') {
-            controlGenerator = new ModelGenerator(name, registeredname);
+            controlGenerator = new ModelGenerator(instanceName, registeredname);
         } else if (type === 'attribute') {
-            controlGenerator = new AttributeControlGenerator(name, registeredname);
+            controlGenerator = new AttributeControlGenerator(instanceName, registeredname);
         } else {
             throw 'Unknown control type.';
         }
-        
-        return controlGenerator; 
+
+        return controlGenerator;
     };
 }
 

@@ -69,12 +69,11 @@ commander
             .then((config) => {
                 platypiConfig = config;
 
-                var registeredname = (<any>options).registername
-                    , controlGenerator = null;
+                var registeredname = (<any>options).registername;
 
                 type = type.toLowerCase().trim();
 
-                var controlGen = GeneratorHandler.getGenerator(type);
+                var controlGen = GeneratorHandler.getGenerator(type, name, registeredname, config.type);
                 return controlGen.generate(config);
 
             })

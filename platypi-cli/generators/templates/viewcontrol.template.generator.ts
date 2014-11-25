@@ -1,7 +1,6 @@
 ﻿/// <reference path="../../_references.d.ts" />
 
 import BaseTemplateGenerator = require('./base.template.generator');
-import path = require('path');
 
 class ViewControlTemplateGenerator extends BaseTemplateGenerator {
     constructor(name: string, type: string, registeredName?: string) {
