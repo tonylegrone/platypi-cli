@@ -16,17 +16,6 @@ class ServiceTemplateGenerator extends BaseTemplateGenerator {
             }];
         super('service', 'base', environmentVariables);
     }
-
-    generate(projectConfig: config.IPlatypi): Thenable<string> {
-        console.log('Creating Service Injectable...');
-        var servicePath = path.join(projectConfig.public, 'services');
-        return this._copyTemplateTo(servicePath).then((newPath) => {
-            projectConfig.addService(this.instanceName, 'service', this.registeredName);
-            return projectConfig.save().then(() => {
-                return newPath;
-            });
-        });
-    }
 }
 
 export = ServiceTemplateGenerator;

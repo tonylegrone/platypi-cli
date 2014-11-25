@@ -182,6 +182,24 @@ class Config implements config.IPlatypi {
         return fileutils.writeFile(this.__configPath, JSON.stringify(this));
     }
 
+    addControl(name: string, type: string, registeredName?: string) {
+        if (type === 'viewcontrol' || type === 'webviewcontrol') {
+            this.addViewControl(name, type, registeredName);
+        } else if (type === 'templatecontrol') {
+            this.addTemplateControl(name, type, registeredName);
+        } else if (type === 'service') {
+            this.addService(name, type, registeredName);
+        } else if (type === 'repository') {
+            this.addRepository(name, type, registeredName);
+        } else if (type === 'model') {
+            this.addModel(name, type, registeredName);
+        } else if (type === 'injectable') {
+            this.addInjectable(name, type, registeredName);
+        } else if (type === 'attribute') {
+            this.addAttributeControl(name, type, registeredName);
+        }
+    }
+
     addViewControl(name: string, type: string, registeredName?: string) {
         var newViewControl: config.IViewControl = {
             name: name,

@@ -9,7 +9,7 @@ import globals = require('../../globals');
 
 var Promise = promises.Promise;
 
-class BaseTemplateGenerator {
+class BaseTemplateGenerator implements generators.ITemplateGenerator {
     _provider: providers.ITemplateProvider = null;
     _config: CliConfig.PlatypiCliConfig = null;
     location = null;
@@ -206,6 +206,20 @@ class BaseTemplateGenerator {
             return this._provider.update().then((templateLocation) => {
                 return this._config.getConfig().then((cliConfig) => {
                     return cliConfig;
+                });
+            });
+        });
+    }
+
+    generate(projectConfig: config.IPlatypi): Thenable<string> {
+        return this._config.getConfig().then((cliConfig) => {
+            console.log('Creating' + this.__controlName + '..');
+            var controlPath = path.join(projectConfig.public, cliConfig.controlLocation[this.__controlName]);
+            return this._copyTemplateTo(controlPath).then((newPath) => {
+                // add to project config
+                projectConfig.addControl(this.instanceName, this.__controlName, this.registeredName);
+                return projectConfig.save().then(() => {
+                    return newPath;
                 });
             });
         });

@@ -16,17 +16,6 @@ class InjectableTemplateGenerator extends BaseTemplateGenerator {
             }];
         super('injectable', 'base', environmentVariables);
     }
-
-    generate(projectConfig: config.IPlatypi): Thenable<string> {
-        console.log('Creating Injectable...');
-        var injectablePath = path.join(projectConfig.public, 'common/injectables');
-        return this._copyTemplateTo(injectablePath).then((newPath) => {
-            projectConfig.addInjectable(this.instanceName, 'injectable', this.registeredName);
-            return projectConfig.save().then(() => {
-                return newPath;
-            });
-        });
-    }
 }
 
 export = InjectableTemplateGenerator;

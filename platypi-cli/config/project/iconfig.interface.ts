@@ -20,6 +20,7 @@
         attributecontrols?: Array<IAttributeControl>;
         cliDepend?: string;
 
+        addControl(name: string, type: string, registeredName?: string);
         addViewControl(name: string, type: string, registeredName?: string);
         addInjectable(name: string, type: string, registeredName?: string);
         addService(name: string, type: string, registeredName?: string);

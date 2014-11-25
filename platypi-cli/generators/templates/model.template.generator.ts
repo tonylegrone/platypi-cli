@@ -16,17 +16,6 @@ class ModelTemplateGenerator extends BaseTemplateGenerator {
             }];
         super('model', 'base', environmentVariables);
     }
-
-    generate(projectConfig: config.IPlatypi): Thenable<string> {
-        console.log('Creating new Model...');
-        var modelPath = path.join(projectConfig.public, 'models');
-        return this._copyTemplateTo(modelPath).then((newPath) => {
-            projectConfig.addModel(this.instanceName, 'model', this.registeredName);
-            return projectConfig.save().then(() => {
-                return newPath;
-            });
-        });
-    }
 }
 
 export = ModelTemplateGenerator;

@@ -5,14 +5,8 @@ import msg = require('./helpers/msg.helper');
 import ConfigFinder = require('./config/project/config.finder');
 import ConfigGenerator = require('./generators/platypiconfig.generator');
 import ProjectGenerator = require('./generators/templates/project.template.generator');
-import ViewControlGenerator = require('./generators/templates/viewcontrol.template.generator');
-import InjectableGenerator = require('./generators/templates/injectable.template.generator');
-import RepositoryGenerator = require('./generators/templates/repository.template.generator');
-import ServiceGenerator = require('./generators/templates/service.template.generator');
-import TemplateControlGenerator = require('./generators/templates/templatecontrol.template.generator');
-import ModelGenerator = require('./generators/templates/model.template.generator');
-import AttributeControlGenerator = require('./generators/templates/attributecontrol.template.generator');
 import TemplateProvider = require('./providers/githubtemplate.provider');
+import GeneratorHandler = require('./handlers/generator.handler');
 import PlatypiConfig = require('./config/project/platypi.config');
 import globals = require('./globals');
 
@@ -80,25 +74,9 @@ commander
 
                 type = type.toLowerCase().trim();
 
-                if (type === 'viewcontrol') {
-                    controlGenerator = new ViewControlGenerator(name, config.type, registeredname);
-                } else if (type === 'injectable') {
-                    controlGenerator = new InjectableGenerator(name, registeredname);
-                } else if (type === 'repository') {
-                    controlGenerator = new RepositoryGenerator(name, registeredname);
-                } else if (type === 'service') {
-                    controlGenerator = new ServiceGenerator(name, registeredname);
-                } else if (type === 'templatecontrol') {
-                    controlGenerator = new TemplateControlGenerator(name, registeredname);
-                } else if (type === 'model') {
-                    controlGenerator = new ModelGenerator(name, registeredname);
-                } else if (type === 'attribute') {
-                    controlGenerator = new AttributeControlGenerator(name, registeredname);
-                } else {
-                    throw 'Unknown control type.';
-                }
+                var controlGen = GeneratorHandler.getGenerator(type);
+                return controlGen.generate(config);
 
-                return controlGenerator.generate(config);
             })
             .then((newPath) => {
                 msg.log('New ' + type + ' generated at: ' + newPath);

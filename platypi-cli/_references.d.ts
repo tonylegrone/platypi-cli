@@ -5,3 +5,4 @@
 /// <reference path="generators/templates/ienvironmentvariable.interface.ts" />
 /// <reference path="providers/itemplateprovider.interface.ts" />
 
+/// <reference path="generators/templates/igenerator.interface.ts" />

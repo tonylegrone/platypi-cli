@@ -16,22 +16,7 @@ class ViewControlTemplateGenerator extends BaseTemplateGenerator {
             }];
         super('viewcontrol', type, environmentVariables);
     }
-
-    generate(projectConfig: config.IPlatypi): Thenable<string> {
-        console.log('Creating ViewControl...');
-        var viewControlPath = path.join(projectConfig.public, 'viewcontrols');
-        return this._copyTemplateTo(viewControlPath).then((newPath) => {
-            var vcType = 'viewcontrol';
-            if (projectConfig.type === 'web') {
-                vcType = 'webviewcontrol';
-            }
-            projectConfig.addViewControl(this.instanceName, vcType, this.registeredName);
-            return projectConfig.save().then(() => {
-                return newPath;
-            });
-        });
-    }
-
 }
 
 export = ViewControlTemplateGenerator;
+

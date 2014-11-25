@@ -16,17 +16,6 @@ class TemplateControlTemplateGenerator extends BaseTemplateGenerator {
             }];
         super('templatecontrol', 'base', environmentVariables);
     }
-
-    generate(projectConfig: config.IPlatypi): Thenable<string> {
-        console.log('Creating TemplateControl...');
-        var templateControlPath = path.join(projectConfig.public, 'common/controls');
-        return this._copyTemplateTo(templateControlPath).then((newPath) => {
-            projectConfig.addTemplateControl(this.instanceName, 'templatecontrol', this.registeredName);
-            return projectConfig.save().then(() => {
-                return newPath;
-            });
-        });
-    }
 }
 
 export = TemplateControlTemplateGenerator;
