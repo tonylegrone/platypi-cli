@@ -1,4 +1,6 @@
-﻿import fs = require('fs');
+﻿/// <reference path="../../_references.d.ts" />
+
+import fs = require('fs');
 import path = require('path');
 import util = require('util');
 import dirutil = require('../../utils/directory.utils');
