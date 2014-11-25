@@ -34,7 +34,7 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
     private __preserveStructure(publicPath: string): Thenable<any> {
         return this.__walkItOut(publicPath, publicPath).then((result) => {
             return this._config.getConfig().then((cliConfig) => {
-                var projectStruct = cliConfig.projectStruct;
+                var projectStruct = cliConfig.templates.projectStruct;
                 return Promise.all<Array<Promise<any>>>(projectStruct.map((directory) => {
                     var dirNormal = path.normalize(directory);
                     if (result.indexOf(dirNormal) < 0) {
