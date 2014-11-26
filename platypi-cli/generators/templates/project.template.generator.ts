@@ -11,7 +11,7 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
         super('project', type, environmentVariables);
     }
 
-    generateProject(projectConfig?: config.IPlatypi, configPath?: string): Thenable<string> {
+    generate(projectConfig?: config.IPlatypi, configPath?: string): Thenable<string> {
         console.log('Extracting templates to: ' + process.cwd());
         return this._copyTemplateTo(process.cwd()).then((folder) => {
             var publicPath = path.join(folder, 'public');
