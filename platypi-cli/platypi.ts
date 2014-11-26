@@ -14,6 +14,9 @@ var provider = new TemplateProvider();
 
 globals.identifyApplication();
 
+/**
+ *  New Project Command
+ */
 commander
     .version(globals.package.version)
     .usage('[command] [parameters..]')
@@ -44,6 +47,8 @@ commander
         var finder = new ConfigFinder();
         finder.findConfig()
             .then((config) => {
+                // commander.js TS definitions need to be updated using <any> for now.
+                // generate project from command prompts
                 var registeredname = (<any>options).registername
                     , controlGen = GeneratorHandler.getGenerator(type.toLowerCase().trim(), name, registeredname, config.type);
 
