@@ -1,7 +1,6 @@
 ﻿/// <reference path="_references.d.ts" />
 
 import commander = require('commander');
-import msg = require('./helpers/msg.helper');
 import ConfigFinder = require('./config/project/config.finder');
 import ConfigGenerator = require('./generators/platypiconfig.generator');
 import ProjectGenerator = require('./generators/templates/project.template.generator');
@@ -11,14 +10,9 @@ import PlatypiConfig = require('./config/project/platypi.config');
 import EnvironmentVariableHandler = require('./handlers/environmentvariable.handler');
 import globals = require('./globals');
 
-var platypiConfig: config.IPlatypi = null
-    , provider = new TemplateProvider()
-    , identifyApplication = () => {
-        msg.label('Platypi Command Line Interface');
-        msg.log('Version ' + globals.package.version);
-    };
+var provider = new TemplateProvider();
 
-identifyApplication();
+globals.identifyApplication();
 
 commander
     .version(globals.package.version)
@@ -34,10 +28,10 @@ commander
 
         var projectGen = new ProjectGenerator(newConfig.type, environmentVariables);
         projectGen.generate(newConfig).then((path) => {
-            msg.log('New Project at: ' + path);
+            globals.console.log('New Project at: ' + path);
             process.exit(0);
         }, (err) => {
-            msg.error(err);
+            globals.console.error(err);
             process.exit(1);
         });
     });
@@ -50,21 +44,16 @@ commander
         var finder = new ConfigFinder();
         finder.findConfig()
             .then((config) => {
-                platypiConfig = config;
+                var registeredname = (<any>options).registername
+                    , controlGen = GeneratorHandler.getGenerator(type.toLowerCase().trim(), name, registeredname, config.type);
 
-                var registeredname = (<any>options).registername;
-
-                type = type.toLowerCase().trim();
-
-                var controlGen = GeneratorHandler.getGenerator(type, name, registeredname, config.type);
                 return controlGen.generate(config);
-
             })
             .then((newPath) => {
-                msg.log('New ' + type + ' generated at: ' + newPath);
+                globals.console.log('New ' + type + ' generated at: ' + newPath);
                 process.exit(0);
             }, (err) => {
-                msg.error(err);
+                globals.console.error(err);
                 process.exit(1);
             });
     });
@@ -73,9 +62,9 @@ commander
     .command('update')
     .description('Update the cached CLI files.')
     .action(() => {
-        msg.log('Forcing template update...');
+        globals.console.log('Forcing template update...');
         provider.update().then(() => {
-            msg.log('Templates Updated.');
+            globals.console.log('Templates Updated.');
         });
     });
 
@@ -83,9 +72,9 @@ commander
     .command('cache-clean')
     .description('Clean the CLI cache directory.')
     .action(() => {
-        msg.log('Cleaning the cache directory...');
+        globals.console.log('Cleaning the cache directory...');
         provider.clear().then(() => {
-            msg.log('Cache has been cleaned.');
+            globals.console.log('Cache has been cleaned.');
         });
     });
 
@@ -95,7 +84,7 @@ commander
     .action(() => {
         // commander.js TS definitions need to be updated using <any> for now.
         // generate project from command prompts
-        msg.log('Now entering interactive project generation...');
+        globals.console.log('Now entering interactive project generation...');
         ConfigGenerator().then((newConfig) => {
             var environmentVariables = EnvironmentVariableHandler.parseVariables(newConfig);
 
@@ -103,9 +92,9 @@ commander
             return projectGen.generate(newConfig);
 
         }).then((path) => {
-            msg.log('New Project at: ' + path);
+            globals.console.log('New Project at: ' + path);
         }, (err) => {
-            msg.error(err);
+            globals.console.error(err);
             process.exit(0);
         });
     });
