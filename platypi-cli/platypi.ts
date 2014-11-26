@@ -8,6 +8,7 @@ import ProjectGenerator = require('./generators/templates/project.template.gener
 import TemplateProvider = require('./providers/githubtemplate.provider');
 import GeneratorHandler = require('./handlers/generator.handler');
 import PlatypiConfig = require('./config/project/platypi.config');
+import EnvironmentVariableHandler = require('./handlers/environmentvariable.handler');
 import globals = require('./globals');
 
 var platypiConfig: config.IPlatypi = null
@@ -16,24 +17,6 @@ var platypiConfig: config.IPlatypi = null
         msg.label('Platypi Command Line Interface');
         msg.log('Version ' + globals.package.version);
     };
-
-var parseVariables = (newConfig: config.IPlatypi): Array<config.IEnvironmentVariable> => {
-    var environmentVariables: Array<config.IEnvironmentVariable> = []
-        , configKeys = Object.keys(newConfig);
-
-    configKeys.forEach((key) => {
-        var value = newConfig[key];
-        if (!(value instanceof Array)) {
-            var envVar: config.IEnvironmentVariable = {
-                name: key,
-                value: value
-            };
-            environmentVariables.push(envVar);
-        }
-    });
-
-    return environmentVariables;
-};
 
 identifyApplication();
 
@@ -47,10 +30,10 @@ commander
 
         newConfig.name = name;
 
-        var environmentVariables = parseVariables(newConfig);
+        var environmentVariables = EnvironmentVariableHandler.parseVariables(newConfig);
 
         var projectGen = new ProjectGenerator(newConfig.type, environmentVariables);
-        projectGen.generateProject(newConfig).then((path) => {
+        projectGen.generate(newConfig).then((path) => {
             msg.log('New Project at: ' + path);
             process.exit(0);
         }, (err) => {
@@ -114,10 +97,10 @@ commander
         // generate project from command prompts
         msg.log('Now entering interactive project generation...');
         ConfigGenerator().then((newConfig) => {
-            var environmentVariables = parseVariables(newConfig);
+            var environmentVariables = EnvironmentVariableHandler.parseVariables(newConfig);
 
             var projectGen = new ProjectGenerator(newConfig.type, environmentVariables);
-            return projectGen.generateProject(newConfig);
+            return projectGen.generate(newConfig);
 
         }).then((path) => {
             msg.log('New Project at: ' + path);
