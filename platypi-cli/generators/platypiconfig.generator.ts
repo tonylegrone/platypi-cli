@@ -5,6 +5,9 @@ import PlatypiConfig = require('../config/project/platypi.config');
 var prompt = require('prompt')
     , Promise = promises.Promise;
 
+/**
+ *  Generate a config file based on prompts.
+ */
 var generateConfig = (): Thenable<config.IPlatypi> => {
     var schema = {
         properties: {

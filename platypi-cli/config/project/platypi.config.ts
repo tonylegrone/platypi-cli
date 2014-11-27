@@ -1,6 +1,9 @@
 ﻿import path = require('path');
 import fileutils = require('../../utils/file.utils');
 
+/**
+ *  Contains methods and properties for the Platypi config file.
+ */
 class Config implements config.IPlatypi {
     private __configPath = '';
 
@@ -177,11 +180,21 @@ class Config implements config.IPlatypi {
         this.attributecontrols = value;
     }
 
+    /**
+     *  Save the platypi config file to disk.
+     *  @param configPath String path to save the config file to.
+     */
     save(configPath?: string): Thenable<string> {
         this.__configPath = (configPath && configPath !== '' ? path.normalize(configPath) : this.__configPath);
         return fileutils.writeFile(this.__configPath, JSON.stringify(this));
     }
 
+    /**
+     *  Add a control to the project config file.
+     *  @param name The instance name of the control.
+     *  @param type The control type to be added.
+     *  @param registeredName The name the control will register with the framework as.
+     */
     addControl(name: string, type: string, registeredName?: string) {
         if (type === 'viewcontrol' || type === 'webviewcontrol') {
             this.addViewControl(name, type, registeredName);
@@ -263,6 +276,9 @@ class Config implements config.IPlatypi {
         this.repositories.push(newRepository);
     }
 
+    /**
+     *  Initialize a new Platypi Project Config for the mobile project template.
+     */
     static CreateNewMobileConfig(): config.IPlatypi {
         var mobileConfig = new Config();
         mobileConfig.Type = 'mobile';
@@ -282,6 +298,9 @@ class Config implements config.IPlatypi {
         return mobileConfig;
     }
 
+    /**
+     *  Initializes a new Platypi Project Config for the web project template.
+     */
     static CreateNewWebConfig(): config.IPlatypi {
         var webConfig = new Config();
         webConfig.Type = 'web';
@@ -301,6 +320,10 @@ class Config implements config.IPlatypi {
         return webConfig;
     }
 
+    /**
+     *  Load the Platypi project config from disk.
+     *  @param configPath Path to the config file to be loaded from disk.
+     */
     static loadFromFile(configPath: string): Thenable<config.IPlatypi> {
         return fileutils.readFile(configPath, { encoding: 'utf8' }).then((data) => {
             var configData: config.IPlatypi = JSON.parse(data)
@@ -319,6 +342,10 @@ class Config implements config.IPlatypi {
         });
     }
 
+    /**
+     *  Load the project cli from another object.
+     *  @param configData Object containing properties to be loaded.
+     */
     static loadFromObject(configData: config.IPlatypi, configPath?: string): config.IPlatypi {
         var parsedConfig = new Config()
             , keys = Object.keys(configData);

@@ -1,5 +1,8 @@
 ﻿declare module config {
 
+    /**
+     *  Interface for Platypi Project Config
+     */
     export interface IPlatypi {
         name: string;
         description?: string;
@@ -32,42 +35,63 @@
         save(configPath?: string): Thenable<string>;
     }
 
+    /**
+     *  Interface for Viewcontrol Config property
+     */
     export interface IViewControl {
         name: string;
         type: string;
         registeredName?: string;
     }
 
+    /**
+     *  Interface for Injectable Config property.
+     */
     export interface IInjectable {
         name: string;
         type: string;
         registeredName?: string;
     }
 
+    /**
+     *  Interface for Repository Config property.
+     */
     export interface IRepository {
         name: string;
         type: string;
         registeredName?: string;
     }
 
+    /**
+     *  Interface for Service Config property.
+     */
     export interface IService {
         name: string;
         type: string;
         registeredName?: string;
     }
 
+    /**
+     *  Interface for Model Config property.
+     */
     export interface IModel {
         name: string;
         type: string;
         registeredName?: string;
     }
 
+    /**
+     *  Interface for TemplateControl config property.
+     */
     export interface ITemplateControl {
         name: string;
         type: string;
         registeredName?: string;
     }
 
+    /**
+     *  Interface for AttributeControl config property.
+     */
     export interface IAttributeControl {
         name: string;
         type: string;

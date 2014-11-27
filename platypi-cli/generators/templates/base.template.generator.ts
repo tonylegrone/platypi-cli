@@ -1,4 +1,5 @@
-﻿import TemplateProvider = require('../../providers/githubtemplate.provider');
+﻿/// <reference path="../../_references.d.ts" />
+import TemplateProvider = require('../../providers/githubtemplate.provider');
 import CliConfig = require('../../config/cli/platypicli.config');
 import path = require('path');
 import util = require('util');
@@ -9,6 +10,9 @@ import globals = require('../../globals');
 
 var Promise = promises.Promise;
 
+/**
+ *  Contains the base class for project template generators.
+ */
 class BaseTemplateGenerator implements generators.ITemplateGenerator {
     _provider: providers.ITemplateProvider = null;
     _config: CliConfig.PlatypiCliConfig = null;
@@ -26,9 +30,13 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         this.__handleEnvironmentVariables();
     }
 
+    /**
+     * Parse environment variables for control values.
+     */
     private __handleEnvironmentVariables() {
         var name = ''
             , registerName = null;
+
         this.environmentVariables.forEach((variable) => {
             if (variable.name === 'name') {
                 name = variable.value;
@@ -57,6 +65,12 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         }
     }
 
+    /**
+     *  Make a directory for the template.
+     *  @param folder The name of the folder to be added.
+     *  @param folderFullPath Absolute path for the template folder to be created.
+     *  @param destination Path where the folder will be created. 
+     */
     private __createTemplateFolder(folder: string, folderFullPath: string, destination: string): Thenable<string> {
         return fileUtils.readdir(folderFullPath).then((files) => {
             var newFolder = path.join(destination, folder);
@@ -80,6 +94,12 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         });
     }
 
+    /**
+     *  Copy the template file filling in environment variables.
+     *  @param file Filename to be processed.
+     *  @param templateFullPath The path to the template file.
+     *  @param destination The path to the destination for the processed template.
+     */
     private __createTemplateFile(file: string, templateFullPath: string, destination: string): Thenable<string> {
         return fileUtils.readFile(templateFullPath, { encoding: 'utf8' }).then((data) => {
             data = this.__fillEnvironmentVariables(data);
@@ -93,6 +113,10 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         });
     }
 
+    /**
+     *  Replace placeholders with environment values.
+     *  @param data Text containing placeholders to fill with environment values.
+     */
     private __fillEnvironmentVariables(data: string): string {
         this.environmentVariables.forEach((variable) => {
             var regex = new RegExp('%' + variable.name + '%', 'g');
@@ -104,6 +128,9 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         return data;
     }
 
+    /**
+     *  Return the path to the cached template files.
+     */
     _resolveTemplateLocation(): Thenable<string> {
         if (!this.location) {
             return this.updateTemplates().then((config) => {
@@ -128,6 +155,10 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         return this.instanceName;
     }
 
+    /**
+     *  Replace the placeholder template filename.
+     *  @param baseName Placeholder named to be processed.
+     */
     _handleFileName(baseName: string): string {
         var output = ''
             , fileType = baseName.slice(baseName.lastIndexOf('.') + 1);
@@ -155,6 +186,10 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         return util.format('%s.%s.%s', output, type, fileType);
     }
 
+    /**
+     *  Process and copy the desired template to the destination path.
+     *  @param destination The path to the desired template location.
+     */
     _copyTemplateTo(destination: string): Thenable<any> {
         return this._resolveTemplateLocation().then((templateLocation) => {
             return fileUtils.readdir(templateLocation).then((files) => {
@@ -211,6 +246,10 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         });
     }
 
+    /**
+     *  Generate the template and reference it in the project config.
+     *  @param projectConfig The project config to add the control to.
+     */
     generate(projectConfig: config.IPlatypi): Thenable<string> {
         return this._config.getConfig().then((cliConfig) => {
             console.log('Creating ' + this.__controlName + '..');
