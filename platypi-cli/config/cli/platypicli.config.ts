@@ -1,6 +1,5 @@
 ﻿/// <reference path="../../_references.d.ts" />
 
-import fs = require('fs');
 import path = require('path');
 import util = require('util');
 import dirutil = require('../../utils/directory.utils');
@@ -69,15 +68,8 @@ export class PlatypiCliConfig {
                 throw 'No config loaded!';
             }
 
-            return new Promise((resolve, reject) => {
-                fs.writeFile(configPath, JSON.stringify(this.__config), (err) => {
-                    if (err) {
-                        return reject(err);
-                    }
-                    this.configPath = configPath;
-
-                    resolve(this.__config);
-                });
+            return fileutil.writeFile(configPath, JSON.stringify(this.__config)).then(() => {
+                return this.__config;
             });
         });
     }
