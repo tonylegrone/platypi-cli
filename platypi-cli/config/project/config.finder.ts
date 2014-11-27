@@ -1,42 +1,48 @@
 ﻿/// <reference path="../../_references.d.ts" />
 
 import path = require('path');
-import fs = require('fs');
 import utils = require('../../utils/directory.utils');
 import validator = require('./config.validator');
-import promises = require('es6-promise');
+import fileutils = require('../../utils/file.utils');
 import PlatypiConfig = require('./platypi.config');
 
 var cwd = process.cwd()
-    , Promise = promises.Promise
     , root = path.resolve('/');
 
+/**
+ *  Contains methods relating to a project's Platypi Config file.
+ */
 class ConfigFinder {
+    /**
+     *  Walk upwards looking for a platypi.config file. 
+     *  @param name The name of the config file.
+     *  @param currentDirectory the directory to start looking in.
+     */
     findConfig(name = 'platypi.json', currentDirectory = cwd): Thenable<config.IPlatypi> {
         return this.readFileRecursive(name, currentDirectory);
     }
 
+    /**
+     *  Recursive walk method.
+     */
     readFileRecursive(name: string, currentDirectory: string): Thenable<any> {
-        return new Promise((resolve, reject) => {
-            var filePath = path.join(currentDirectory, name);
-            fs.readFile(filePath, 'utf8', (err, data) => {
-                if (data) {
-                    var config: config.IPlatypi = JSON.parse(data);
+        var filePath = path.join(currentDirectory, name);
+        return fileutils.readFile(filePath, { encoding: 'utf8' }).then((data) => {
+            var config: config.IPlatypi = JSON.parse(data);
 
-                    if (validator(config)) {
-                        config = PlatypiConfig.loadFromObject(config);
-                        return resolve(config);
-                    } else {
-                        return reject('A valid platypi config file was not found.');
-                    }
-                } else  if (currentDirectory === root) {
-                    return reject('A valid platypi config file was not found.');
-                } else {
-                    return resolve(this.readFileRecursive(name, utils.upOneLevel(currentDirectory)));
-                }
-            });
+            if (validator(config)) {
+                config = PlatypiConfig.loadFromObject(config);
+                return config;
+            } else {
+                throw 'A valid platypi config file was not found.';
+            }
+        }, (err) => {
+            if (currentDirectory === root) {
+                throw 'A valid platypi config file was not found.';
+            } else {
+                return this.readFileRecursive(name, utils.upOneLevel(currentDirectory));
+            }
         });
-
     }
 }
 
