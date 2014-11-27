@@ -9,10 +9,17 @@ import promises = require('es6-promise');
 
 var Promise = promises.Promise;
 
+/**
+ * Contains methods and variables for dealing with the CLI Config file.
+ */
 export class PlatypiCliConfig {
     private __config: config.IPlatypiCliConfig = null;
     configPath: string = '';
 
+    /**
+     * Set the current config.
+     * @param newConfig CLI Config file to set.
+     */
     setConfig(newConfig: config.IPlatypiCliConfig): Thenable<config.IPlatypiCliConfig> {
         if (JSON.stringify(newConfig) === JSON.stringify(this.__config)) {
             return Promise.resolve(this.__config);
@@ -22,6 +29,9 @@ export class PlatypiCliConfig {
         }
     }
 
+    /**
+     *  Return loaded config or load config from disk.
+     */
     getConfig(): Thenable<config.IPlatypiCliConfig> {
         if (this.__config) {
             return Promise.resolve(this.__config);
@@ -30,6 +40,9 @@ export class PlatypiCliConfig {
         }
     }
 
+    /**
+     *  Load CLI config from disk.
+     */
     private __loadConfig(): Thenable<config.IPlatypiCliConfig> {
         var configPath: string;
 
@@ -45,6 +58,9 @@ export class PlatypiCliConfig {
             });
     }
 
+    /**
+     *  Update the config file stored in the AppData directory.
+     */
     private __updateConfig(): Thenable<config.IPlatypiCliConfig> {
         return dirutil.appDataDir().then((appDataDir) => {
             var configPath = path.normalize(util.format('%s/%s', appDataDir, 'cli.json'));

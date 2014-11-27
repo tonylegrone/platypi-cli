@@ -39,6 +39,9 @@ commander
         });
     });
 
+/**
+ * Add Control Command.
+ */
 commander
     .command('add <type> <name>')
     .description('Add a new control to an existing project.')
@@ -63,6 +66,9 @@ commander
             });
     });
 
+/**
+ * Update templates command.
+ */
 commander
     .command('update')
     .description('Update the cached CLI files.')
@@ -73,6 +79,9 @@ commander
         });
     });
 
+/**
+ * Delete Cached Templates
+ */
 commander
     .command('cache-clean')
     .description('Clean the CLI cache directory.')
@@ -83,6 +92,9 @@ commander
         });
     });
 
+/**
+ * Initialize a New Project through prompts
+ */
 commander
     .command('init')
     .description('initialize a new Platypi project through a series of prompts.')
@@ -106,6 +118,7 @@ commander
 
 commander.parse(process.argv);
 
+// No command issued, display help
 if (!commander.args.length) {
     commander.help();
 }

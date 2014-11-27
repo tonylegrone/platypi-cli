@@ -1,4 +1,7 @@
 ﻿declare module config {
+    /**
+     * Interface for CLI Config 
+     */
     export interface IPlatypiCliConfig {
         version: string;
         templates: {
