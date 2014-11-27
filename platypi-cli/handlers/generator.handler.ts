@@ -9,6 +9,14 @@ import ModelGenerator = require('../generators/templates/model.template.generato
 import AttributeControlGenerator = require('../generators/templates/attributecontrol.template.generator');
 
 module GeneratorHandler {
+
+    /**
+     *  Retrieve the appropriate generator for the given control parameters.
+     *  @param controlName Control Type name to be generated.
+     *  @param instanceName The desired name for the control once generated.
+     *  @param registeredname The name the control will register with the framework as.
+     *  @param configType The config type of the platypi project.
+     */
     export var getGenerator = (controlName: string, instanceName: string, registeredname: string, configType: string) => {
         var controlGenerator: generators.ITemplateGenerator = null
             , type = controlName;

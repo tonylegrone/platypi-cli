@@ -6,6 +6,9 @@ import fs = require('fs');
 
 var Promise = promises.Promise;
 
+/**
+ *  Contains methods for accessing RESTful services.
+ */
 class BaseService implements IBaseService {
     _get(host: string, path: string, authtoken?: string): Thenable<any> {
         return new Promise((resolve, reject) => {

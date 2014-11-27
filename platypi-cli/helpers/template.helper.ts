@@ -9,6 +9,9 @@ var package = require('../../package.json')
     , admzip = require('adm-zip')
     , cliConfig = PlatypiCliConfig.config;
 
+/**
+ *  Contains methods for dealing with external templates.
+ */
 class TemplateHelper<T extends IBaseService> {
     service: T;
     cacheDir = null;
@@ -17,6 +20,10 @@ class TemplateHelper<T extends IBaseService> {
         this.service = new Service();
     }
 
+    /**
+     *  Create the cache directory for template storage.
+     *  @param appDataFolderPath The path to the OS specific app data folder.
+     */
     private __makeCacheDir(appDataFolderPath: string): Thenable<string> {
         var cacheFolder = path.normalize(util.format('%s/%s', appDataFolderPath, 'cache'));
 
@@ -34,6 +41,10 @@ class TemplateHelper<T extends IBaseService> {
         });
     }
 
+    /**
+     *  Create the folder to store template archives.
+     *  @param cacheFolderPath Path to the cache data folder.
+     */
     private __makeArchiveCacheDir(cacheFolderPath: string): Thenable<string> {
         var archiveFolder = path.normalize(util.format('%s/%s/', cacheFolderPath, 'archives'));
         return fileutils.mkdir(archiveFolder).then(() => {
@@ -48,6 +59,10 @@ class TemplateHelper<T extends IBaseService> {
         });
     }
 
+    /**
+     *  Download the templates from the service and store in the cache folder.
+     *  @param appDataDir The path to the OS specific app data dir where the cache is located.
+     */
     private __downloadTemplates(appDataDir: string): Thenable<string> {
         return this.__makeCacheDir(appDataDir)
             .then(this.__makeArchiveCacheDir)
@@ -59,6 +74,10 @@ class TemplateHelper<T extends IBaseService> {
             });
     }
 
+   /**
+    *  Download and unzip the template files to the cache dir.
+    *  @param appDataDir Path to the OS specfic app data directory.
+    */
     updateTemplates(appDataDir: string): Thenable<string> {
         return this.__downloadTemplates(appDataDir)
             .then((zipLocation) => {
@@ -78,6 +97,10 @@ class TemplateHelper<T extends IBaseService> {
             });
     }
 
+    /**
+     *  Update the CLI config file on disk.
+     *  @param extractDir Path archives are extracted to.
+     */
     private __updateConfig(extractDir: string): Thenable<any> {
         var configPath = path.normalize(util.format('%s/%s', extractDir, 'cli.json'));
 

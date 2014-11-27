@@ -4,6 +4,9 @@ import GithubService = require('../services/github/github.service');
 import TemplateHelper = require('../helpers/template.helper');
 import dirutils = require('../utils/directory.utils');
 
+/**
+ *  Contains methods for providing templates stored on Github.
+ */
 class GithubTemplateProvider implements providers.ITemplateProvider {
     private __helper = null;
 
