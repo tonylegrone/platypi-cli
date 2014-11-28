@@ -110,6 +110,16 @@ class Config implements config.IPlatypi {
         this.cordova = path.normalize(value);
     }
 
+    mainFile: string;
+
+    get MainFile(): string {
+        return this.mainFile;
+    }
+
+    set MainFile(pathValue: string) {
+        this.mainFile = path.normalize(value);
+    }
+
     viewcontrols: Array<config.IViewControl> = new Array();
 
     get ViewControls(): Array<config.IViewControl> {

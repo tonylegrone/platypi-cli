@@ -14,6 +14,7 @@
         root?: string;
         public?: string;
         cordova?: string;
+        mainFile?: string;
         viewcontrols?: Array<IViewControl>;
         injectables?: Array<IInjectable>;
         services?: Array<IService>;
