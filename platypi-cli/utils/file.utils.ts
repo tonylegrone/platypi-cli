@@ -21,6 +21,12 @@ export var deleteFile = (location: string): Thenable<any> => {
     });
 };
 
+export var appendFIle = (location: string, data: string): Thenable<any> => {
+    return asyncCall((resolver) => {
+        fs.appendFile(location, data, resolver);
+    });
+};
+
 export var stat = (location: string): Thenable<fs.Stats> => {
     return asyncCall((resolver) => {
         fs.stat(location, resolver);
