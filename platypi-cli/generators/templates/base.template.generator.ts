@@ -7,7 +7,6 @@ import promises = require('es6-promise');
 import dirutils = require('../../utils/directory.utils');
 import fileUtils = require('../../utils/file.utils');
 import globals = require('../../globals');
-import MainFile = require('../../handlers/mainfile.handler');
 
 var Promise = promises.Promise;
 
@@ -259,10 +258,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
                 // add to project config
                 projectConfig.addControl(this.instanceName, this.__controlName, this.registeredName);
                 return projectConfig.save().then(() => {
-                    // add reference to main.ts file
-                    return MainFile.addControl(newPath, projectConfig).then(() => {
-                        return newPath;
-                    });
+                    return newPath;
                 });
             });
         });
