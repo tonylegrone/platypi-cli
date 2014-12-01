@@ -14,13 +14,15 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
     generate(projectConfig?: config.IPlatypi, configPath?: string): Thenable<string> {
         console.log('Extracting templates to: ' + process.cwd());
         return this._copyTemplateTo(process.cwd()).then((folder) => {
-            var publicPath = path.join(folder, 'public');
+            var publicPath = path.join(folder, 'public')
+                , mainFile = path.join(publicPath, 'main.ts');
 
             if (!configPath || configPath === '') {
                 configPath = path.join(folder, 'platypi.json');
             }
 
             projectConfig.public = publicPath;
+            projectConfig.mainFile = mainFile;
             projectConfig.root = folder;
             console.log('config path: ', configPath);
             return projectConfig.save(configPath).then(() => {
