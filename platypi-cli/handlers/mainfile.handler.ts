@@ -3,7 +3,8 @@ import fileutils = require('../utils/file.utils');
 
 class MainFileHandler {
     static addControl(controlPath: string, projectConfig: config.IPlatypi) {
-        var toAppend = 'require(\'' + controlPath + '\');';
+        controlPath = (controlPath.charAt(0) === '.' ? controlPath : './' + controlPath);
+        var toAppend = 'require(\'' + controlPath + '\');\n';
         return fileutils.appendFIle(projectConfig.mainFile, toAppend);
     }
 }
