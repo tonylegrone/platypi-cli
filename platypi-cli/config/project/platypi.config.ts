@@ -116,7 +116,7 @@ class Config implements config.IPlatypi {
         return this.mainFile;
     }
 
-    set MainFile(pathValue: string) {
+    set MainFile(value: string) {
         this.mainFile = path.normalize(value);
     }
 
