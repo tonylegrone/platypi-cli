@@ -3,9 +3,9 @@
 ##Getting Started
 
 ###Install
-``
+```
 npm install -g platypi-cli
-``
+```
 
 ##Usage
 
