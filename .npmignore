@@ -1,0 +1,6 @@
+*.ts
+*.js.map
+tslint.json
+jshint.json
+tests/
+Gruntfile.js
