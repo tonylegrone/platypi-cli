@@ -1,6 +1,10 @@
 *.ts
+*.d.ts
 *.js.map
 tslint.json
 jshint.json
 tests/
 Gruntfile.js
+node_modules/
+typings/
+platypi-cli/typings/
