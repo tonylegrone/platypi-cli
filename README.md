@@ -1,8 +1,13 @@
 #Platypi Command Line Interface
-##Project Generator
 
-###Getting Started
---install tbd
+##Getting Started
+
+###Install
+``
+npm install -g platypi-cli
+``
+
+##Usage
 
 ###Generating a Project
 ```
