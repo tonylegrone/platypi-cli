@@ -47,7 +47,7 @@ class ReferencesHandler {
      *  Search a directory for a interface files.
      *  @param referencePath The path to the directory to search.
      */
-     static findInterfaceFiles(referencePath: string): Thenable<string> {
+     static findInterfaceFiles(referencePath: string): Thenable<Array<string>> {
          return fileutils.readdir(referencePath).then((fileList) => {
              var interfaceFiles: Array<string> = [];
 
