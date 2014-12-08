@@ -39,9 +39,28 @@ class ReferencesHandler {
      *  Creates a new TypeScript reference string from the provided path.
      *  @param referencePath The relative path to the interface to be referenced.
      */
-     static newReferenceString(referencePath: string): String {
+     static newReferenceString(referencePath: string): string {
         return '/// <reference path=\"' + referencePath + '\" />';
-    }
+     }
+
+    /**
+     *  Search a directory for a interface files.
+     *  @param referencePath The path to the directory to search.
+     */
+     static findInterfaceFiles(referencePath: string): Thenable<string> {
+         return fileutils.readdir(referencePath).then((fileList) => {
+             var interfaceFiles: Array<string> = [];
+
+             fileList.forEach((file) => {
+                 if (file.indexOf('.d.ts') > -1) {
+                     interfaceFiles.push(file);
+                 }
+             });
+
+             return interfaceFiles;
+         });
+     }
+     
 }
 
 export = ReferencesHandler;
