@@ -259,7 +259,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
                 // add to project config
                 projectConfig.addControl(this.instanceName, this.__controlName, this.registeredName);
                 return projectConfig.save().then(() => {
-                    var referencesPath = path.join(projectConfig.public, 'references.d.ts')
+                    var referencesPath = path.join(projectConfig.public, '_references.d.ts')
                         , pathToReference = path.relative(referencesPath, newPath);
 
                     return ReferenceHandler.addReference(referencesPath, pathToReference, this.__controlName).then(() => {
