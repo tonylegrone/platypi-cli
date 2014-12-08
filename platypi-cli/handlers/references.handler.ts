@@ -3,7 +3,7 @@
 import fileutils = require('../utils/file.utils');
 import promises = require('es6-promise');
 
-var Promise = promise.Promise;
+var Promise = promises.Promise;
 
 /**
  *  Contains methods for handling a project's _references.d.ts file.
@@ -31,8 +31,8 @@ class ReferencesHandler {
                 }
             });
         } else {
-           return Promise.resolve(''); 
-        } 
+           return Promise.resolve('');
+        }
     }
 
     /**
