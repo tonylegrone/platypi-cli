@@ -1,5 +1,6 @@
 /// <reference path="../_references.d.ts" />
 
+import path = require('path');
 import fileutils = require('../utils/file.utils');
 import promises = require('es6-promise');
 
@@ -11,28 +12,32 @@ var Promise = promises.Promise;
 class ReferencesHandler {
     /**
      *  Add a reference to the current project's _references.d.ts file.
-     *  @param referenceFolderPath The relative path to the folder containing an interface to be referenced.
+     *  @param referenceFolderPath The absolute path to the folder containing an interface to be referenced.
      *  @param referenceType The control type of the interface.
      */
     static addReference(referenceFileLocation: string, referenceFolderPath: string, referenceType?: string): Thenable<any> {
+        var relativePathToReference = path.relative(referenceFileLocation, referenceFolderPath);
+
         return this.findInterfaceFiles(referenceFolderPath).then((interfaceFiles) => {
             if (interfaceFiles.length > 0) {
                 return Promise.all(<Array<Promise<string>>>interfaceFiles.map((file) => {
                     if (file.indexOf('.d.ts') > -1) {
-                        return fileutils.readFile(referenceFileLocation).then((referenceData: string) => {
-                            var typePos = -1;
+                        return fileutils.readFile(referenceFileLocation, { encoding: 'utf8' }).then((referenceData: string) => {
+                            var typePos = -1,
+                                relativePathToReferenceFile = path.join(relativePathToReference, file);
+
+                            relativePathToReferenceFile = relativePathToReferenceFile.slice(3);
 
                             if (referenceType) {
-                                var referenceTypeComment = '// ' + referenceType.toLowerCase();
+                                var referenceTypeComment = '// ' + referenceType.toLowerCase() + 's';
 
                                 typePos = referenceData.indexOf(referenceTypeComment);
                                 typePos = typePos + referenceTypeComment.length;
 
-                                return fileutils.appendFileAt(referenceFileLocation, typePos, '\n'
-                                    + this.newReferenceString(referenceFolderPath));
-                            } else {
-                                return fileutils.appendFIle(referenceFileLocation, '\n' + this.newReferenceString(referenceFolderPath));
                             }
+
+                            return fileutils.appendFileAt(referenceFileLocation, typePos, '\n'
+                                    + this.newReferenceString(relativePathToReferenceFile));
                         });
                     } else {
                         return Promise.resolve('');
