@@ -1,6 +1,9 @@
 /// <reference path="../_references.d.ts" />
 
 import fileutils = require('../utils/file.utils');
+import promises = require('es6-promise');
+
+var Promise = promise.Promise;
 
 /**
  *  Contains methods for handling a project's _references.d.ts file.
@@ -12,20 +15,24 @@ class ReferencesHandler {
      *  @param referenceType The control type of the interface.
      */
     static addReference(referenceFileLocation: string, referencePath: string, referenceType?: string): Thenable<any> {
-        return fileutils.readFile(referenceFileLocation).then((referenceData: string) => {
-            var typePos = -1;
+        if (referencePath.indexOf('.d.ts') > -1) {
+            return fileutils.readFile(referenceFileLocation).then((referenceData: string) => {
+                var typePos = -1;
 
-            if (referenceType) {
-                var referenceTypeComment = '// ' + referenceType.toLowerCase();
+                if (referenceType) {
+                    var referenceTypeComment = '// ' + referenceType.toLowerCase();
 
-                typePos = referenceData.indexOf(referenceTypeComment);
-                typePos = typePos + referenceTypeComment.length;
+                    typePos = referenceData.indexOf(referenceTypeComment);
+                    typePos = typePos + referenceTypeComment.length;
 
-                return fileutils.appendFileAt(referenceFileLocation, typePos, '\n' + this.newReferenceString(referencePath));
-            } else {
-                return fileutils.appendFIle(referenceFileLocation, '\n' + this.newReferenceString(referencePath));
-            }
-        });
+                    return fileutils.appendFileAt(referenceFileLocation, typePos, '\n' + this.newReferenceString(referencePath));
+                } else {
+                    return fileutils.appendFIle(referenceFileLocation, '\n' + this.newReferenceString(referencePath));
+                }
+            });
+        } else {
+           return Promise.resolve(''); 
+        } 
     }
 
     /**
