@@ -162,7 +162,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
      */
     _handleFileName(baseName: string): string {
         var output = ''
-            , fileType = baseName.slice(baseName.lastIndexOf('.') + 1);
+            , fileType = (baseName.indexOf('.d.ts') > -1 ? 'd.ts' : baseName.slice(baseName.lastIndexOf('.') + 1));
 
         var typeMatches = baseName.match(/\.(.*?)\./)
             , type = null
