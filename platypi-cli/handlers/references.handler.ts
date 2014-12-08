@@ -60,7 +60,7 @@ class ReferencesHandler {
      }
 
     /**
-     *  Search a directory for a interface files.
+     *  Search a directory for interfaces files.
      *  @param referencePath The path to the directory to search.
      */
      static findInterfaceFiles(referencePath: string): Thenable<Array<string>> {
