@@ -7,6 +7,7 @@ import promises = require('es6-promise');
 import dirutils = require('../../utils/directory.utils');
 import fileUtils = require('../../utils/file.utils');
 import globals = require('../../globals');
+import ReferenceHandler = require('../../handlers/references.handler');
 
 var Promise = promises.Promise;
 
@@ -258,7 +259,12 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
                 // add to project config
                 projectConfig.addControl(this.instanceName, this.__controlName, this.registeredName);
                 return projectConfig.save().then(() => {
-                    return newPath;
+                    var referencesPath = path.join(projectConfig.public, 'references.d.ts')
+                        , pathToReference = path.relative(referencesPath, newPath);
+
+                    return ReferenceHandler.addReference(referencesPath, pathToReference, this.__controlName).then(() => {
+                        return newPath;
+                    });
                 });
             });
         });
