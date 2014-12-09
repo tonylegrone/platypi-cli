@@ -65,19 +65,19 @@ class MainFileHandler {
      *  Search a directory for TypeScript files.
      *  @param templatePath The path to the template directory to reference.
      */
-     static findTypeScriptFiles(templatePath: string): Thenable<Array<string>> {
-         return fileutils.readdir(templatePath).then((fileList) => {
-             var tsFiles: Array<string> = [];
+    static findTypeScriptFiles(templatePath: string): Thenable<Array<string>> {
+        return fileutils.readdir(templatePath).then((fileList) => {
+            var tsFiles: Array<string> = [];
 
-             fileList.forEach((file) => {
-                 if (file.indexOf('.ts') > -1 && file.indexOf('.d.ts') === -1) {
-                     tsFiles.push(file);
-                 }
-             });
+            fileList.forEach((file) => {
+                if (file.indexOf('.ts') > -1 && file.indexOf('.d.ts') === -1) {
+                    tsFiles.push(file);
+                }
+            });
 
-             return tsFiles;
-         });
-     }
+            return tsFiles;
+        });
+    }
 }
 
 export = MainFileHandler;
