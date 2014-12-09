@@ -8,6 +8,7 @@ import dirutils = require('../../utils/directory.utils');
 import fileUtils = require('../../utils/file.utils');
 import globals = require('../../globals');
 import ReferenceHandler = require('../../handlers/references.handler');
+import MainFileHandler = require('../../handlers/mainfile.handler');
 
 var Promise = promises.Promise;
 
@@ -218,6 +219,35 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         });
     }
 
+    /**
+     *  Adds a control to the project config then saves it.
+     *  @param config The project config to add the control to.
+     */
+    _addToProjectConfig(config: config.IPlatypi): Thenable<any> {
+        config.addControl(this.instanceName, this.__controlName, this.registeredName);
+        return config.save();
+    }
+
+    /**
+     *  Add an interface reference to the project's references file.
+     *  @param config The project config for the project the reference will be added to.
+     *  @param templatePath Absolute path to the template to be referenced.
+     */
+    _addReferences(config: config.IPlatypi, templatePath: string): Thenable<any> {
+        var referencesPath = path.join(config.public, '_references.d.ts');
+
+        return ReferenceHandler.addReference(referencesPath, templatePath, this.__controlName);
+    }
+
+    /**
+     *  Add a 'require' statement to the project's main file for a provided control template.
+     *  @param config The project config for the project to add the control to.
+     *  @param templatePath Absolute path to the template to be required.
+     */
+    _addRequireToMain(config: config.IPlatypi, templatePath: string): Thenable<any> {
+        return MainFileHandler.addControl(templatePath, config, this.__controlName);
+    }
+
     /*
      * Updates templates if the cache age is maxed.
      * returns config
@@ -256,14 +286,12 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
             console.log('Creating ' + this.__controlName + '..');
             var controlPath = path.join(projectConfig.public, cliConfig.templates.controlLocation[this.__controlName]);
             return this._copyTemplateTo(controlPath).then((newPath) => {
-                // add to project config
-                projectConfig.addControl(this.instanceName, this.__controlName, this.registeredName);
-                return projectConfig.save().then(() => {
-                    var referencesPath = path.join(projectConfig.public, '_references.d.ts');
-
-                    return ReferenceHandler.addReference(referencesPath, newPath, this.__controlName).then(() => {
-                        return newPath;
-                    });
+                return this._addReferences(projectConfig, newPath).then(() => {
+                    return this._addRequireToMain(projectConfig, newPath);
+                }).then(() => {
+                    return this._addToProjectConfig(projectConfig);
+                }).then(() => {
+                    return newPath;
                 });
             });
         });
