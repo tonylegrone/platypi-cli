@@ -29,6 +29,7 @@ export var appendFIle = (location: string, data: string): Thenable<any> => {
 
 export var appendFileAt = (location: string, index: number, toAppend: string): Thenable<any> => {
     return readFile(location, { encoding : 'utf8' }).then((data: string) => {
+        index = (index > -1 ? index : data.length);
         var newData = data.substring(0, index) + toAppend + data.substring(index, data.length);
         return writeFile(location, newData);
     });
