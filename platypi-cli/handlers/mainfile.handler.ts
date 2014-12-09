@@ -25,7 +25,13 @@ class MainFileHandler {
                         var typePos = -1,
                             relativePathToControlFile = path.join(relativePathToControl, file);
 
+                        // remove ../ fomr beginning of path for require statement
                         relativePathToControlFile = relativePathToControlFile.slice(3);
+
+                        // remove .ts from the end of path for require statement (node will find it)
+                        relativePathToControlFile = relativePathToControlFile.slice(0, relativePathToControlFile.indexOf('.ts'));
+
+                        // append './' to the beginning of the path (could be combined with the first step but let's be safe)
                         relativePathToControlFile = './' + relativePathToControlFile;
 
                         if (controlType) {
