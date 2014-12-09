@@ -32,7 +32,7 @@ class ReferencesHandler {
                                 var referenceTypeComment = '// ' + referenceType.toLowerCase() + 's';
 
                                 typePos = referenceData.indexOf(referenceTypeComment);
-                                typePos = typePos + referenceTypeComment.length;
+                                typePos = (typePos > -1 ? typePos + referenceTypeComment.length : -1);
 
                             }
 

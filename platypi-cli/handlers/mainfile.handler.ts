@@ -38,7 +38,7 @@ class MainFileHandler {
                             var controlTypeComment = '// ' + controlType.toLowerCase() + 's';
 
                             typePos = mainData.indexOf(controlTypeComment);
-                            typePos = typePos + controlTypeComment.length;
+                            typePos = (typePos > -1 ?  typePos + controlTypeComment.length : -1);
                         }
 
                         return fileutils.appendFileAt(projectConfig.mainFile, typePos, '\n'
