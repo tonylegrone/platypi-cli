@@ -6,7 +6,9 @@
   "homepage": "http://getplatypi.com",
   "main": "platypi.js",
   "preferGlobal": true,
-  "scripts": {},
+  "scripts": {
+    "test": "istanbul cover --hook-run-in-context node_modules/mocha/bin/_mocha -- -R spec --recursive"
+  },
   "bin": {
     "platypi": "./platypi-cli/platypi.js"
   },
@@ -43,6 +45,7 @@
     "grunt-shell": "^1.1.1",
     "grunt-tslint": "^0.4.4",
     "grunt-typescript": "^0.3.8",
+    "istanbul": "^0.3.5",
     "mocha": "^2.0.1",
     "should": "^4.3.0",
     "tsd": "^0.6.0-beta.3"

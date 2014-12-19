@@ -185,3 +185,4 @@ dbconnection.json
 *.vim
 *.swp
 *.swo
+coverage/
