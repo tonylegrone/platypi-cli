@@ -1,5 +1,4 @@
 var should = require('should') // jshint ignore:line
-    , fs = require('fs')
     , path = require('path')
     , directory = require('../../platypi-cli/utils/directory.utils');
 
