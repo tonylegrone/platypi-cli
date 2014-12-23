@@ -9,7 +9,7 @@ var Promise = promises.Promise;
 /**
  *  Contains methods for accessing RESTful services.
  */
-class BaseService implements IBaseService {
+class BaseService {
     _get(host: string, path: string, authtoken?: string): Thenable<any> {
         return new Promise((resolve, reject) => {
             var userAgent = 'node.js'
@@ -57,12 +57,6 @@ class BaseService implements IBaseService {
                 });
 
         });
-    }
-
-    getRelease(version: string, savePath: string): Thenable<string> {
-        var location = '/';
-
-        return this._downloadFile(location, savePath);
     }
 
 }
