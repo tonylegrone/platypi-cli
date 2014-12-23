@@ -11,9 +11,34 @@ describe('validator', function () {
         author: 'Bob'
     };
 
-    describe('invalid config', function () {
+    describe('invalid config, blank project name', function () {
         it('should be false', function () {
             validator(config).should.be.false;
+        });
+    });
+
+    var configFail1 = {
+        name: 'Bob Project',
+        author: 'Bob'
+    };
+
+    describe('invalid config, type missing', function() {
+        it('should be false', function(done) {
+            validator(configFail1).should.be.false;
+            done();
+        });
+    });
+
+
+    var configFail2 = {
+        name: 'Bob Project',
+        type: 'mobile'
+    };
+
+    describe('invalid config, author missing', function() {
+        it('should be false', function(done) {
+            validator(configFail2).should.be.false;
+            done();
         });
     });
 
