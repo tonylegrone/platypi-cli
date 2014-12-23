@@ -13,7 +13,7 @@ describe('Main File Handler', function() {
         done();
     });
 
-    it('should return an instance', function(done) {
+    it('constructor should return an instance', function(done) {
         var newHandler = new mainFileHandler();
         expect(newHandler).to.be.an.object;
         done();
