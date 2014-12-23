@@ -3,7 +3,7 @@
 import BaseService = require('../base.service');
 import util = require('util');
 
-class GithubService extends BaseService {
+class GithubService extends BaseService implements IBaseService {
 
     baseUrl = 'https://github.com/Platypi/platypi-cli-templates/archive/';
 
