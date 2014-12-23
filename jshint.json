@@ -82,6 +82,8 @@
         "it": false,
         "before": false,
         "after": false,
+        "beforeEach": false,
+        "afterEach": false,
         "should":  false
         } // additional predefined global variables
 }

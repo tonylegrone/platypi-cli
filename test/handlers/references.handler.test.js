@@ -25,8 +25,7 @@ describe('References File Handler', function() {
             , readDirFunc
             , readFileFunc
             , writeFileFunc
-            , appendFileAtFunc
-            , position = -1;
+            , appendFileAtFunc;
 
         beforeEach(function(done) {
             sandbox = sinon.sandbox.create();
