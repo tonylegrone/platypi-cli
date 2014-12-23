@@ -6,8 +6,8 @@ module.exports = function (grunt) {
         './platypi-cli/**/*.ts'
     ]
     , tests = [
-        './tests/*.test.js',
-        './tests/**/*.test.js'
+        './test/*.test.js',
+        './test/**/*.test.js'
     ]
     , lintIgnore = [
         '!./platypi-cli/*.d.ts',
