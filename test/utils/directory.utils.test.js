@@ -53,43 +53,4 @@ describe('directory utils', function () {
             dirPath.should.not.equal('');
         });
     });
-
-    describe('deleteDirectoryRecursive', function () {
-        var error = '';
-
-        before(function (done) {
-            fs.mkdir('./testdir', function (err) {
-                if (err) {
-                    error = err;
-                    done();
-                }
-                fs.mkdir('./testdir/test1', function (err) {
-                    if (err) {
-                        error = err;
-                        done();
-                    }
-
-                    fs.writeFile('./testdir/test1/test.json', JSON.stringify({ test: 'test' }), function (err) {
-                        if (err) {
-                            error = err;
-                            done();
-                        }
-
-                        directory.deleteDirectoryRecursive('./testdir')
-                            .then(function () {
-                                done();
-                            }, function (err) {
-                                error = err;
-                                done();
-                            });
-                    });
-                });
-            });
-        });
-
-        it('should delete a directory with contents', function () {
-            error.should.equal('');
-        });
-    });
-
 });
