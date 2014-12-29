@@ -24,7 +24,7 @@ describe('Github Template Provider', function() {
 
         before(function(done) {
             sandbox = sinon.sandbox.create();
-            updateTemplateFunc = sandbox.stub(providerInstance.__helper, 'updateTemplates', function(path) {
+            updateTemplateFunc = sandbox.stub(providerInstance.__helper, 'updateTemplates', function() {
                 return Promise.resolve('successDir');
             });
 

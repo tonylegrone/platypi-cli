@@ -158,7 +158,7 @@ describe('Template Helper', function() {
     });
 
     describe('updateTemplates function', function() {
-        var sandbox, mkdirFunc, getReleaseMethod, extractAllMethod, version;
+        var sandbox, mkdirFunc, version;
 
         version = true;
 
@@ -191,7 +191,7 @@ describe('Template Helper', function() {
                 callback(null, JSON.stringify(testConfig));
             });
 
-            sandbox.stub(ZipUtil.prototype, 'extractAll', function(extractDir, overwrite) {
+            sandbox.stub(ZipUtil.prototype, 'extractAll', function(extractDir) {
                 if (extractDir === 'test/dir/fail/cache/0.0.1') {
                     throw 'Error';
                 }
@@ -240,7 +240,7 @@ describe('Template Helper', function() {
 
 
         it('should fail because there was an error unzipping', function(done) {
-            helper.updateTemplates('test/dir/fail').then(function(extractDir) {
+            helper.updateTemplates('test/dir/fail').then(function() {
                 done('should not return from here');
             }, function(err) {
                 expect(err).to.equal('Error');
