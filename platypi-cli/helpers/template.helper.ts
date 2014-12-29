@@ -81,7 +81,8 @@ class TemplateHelper<T extends IBaseService> {
     updateTemplates(appDataDir: string): Thenable<string> {
         return this.__downloadTemplates(appDataDir)
             .then((zipLocation) => {
-                var extractDir = path.normalize(util.format('%s/%s', this.cacheDir, package.version));
+                var version = package.version || '0.0.1'
+                    , extractDir = path.normalize(util.format('%s/%s', this.cacheDir, version));
 
                 var zip = new ZipUtil(zipLocation);
                 try {
@@ -89,7 +90,7 @@ class TemplateHelper<T extends IBaseService> {
                 } catch (e) {
                     throw e;
                 }
-                extractDir = path.normalize(util.format('%s/%s-%s', extractDir, 'platypi-cli-templates', package.version));
+                extractDir = path.normalize(util.format('%s/%s-%s', extractDir, 'platypi-cli-templates', version));
 
                 return this.__updateConfig(extractDir).then(() => {
                     return extractDir;
