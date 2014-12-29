@@ -4,5 +4,6 @@
 /// <reference path="config/cli/iplatypicli.config.d.ts" />
 /// <reference path="generators/templates/ienvironmentvariable.interface.d.ts" />
 /// <reference path="providers/itemplateprovider.interface.d.ts" />
+/// <reference path="utils/zip/izip.util.interface.d.ts" />
 
 /// <reference path="generators/templates/igenerator.interface.d.ts" />
