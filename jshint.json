@@ -84,6 +84,7 @@
         "after": false,
         "beforeEach": false,
         "afterEach": false,
-        "should":  false
+        "should":  false,
+        "Promise": true
         } // additional predefined global variables
 }
