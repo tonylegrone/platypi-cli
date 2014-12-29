@@ -4,9 +4,9 @@ import util = require('util');
 import path = require('path');
 import PlatypiCliConfig = require('../config/cli/platypicli.config');
 import fileutils = require('../utils/file.utils');
+import ZipUtil = require('../utils/zip/zip.util');
 
 var package = require('../../package.json')
-    , admzip = require('adm-zip')
     , cliConfig = PlatypiCliConfig.config;
 
 /**
@@ -36,7 +36,7 @@ class TemplateHelper<T extends IBaseService> {
                 this.cacheDir = cacheFolder;
                 return cacheFolder;
             } else {
-                return err;
+                throw err;
             }
         });
     }
@@ -54,7 +54,7 @@ class TemplateHelper<T extends IBaseService> {
                 // path already exists
                 return archiveFolder;
             } else {
-                return err;
+                throw err;
             }
         });
     }
@@ -82,10 +82,10 @@ class TemplateHelper<T extends IBaseService> {
         return this.__downloadTemplates(appDataDir)
             .then((zipLocation) => {
                 var extractDir = path.normalize(util.format('%s/%s', this.cacheDir, package.version));
-                var zip = admzip(zipLocation);
 
+                var zip = new ZipUtil(zipLocation);
                 try {
-                    zip.extractAllTo(extractDir, true);
+                    zip.extractAll(extractDir, true);
                 } catch (e) {
                     throw e;
                 }
