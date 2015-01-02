@@ -62,6 +62,10 @@ describe('Base Template Generator', function() {
                 callback(null, '%name%');
             });
 
+            sandbox.stub(fs, 'writeFile', function(filename, data, callback) {
+                callback(null);
+            });
+
             done();
         });
         
