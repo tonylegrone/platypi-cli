@@ -1,10 +1,16 @@
-var should = require('should') // jshint ignore:line
-    , BaseGenerator = require('../../../platypi-cli/generators/templates/base.template.generator')
+var chai = require('chai')
     , fs = require('fs')
-    , path = require('path')
-    , utils = require('../../../platypi-cli/utils/directory.utils.js');
+    , sinon = require('sinon')
+    , sinonChai = require('sinon-chai')
+    , expect = chai.expect
+    , Promise = require('es6-promise').Promise
+    , BaseGenerator = require('../../../platypi-cli/generators/templates/base.template.generator')
+    , ReferenceHandler = require('../../../platypi-cli/handlers/references.handler')
+    , MainFileHandler = require('../../../platypi-cli/handlers/mainfile.handler');
 
-describe('Base Template Generator', function () {
+chai.use(sinonChai); 
+
+describe('Base Template Generator', function() {
     var environmentVariables = []
         , nameVar = {
             name: 'name',
@@ -15,100 +21,91 @@ describe('Base Template Generator', function () {
 
     var generator = new BaseGenerator('model', 'base', environmentVariables);
 
-    it('should be an object', function () {
-        should.exist(generator);
-        generator.should.be.an.Object;
-    });
+    describe('generate method', function() {
+        var sandbox, mockProjectConfig;
+        beforeEach(function(done) {
+            sandbox = sinon.sandbox.create();
 
-    describe('_handleFileName', function () {
-        it('should generate test.model.ts', function () {
-            generator.instanceName = 'test';
-            var name = generator._handleFileName('model.model.ts');
-            name.should.equal('test.model.ts');
-        });
-
-        it('should generate iconfig.model.ts', function () {
-            generator.instanceName = 'config';
-            var name = generator._handleFileName('imodel.model.ts');
-            name.should.equal('iconfig.model.ts');
-        });
-    });
-
-    describe('__fillEnvironmentVariables', function () {
-        it('should replace placeholders with value', function () {
-            var data = 'class %name%Model { }';
-            data = generator.__fillEnvironmentVariables(data);
-
-            data.should.equal('class testModel { }');
-        });
-    });
-
-    describe('_copyTemplateTo', function () {
-        generator.instanceName = 'test';
-        var error = ''
-            , output = [];
-
-        before(function (done) {
-            generator.location = path.join(__dirname, 'testtemplate/viewcontrol');
-            fs.mkdir(path.join(__dirname, 'testoutput'), function (err) {
-                if (err) {
-                    if (err.code !== 'EEXIST') {
-                        throw err;
-                    }
+            // mock project config
+            mockProjectConfig = {
+                public: 'fake/public/dir',
+                save: function() {
+                    return Promise.resolve('');
+                },
+                addControl: function() {
+                    return;
                 }
-                generator._copyTemplateTo(path.join(__dirname, './testoutput')).then(function (newFiles) {
-                    output = newFiles;
-                    done();
-                }, function (err) {
-                    error = err;
-                    done();
+            };
+
+            // stub methods
+
+            sandbox.stub(generator._config, 'getConfig', function() {
+                return Promise.resolve({
+                    templates: {
+                        lastUpdated: new Date(2012, 01, 01),
+                        controlLocation: {
+                            model: 'fake/location'
+                        },
+                        controls: {
+                            base: {
+                                model: './fake/model/location'
+                            }
+                        },
+                        baseLocation:'fake/base/location'
+                    }
                 });
             });
-        });
 
-        it('should copy control template files', function () {
-            error.should.equal('');
-            output.length.should.be.greaterThan(0);
-        });
-    });
+            sandbox.stub(generator._provider, 'update', function() {
+                return Promise.resolve('fake/template/location');
+            });
 
-    describe('_copyTemplateTo', function () {
-        var projectTemplateGen = new BaseGenerator('project', 'web', environmentVariables);
-        projectTemplateGen.instanceName = 'test';
-        var error = ''
-            , output = [];
+            sandbox.stub(fs, 'readdir', function(dirPath, callback) {
+                callback(null, ['model.mock.ts', 'model.mock.d.ts']);
+            });
 
-        before(function (done) {
-            projectTemplateGen.location = path.join(__dirname, 'testtemplate/web');
-            fs.mkdir(path.join(__dirname, 'testoutput'), function (err) {
-                if (err) {
-                    if (err.code !== 'EEXIST') {
-                        throw err;
+            sandbox.stub(fs, 'mkdir', function(newPath, mode, callback) {
+                callback(null);
+            });
+
+            sandbox.stub(fs, 'stat', function(statPath, callback) {
+                callback(null, {
+                    isDirectory: function() {
+                        return false;
                     }
-                }
-                projectTemplateGen._copyTemplateTo(path.join(__dirname, './testoutput')).then(function (newFiles) {
-                    output = newFiles;
-                    done();
-                }, function (err) {
-                    error = err;
-                    done();
                 });
             });
+
+            sandbox.stub(fs, 'readFile', function(filename, options, callback) {
+                callback(null, '%name%');
+            });
+
+            sandbox.stub(fs, 'writeFile', function(filename, data, callback) {
+                callback(null);
+            });
+
+            sandbox.stub(ReferenceHandler, 'addReference', function(projectConfig, newPath) {
+                return Promise.resolve('');
+            });
+
+            sandbox.stub(MainFileHandler, 'addControl', function(projectConfig, newPath) {
+                return Promise.resolve('');
+            });
+
+            done();
         });
 
-        it('should copy project template files', function () {
-            error.should.equal('');
-            output.length.should.be.greaterThan(0);
+        afterEach(function(done) {
+            sandbox.restore();
+            done();
         });
 
-        after(function (done) {
-            utils.deleteDirectoryRecursive(path.join(__dirname, './testoutput')).then(function () {
-                done();
-            }, function (err) {
-                console.log(err);
+        it('should copy the template to the desired location.', function(done) {
+            generator.generate(mockProjectConfig).then(function(newPath) {
+                expect(newPath).to.exist;
                 done();
             });
         });
+        
     });
-
 });
