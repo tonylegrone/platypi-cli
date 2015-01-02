@@ -42,6 +42,22 @@ describe('Base Template Generator', function() {
                 return Promise.resolve('fake/template/location');
             });
 
+            sandbox.stub(fs, 'readdir', function(dirPath, callback) {
+                callback(null, ['test.ts', 'test.d.ts']);
+            });
+
+            sandbox.stub(fs, 'mkdir', function(newPath, mode, callback) {
+                callback(null);
+            });
+
+            sandbox.stub(fs, 'stat', function(statPath, callback) {
+                callback(null, {
+                    isDirectory: function() {
+                        return false;
+                    }
+                });
+            });
+
             done();
         });
         
