@@ -283,7 +283,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
      */
     generate(projectConfig: config.IPlatypi): Thenable<string> {
         return this._config.getConfig().then((cliConfig) => {
-            console.log('Creating ' + this.__controlName + '..');
+            globals.console.log('Creating ' + this.__controlName + '..');
             var controlPath = path.join(projectConfig.public, cliConfig.templates.controlLocation[this.__controlName]);
             return this._copyTemplateTo(controlPath).then((newPath) => {
                 return this._addReferences(projectConfig, newPath).then(() => {
