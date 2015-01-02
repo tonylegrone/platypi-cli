@@ -1,0 +1,49 @@
+var chai = require('chai')
+    , fs = require('fs')
+    , sinon = require('sinon')
+    , sinonChai = require('sinon-chai')
+    , expect = chai.expect
+    , Promise = require('es6-promise').Promise
+    , BaseGenerator = require('../../../platypi-cli/generators/templates/base.template.generator');
+
+chai.use(sinonChai); 
+
+describe('Base Template Generator', function() {
+    var environmentVariables = []
+        , nameVar = {
+            name: 'name',
+            value: 'test'
+        };
+
+    environmentVariables.push(nameVar);
+
+    var generator = new BaseGenerator('model', 'base', environmentVariables);
+
+    describe('generate method', function() {
+        var sandbox;
+        beforeEach(function(done) {
+            sandbox = sinon.sandbox.create();
+
+            // stub methods
+
+            sandbox.stub(generator._config, 'getConfig', function() {
+                return Promise.resolve({
+                    templates: {
+                        lastUpdated: new Date(2012, 01, 01),
+                        controlLocation: {
+                            model: 'fake/location'
+                        },
+                        baseLocation:'fake/base/location'
+                    }
+                });
+            });
+
+            sandbox.stub(generator._provider, 'update', function() {
+                return Promise.resolve('fake/template/location');
+            });
+
+            done();
+        });
+        
+    });
+});
