@@ -4,7 +4,9 @@ var chai = require('chai')
     , sinonChai = require('sinon-chai')
     , expect = chai.expect
     , Promise = require('es6-promise').Promise
-    , BaseGenerator = require('../../../platypi-cli/generators/templates/base.template.generator');
+    , BaseGenerator = require('../../../platypi-cli/generators/templates/base.template.generator')
+    , ReferenceHandler = require('../../handlers/references.handler')
+    , MainFileHandler = require('../../handlers/mainfile.handler');
 
 chai.use(sinonChai); 
 
@@ -20,9 +22,20 @@ describe('Base Template Generator', function() {
     var generator = new BaseGenerator('model', 'base', environmentVariables);
 
     describe('generate method', function() {
-        var sandbox;
+        var sandbox, mockProjectConfig;
         beforeEach(function(done) {
             sandbox = sinon.sandbox.create();
+
+            // mock project config
+            mockProjectConfig = {
+                public: 'fake/public/dir',
+                save: function() {
+                    return Promise.resolve('');
+                },
+                addControl: function() {
+                    return;
+                }
+            };
 
             // stub methods
 
@@ -64,6 +77,14 @@ describe('Base Template Generator', function() {
 
             sandbox.stub(fs, 'writeFile', function(filename, data, callback) {
                 callback(null);
+            });
+
+            sandbox.stub(ReferenceHandler, 'addReferences', function(projectConfig, newPath) {
+                return Promise.resolve('');
+            });
+
+            sandbox.stub(MainFileHandler, 'addControl', function(projectConfig, newPath) {
+                return Promise.resolve('');
             });
 
             done();
