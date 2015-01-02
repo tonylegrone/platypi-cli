@@ -6,7 +6,8 @@ var chai = require('chai')
     , Promise = require('es6-promise').Promise
     , BaseGenerator = require('../../../platypi-cli/generators/templates/base.template.generator')
     , ReferenceHandler = require('../../../platypi-cli/handlers/references.handler')
-    , MainFileHandler = require('../../../platypi-cli/handlers/mainfile.handler');
+    , MainFileHandler = require('../../../platypi-cli/handlers/mainfile.handler')
+    , globals = require('../../../platypi-cli/globals');
 
 chai.use(sinonChai); 
 
@@ -92,6 +93,11 @@ describe('Base Template Generator', function() {
                 return Promise.resolve('');
             });
 
+            // suppress any logging from module
+            sandbox.stub(globals.console, 'log', function() {
+                return;
+            });
+
             done();
         });
 
@@ -102,7 +108,8 @@ describe('Base Template Generator', function() {
 
         it('should copy the template to the desired location.', function(done) {
             generator.generate(mockProjectConfig).then(function(newPath) {
-                expect(newPath).to.exist;
+                // add checks for each stub that should be called/not called
+                expect(newPath).to.equal('fake/public/dir/fake/location/test');
                 done();
             });
         });
