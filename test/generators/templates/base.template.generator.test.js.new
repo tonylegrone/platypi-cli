@@ -58,6 +58,10 @@ describe('Base Template Generator', function() {
                 });
             });
 
+            sandbox.stub(fs, 'readFile', function(filename, options, callback) {
+                callback(null, '%name%');
+            });
+
             done();
         });
         
