@@ -1,5 +1,3 @@
-import ConfigFinder = require('../../config/project/config.finder');
-import GeneratorHandler = require('../../handlers/generator.handler');
 
 class ControlsModel {
     public type: string;
