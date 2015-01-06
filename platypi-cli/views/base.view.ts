@@ -1,12 +1,12 @@
 /// <reference path="../_references.d.ts" />
-import globals = require('../globals');
+import msg = require('../helpers/msg.helper');
 
 class BaseView implements IView {
-    logger = globals.console;
+    logger = msg;
     constructor(public responseText?: string) {}
 
     display() {
-        logger.log(this.responseText);
+        this.logger.log(this.responseText);
         return;
     }
 }

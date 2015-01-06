@@ -1,4 +1,4 @@
-export interface IView {
+interface IView {
     responseText: string;
     display(): any;
 }

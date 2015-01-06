@@ -1,6 +1,6 @@
 /// <reference path="../_references.d.ts" />
 
-export interface IController {
+interface IController {
     view: IView;
-    getResopnseView(): Thenable<IView>;
+    getResponseView(): Thenable<IView>;
 }

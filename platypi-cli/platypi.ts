@@ -6,8 +6,9 @@ import ConfigGenerator = require('./generators/platypiconfig.generator');
 import ProjectGenerator = require('./generators/templates/project.template.generator');
 import TemplateProvider = require('./providers/githubtemplate.provider');
 import GeneratorHandler = require('./handlers/generator.handler');
-import PlatypiConfig = require('./config/project/platypi.config');
 import EnvironmentVariableHandler = require('./handlers/environmentvariable.handler');
+import NewProjectController = require('./controllers/project/new/new.project.controller');
+import NewProjectView = require('./views/project/new/new.project.view');
 import globals = require('./globals');
 
 var provider = new TemplateProvider();
@@ -23,19 +24,12 @@ commander
     .command('create [type] [name]')
     .description('Create a new PlatypusTS project of type mobile or web. Default: web')
     .action((type, name) => {
-        var newConfig = (type === 'mobile' ? PlatypiConfig.CreateNewMobileConfig() : PlatypiConfig.CreateNewWebConfig());
+        var view = new NewProjectView()
+            , controller = new NewProjectController(view, type, name);
 
-        newConfig.name = name;
-
-        var environmentVariables = EnvironmentVariableHandler.parseVariables(newConfig);
-
-        var projectGen = new ProjectGenerator(newConfig.type, environmentVariables);
-        projectGen.generate(newConfig).then((path) => {
-            globals.console.log('New Project at: ' + path);
+        controller.getResponseView().then((responseView) => {
+            responseView.display();
             process.exit(0);
-        }, (err) => {
-            globals.console.error(err);
-            process.exit(1);
         });
     });
 
