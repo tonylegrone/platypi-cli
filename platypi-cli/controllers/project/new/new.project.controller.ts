@@ -1,22 +1,20 @@
 /// <reference path="../../../_references.d.ts" />
 
-import PlatypiConfig = require('./config/project/platypi.config');
-import ProjectGenerator = require('./generators/templates/project.template.generator');
-import EnvironmentVariableHandler = require('./handlers/environmentvariable.handler');
+import PlatypiConfig = require('../../../config/project/platypi.config');
+import ProjectGenerator = require('../../../generators/templates/project.template.generator');
+import EnvironmentVariableHandler = require('../../../handlers/environmentvariable.handler');
+import Model = require('../../../models/project/project.model');
 
 class NewProjectController implements IController {
-    private __environmentVariables;
-    private __config;
+    public model;
 
-    constructor(public view: IView, private __type = 'web', private __name = 'New Project') {
-        this.__config = (__type === 'web' ? PlatypiConfig.CreateNewWebConfig() : PlatypiConfig.CreateNewMobileConfig());
-        this.__config.name = this.__name;
-        this.__environmentVariables = EnvironmentVariableHandler.parse(this.__config);
+    constructor(public view: IView, type: string, name: string) {
+        this.model = new Model(type, name);
     }
 
     create(): Thenable<string> {
-        var generator = new ProjectGenerator(this.__type, this.__environmentVariables);
-        return this.generate(this.__config);
+        var generator = new ProjectGenerator(this.model.type, this.model.environmentVariables);
+        return generator.generate(this.model.config);
     }
 
     getResponseView(): Thenable<any> {
