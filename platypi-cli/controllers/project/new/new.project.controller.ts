@@ -1,8 +1,6 @@
 /// <reference path="../../../_references.d.ts" />
 
-import PlatypiConfig = require('../../../config/project/platypi.config');
 import ProjectGenerator = require('../../../generators/templates/project.template.generator');
-import EnvironmentVariableHandler = require('../../../handlers/environmentvariable.handler');
 import Model = require('../../../models/project/project.model');
 
 class NewProjectController implements IController {
