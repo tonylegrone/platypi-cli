@@ -3,16 +3,26 @@
 import ProjectGenerator = require('../../../generators/templates/project.template.generator');
 import Model = require('../../../models/project/project.model');
 
+import ConfigGenerator = require('../../../generators/platypiconfig.generator');
+
 class NewProjectController implements IController {
     public model;
 
-    constructor(public view: IView, type: string, name: string) {
+    constructor(public view: IView, type: string = 'web', name: string = 'New Project', public init: boolean = false) {
         this.model = new Model(type, name);
     }
 
     create(): Thenable<string> {
-        var generator = new ProjectGenerator(this.model.type, this.model.environmentVariables);
-        return generator.generate(this.model.config);
+        if (this.init) {
+            return ConfigGenerator().then((newConfig) => {
+                this.model = new Model(newConfig.type, newConfig.name, newConfig);
+                var generator = new ProjectGenerator(this.model.type, this.model.environmentVariables);
+                return generator.generate(this.model.config);
+            });
+        } else {
+            var generator = new ProjectGenerator(this.model.type, this.model.environmentVariables);
+            return generator.generate(this.model.config);
+        }
     }
 
     getResponseView(): Thenable<any> {

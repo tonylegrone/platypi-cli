@@ -1,15 +1,21 @@
 ﻿/// <reference path="_references.d.ts" />
 
-import commander = require('commander');
-import ConfigGenerator = require('./generators/platypiconfig.generator');
-import ProjectGenerator = require('./generators/templates/project.template.generator');
 import TemplateProvider = require('./providers/githubtemplate.provider');
-import EnvironmentVariableHandler = require('./handlers/environmentvariable.handler');
-import NewProjectController = require('./controllers/project/new/new.project.controller');
+
+// CLI Lib
+import commander = require('commander');
+
+// Global Variables
+import globals = require('./globals');
+
+// Views
 import NewProjectView = require('./views/project/new/new.project.view');
 import AddControlsView = require('./views/controls/add/add.controls.view');
+
+// Controllers
+import NewProjectController = require('./controllers/project/new/new.project.controller');
 import AddControlsController = require('./controllers/controls/add/add.controls.controller');
-import globals = require('./globals');
+
 
 var provider = new TemplateProvider();
 
@@ -83,19 +89,11 @@ commander
     .command('init')
     .description('initialize a new Platypi project through a series of prompts.')
     .action(() => {
-        // commander.js TS definitions need to be updated using <any> for now.
-        // generate project from command prompts
-        globals.console.log('Now entering interactive project generation...');
-        ConfigGenerator().then((newConfig) => {
-            var environmentVariables = EnvironmentVariableHandler.parseVariables(newConfig);
+        var view = new NewProjectView()
+            , controller = new NewProjectController(view, null, null, true);
 
-            var projectGen = new ProjectGenerator(newConfig.type, environmentVariables);
-            return projectGen.generate(newConfig);
-
-        }).then((path) => {
-            globals.console.log('New Project at: ' + path);
-        }, (err) => {
-            globals.console.error(err);
+        controller.getResponseView().then((responseView) => {
+            responseView.display();
             process.exit(0);
         });
     });
