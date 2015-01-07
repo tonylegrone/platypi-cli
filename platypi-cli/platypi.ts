@@ -1,14 +1,14 @@
 ﻿/// <reference path="_references.d.ts" />
 
 import commander = require('commander');
-import ConfigFinder = require('./config/project/config.finder');
 import ConfigGenerator = require('./generators/platypiconfig.generator');
 import ProjectGenerator = require('./generators/templates/project.template.generator');
 import TemplateProvider = require('./providers/githubtemplate.provider');
-import GeneratorHandler = require('./handlers/generator.handler');
 import EnvironmentVariableHandler = require('./handlers/environmentvariable.handler');
 import NewProjectController = require('./controllers/project/new/new.project.controller');
 import NewProjectView = require('./views/project/new/new.project.view');
+import AddControlsView = require('./views/controls/add/add.controls.view');
+import AddControlsController = require('./controllers/controls/add/add.controls.controller');
 import globals = require('./globals');
 
 var provider = new TemplateProvider();
@@ -40,24 +40,14 @@ commander
     .command('add <type> <name>')
     .description('Add a new control to an existing project.')
     .option('-r, --registername [value]', 'Register Name for Control with the framework')
-    .action((type:string , name: string, options: any) => {
-        var finder = new ConfigFinder();
-        finder.findConfig()
-            .then((config) => {
-                // commander.js TS definitions need to be updated using <any> for now.
-                // generate project from command prompts
-                var registeredname = (<any>options).registername
-                    , controlGen = GeneratorHandler.getGenerator(type.toLowerCase().trim(), name, registeredname, config.type);
+    .action((type:string, name: string, options: any) => {
+        var view = new AddControlsView()
+            , registerName = (<any>options).registername
+            , controller = new AddControlsController(view, type, name, registerName);
 
-                return controlGen.generate(config);
-            })
-            .then((newPath) => {
-                globals.console.log('New ' + type + ' generated at: ' + newPath);
-                process.exit(0);
-            }, (err) => {
-                globals.console.error(err);
-                process.exit(1);
-            });
+        controller.getResponseView().then((responseView) => {
+            responseView.display();
+        });
     });
 
 /**
