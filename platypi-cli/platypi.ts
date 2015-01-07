@@ -1,7 +1,5 @@
 ﻿/// <reference path="_references.d.ts" />
 
-import TemplateProvider = require('./providers/githubtemplate.provider');
-
 // CLI Lib
 import commander = require('commander');
 
@@ -11,13 +9,13 @@ import globals = require('./globals');
 // Views
 import NewProjectView = require('./views/project/new/new.project.view');
 import AddControlsView = require('./views/controls/add/add.controls.view');
+import CliGenericView = require('./views/cli/cli.view');
 
 // Controllers
 import NewProjectController = require('./controllers/project/new/new.project.controller');
 import AddControlsController = require('./controllers/controls/add/add.controls.controller');
-
-
-var provider = new TemplateProvider();
+import CliUpdateTemplatesController = require('./controllers/cli/updatetemplates.controller');
+import CliCacheCleanController = require('./controllers/cli/cacheclean.controller');
 
 globals.identifyApplication();
 
@@ -43,6 +41,7 @@ commander
  * Add Control Command.
  */
 commander
+            console.log('here');
     .command('add <type> <name>')
     .description('Add a new control to an existing project.')
     .option('-r, --registername [value]', 'Register Name for Control with the framework')
@@ -57,15 +56,35 @@ commander
     });
 
 /**
+ * Initialize a New Project through prompts
+ */
+commander
+    .command('init')
+    .description('initialize a new Platypi project through a series of prompts.')
+    .action(() => {
+        var view = new NewProjectView()
+            , controller = new NewProjectController(view, null, null, true);
+
+        controller.getResponseView().then((responseView) => {
+            responseView.display();
+            process.exit(0);
+        });
+    });
+
+
+/**
  * Update templates command.
  */
 commander
     .command('update')
     .description('Update the cached CLI files.')
     .action(() => {
-        globals.console.log('Forcing template update...');
-        provider.update().then(() => {
-            globals.console.log('Templates Updated.');
+        var view = new CliGenericView()
+            , controller = new CliUpdateTemplatesController(view);
+
+        controller.getResponseView().then((responseView) => {
+            responseView.display();
+            process.exit(0);
         });
     });
 
@@ -76,21 +95,8 @@ commander
     .command('cache-clean')
     .description('Clean the CLI cache directory.')
     .action(() => {
-        globals.console.log('Cleaning the cache directory...');
-        provider.clear().then(() => {
-            globals.console.log('Cache has been cleaned.');
-        });
-    });
-
-/**
- * Initialize a New Project through prompts
- */
-commander
-    .command('init')
-    .description('initialize a new Platypi project through a series of prompts.')
-    .action(() => {
-        var view = new NewProjectView()
-            , controller = new NewProjectController(view, null, null, true);
+        var view = new CliGenericView()
+            , controller = new CliCacheCleanController(view);
 
         controller.getResponseView().then((responseView) => {
             responseView.display();
