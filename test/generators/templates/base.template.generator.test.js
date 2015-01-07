@@ -86,11 +86,11 @@ describe('Base Template Generator', function() {
             });
 
             sandbox.stub(ReferenceHandler, 'addReference', function(projectConfig, newPath) {
-                return Promise.resolve('');
+                return Promise.resolve({ n: newPath, p: projectConfig});
             });
 
             sandbox.stub(MainFileHandler, 'addControl', function(projectConfig, newPath) {
-                return Promise.resolve('');
+                return Promise.resolve({ n: newPath, p: projectConfig});
             });
 
             // suppress any logging from module
