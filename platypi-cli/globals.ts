@@ -2,6 +2,8 @@
 
 import msg = require('./helpers/msg.helper');
 
+export var debug = true;
+
 export var console = msg;
 
 export var package = require('../package.json');
