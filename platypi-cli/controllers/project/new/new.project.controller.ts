@@ -17,10 +17,10 @@ class NewProjectController implements IController {
 
     getResponseView(): Thenable<any> {
         return this.create().then((path) => {
-            this.view.responseText = path;
+            this.view.setResponse(path);
             return this.view;
         }, (err) => {
-            this.view.responseText = err;
+            this.view.setResponse('', err);
             return this.view;
         });
     }

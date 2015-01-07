@@ -1,7 +1,7 @@
 /// <reference path="../../../_references.d.ts" />
-import ConfigFinder = require('../../config/project/config.finder');
-import GeneratorHandler = require('../../handlers/generator.handler');
-import Model = require('../../models/controls/controls.model');
+import ConfigFinder = require('../../../config/project/config.finder');
+import GeneratorHandler = require('../../../handlers/generator.handler');
+import Model = require('../../../models/controls/controls.model');
 
 class AddControlsController implements IController {
     public model;
@@ -19,12 +19,12 @@ class AddControlsController implements IController {
         });
     }
 
-    getResponsaeView(): Thenable<IView> {
+    getResponseView(): Thenable<IView> {
         return this.create().then((path) => {
-           this.view.responseText = path;
+           this.view.setResponse(path);
            return this.view;
         }, (err) => {
-            this.view.responseText = err;
+            this.view.setResponse('', err);
             return this.view;
         });
     }
