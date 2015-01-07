@@ -1,4 +1,4 @@
 interface IView {
-    responseText: string;
+    setResponse(response: string, error?: string): any;
     display(): any;
 }
