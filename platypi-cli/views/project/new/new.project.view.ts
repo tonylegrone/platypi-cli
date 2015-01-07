@@ -2,7 +2,6 @@ import BaseView = require('../../base.view');
 
 class NewProjectView extends BaseView {
     setResponse(response: string, error?: string): any {
-        console.log('here');
         if (error) {
             if (this._debug) {
                 super.setResponse('', 'Project Create Controller: ' + error);
