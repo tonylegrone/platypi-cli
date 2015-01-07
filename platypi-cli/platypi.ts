@@ -41,7 +41,6 @@ commander
  * Add Control Command.
  */
 commander
-            console.log('here');
     .command('add <type> <name>')
     .description('Add a new control to an existing project.')
     .option('-r, --registername [value]', 'Register Name for Control with the framework')
