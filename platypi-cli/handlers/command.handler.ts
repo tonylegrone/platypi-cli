@@ -12,6 +12,17 @@ class CommandHandler {
         this.commander.usage(usage);
     }
 
+    static Construct(constructor, args) {
+        var c;
+        function C(): void {
+            constructor.apply(this, args);
+        }
+        C.prototype = constructor.prototype;
+        c = new C();
+        c.constructor = constructor;
+        return c;
+    }
+
     registerCommand(commandObj: command.ICommand) {
 
         var commandString: string = commandObj.command;
@@ -46,13 +57,15 @@ class CommandHandler {
                         });
                         args = args.splice(0, args.indexOf('options'));
                         args = args.concat(args, optionsArguments);
-                        var newArgs = [view].concat(args);
+                    } else {
+                        args = args.splice(0, commandObj.commandParameters.length);
                     }
-                    controller = commandObj.CommandController.apply(this, newArgs);
+
+                    var newArgs = [view].concat(args);
+                    controller = CommandHandler.Construct(commandObj.CommandController, newArgs);
                 } else {
                     controller = new commandObj.CommandController(view);
                 }
-
                 controller.getResponseView().then((responseView) => {
                     responseView.display();
                     process.exit(0);
