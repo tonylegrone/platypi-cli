@@ -7,8 +7,15 @@ import ConfigGenerator = require('../../../generators/platypiconfig.generator');
 
 class NewProjectController implements IController {
     public model;
+    public init = false;
 
-    constructor(public view: IView, type: string = 'web', name: string = 'New Project', public init: boolean = false) {
+    constructor(public view: IView, type: string, name: string) {
+        if (!type || type === '') {
+            type = 'web';
+        }
+        if (!name || name === '') {
+            this.init = true;
+        }
         this.model = new Model(type, name);
     }
 
