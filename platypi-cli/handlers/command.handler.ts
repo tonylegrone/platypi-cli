@@ -23,58 +23,75 @@ class CommandHandler {
         return c;
     }
 
-    registerCommand(commandObj: command.ICommand) {
+    private __buildCommandString(commandObj: command.ICommand): string {
+        var commandWithParameters = commandObj.commandParameters.reduce(
+            (prev: command.ICommandParameter, next: command.ICommandParameter) => {
+                return { name: prev.name + this.__concatBrackets(next.name) };
+            }, { name: commandObj.command});
+        return commandWithParameters.name;
+    }
 
-        var commandString: string = commandObj.command;
+    private __concatBrackets(parameterName: string): string {
+        return ' [' + parameterName + ']';
+    }
 
-        // concat command parameters
-        commandObj.commandParameters.forEach((parameter) => {
-            commandString += ' [' + parameter.name + ']';
+    private __handleOptions(commandObj: command.ICommand): Array<{optionString: string; descString: string; }> {
+        var options = commandObj.commandOptions || [];
+        return options.map((option) => {
+            return {
+                optionString: util.format('-%s,--%s [value]', option.shortFlag, option.longFlag),
+                descString: option.description
+            };
         });
+    }
 
-        var newCommand = this.commander.command(commandString);
+    private __setDefaultAction(commandObj: command.ICommand) {
+        if (commandObj.commandAction) {
+            return;
+        }
+
+        commandObj.commandAction = (...args: any[]) => {
+            var view = new commandObj.CommandView();
+            var optionsArguments = [];
+            var controller: IController;
+
+            if (args) {
+                var commanderArgs = args[commandObj.commandParameters.length];
+
+                if (commanderArgs && commanderArgs.options && commanderArgs.options.length > 0) {
+                    commandObj.commandOptions.forEach((option) => {
+                        optionsArguments.push(commanderArgs[option.longFlag]);
+                    });
+
+                    args = args.splice(0, commandObj.commandParameters.length);
+                    args = args.concat(optionsArguments);
+                } else {
+                    args = args.splice(0, commandObj.commandParameters.length);
+                }
+
+                var newArgs = [view].concat(args);
+                controller = CommandHandler.Construct(commandObj.CommandController, newArgs);
+            } else {
+                controller = new commandObj.CommandController(view);
+            }
+            controller.getResponseView().then((responseView) => {
+                responseView.display();
+                process.exit(0);
+            });
+        };
+    }
+
+    registerCommand(commandObj: command.ICommand) {
+        var newCommand = this.commander.command(this.__buildCommandString(commandObj));
         newCommand.description(commandObj.description);
 
-        if (commandObj.commandOptions && commandObj.commandOptions.length > 0) {
-            commandObj.commandOptions.forEach((option) => {
-                var optionString = util.format('-%s,--%s [value]', option.shortFlag, option.longFlag);
-                newCommand.option(optionString, option.description);
-            });
-        }
+        this.__handleOptions(commandObj).map((option) => {
+            newCommand.option(option.optionString, option.descString);
+        });
 
-        if (commandObj.commandAction) {
-            newCommand.action(commandObj.commandAction);
-        } else {
-            newCommand.action((...args: any[]) => {
-                var view = new commandObj.CommandView();
-                var optionsArguments = [];
-                var controller: IController;
+        this.__setDefaultAction(commandObj);
 
-                if (args) {
-                    var commanderArgs = args[commandObj.commandParameters.length];
-
-                    if (commanderArgs && commanderArgs.options && commanderArgs.options.length > 0) {
-                        commandObj.commandOptions.forEach((option) => {
-                            optionsArguments.push(commanderArgs[option.longFlag]);
-                        });
-
-                        args = args.splice(0, commandObj.commandParameters.length);
-                        args = args.concat(optionsArguments);
-                    } else {
-                        args = args.splice(0, commandObj.commandParameters.length);
-                    }
-
-                    var newArgs = [view].concat(args);
-                    controller = CommandHandler.Construct(commandObj.CommandController, newArgs);
-                } else {
-                    controller = new commandObj.CommandController(view);
-                }
-                controller.getResponseView().then((responseView) => {
-                    responseView.display();
-                    process.exit(0);
-                });
-            });
-        }
+        newCommand.action(commandObj.commandAction);
 
         this.registeredCommands[commandObj.command] = commandObj;
     }
