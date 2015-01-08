@@ -1,13 +1,10 @@
 import BaseView = require('../../base.view');
 
 class AddControlsView extends BaseView {
-    setResponse(response: string, error?: string): any {
-        if (error) {
-            super.setResponse('', 'Control not added: ' + error);
-            return;
-        }
-
-        super.setResponse('Control added at: ' + response);
+    constructor() {
+        this._errorText = 'Could not add control: %s';
+        this._responseText = 'Control added at: %s';
+        super();
     }
 }
 

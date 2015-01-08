@@ -17,6 +17,7 @@ class NewProjectController implements IController {
             this.init = true;
         }
         this.model = new Model(type, name);
+        this.view.model = this.model;
     }
 
     create(): Thenable<string> {
@@ -34,10 +35,10 @@ class NewProjectController implements IController {
 
     getResponseView(): Thenable<any> {
         return this.create().then((path) => {
-            this.view.setResponse(path);
+            this.model.successMessage = path;
             return this.view;
         }, (err) => {
-            this.view.setResponse('', err);
+            this.model.errorMessage = err;
             return this.view;
         });
     }

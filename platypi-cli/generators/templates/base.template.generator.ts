@@ -222,9 +222,16 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
     /**
      *  Adds a control to the project config then saves it.
      *  @param config The project config to add the control to.
+     *  @param controlPath The path to the newly created control.
      */
-    _addToProjectConfig(config: config.IPlatypi): Thenable<any> {
-        config.addControl(this.instanceName, this.__controlName, this.registeredName);
+    _addToProjectConfig(config: config.IPlatypi, controlPath: string): Thenable<any> {
+        var newControl: config.IPlatypusControl = {
+            name: this.instanceName,
+            type: this.__controlName,
+            path: controlPath,
+            registeredName: this.registeredName
+        };
+        config.addControl(newControl);
         return config.save();
     }
 
@@ -289,7 +296,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
                 return this._addReferences(projectConfig, newPath).then(() => {
                     return this._addRequireToMain(projectConfig, newPath);
                 }).then(() => {
-                    return this._addToProjectConfig(projectConfig);
+                    return this._addToProjectConfig(projectConfig, newPath);
                 }).then(() => {
                     return newPath;
                 });

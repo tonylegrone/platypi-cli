@@ -1,4 +1,5 @@
+/// <reference path="../_references.d.ts" />
 interface IView {
-    setResponse(response: string, error?: string): any;
+    model: IModel;
     display(): any;
 }

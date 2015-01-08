@@ -1,31 +1,24 @@
 /// <reference path="../_references.d.ts" />
+import util = require('util');
 import msg = require('../helpers/msg.helper');
 import globals = require('../globals');
 
 class BaseView implements IView {
     public logger = msg;
-    private __responseText = '';
-    private __errorText = '';
+    public model: IModel;
+    _errorText = '';
+    _responseText = '';
     _debug = globals.debug || false;
 
     constructor() {}
 
-    setResponse(response: string, error?: string): any {
-       if (error) {
-           this.__errorText = error;
-           return;
-       }
-
-       this.__responseText = response;
-    }
-
     display() {
-        if (this.__errorText !== '') {
-            this.logger.error(this.__errorText);
+        if (this.model.errorMessage !== '') {
+            this.logger.error(util.format(this._errorText, this.model.errorMessage));
             return;
         }
 
-        this.logger.log(this.__responseText);
+        this.logger.log(util.format(this._responseText, this.model.successMessage));
     }
 }
 

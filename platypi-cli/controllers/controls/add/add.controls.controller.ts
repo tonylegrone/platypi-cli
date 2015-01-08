@@ -1,6 +1,4 @@
 /// <reference path="../../../_references.d.ts" />
-import ConfigFinder = require('../../../config/project/config.finder');
-import GeneratorHandler = require('../../../handlers/generator.handler');
 import Model = require('../../../models/controls/controls.model');
 
 class AddControlsController implements IController {
@@ -8,23 +6,19 @@ class AddControlsController implements IController {
 
     constructor(public view: IView, type: string, name: string, registeredName?: string) {
         this.model = new Model(type, name, registeredName);
+        this.view.model = this.model;
     }
 
     create(): Thenable<string> {
-        // TODO: get rid of finder constructor
-        var finder = new ConfigFinder();
-        return finder.findConfig().then((config) => {
-            var generator = GeneratorHandler.getGenerator(this.model.type, this.model.name, this.model.registeredName, config.type);
-            return generator.generate(config);
-        });
+        return this.model.create();
     }
 
     getResponseView(): Thenable<IView> {
         return this.create().then((path) => {
-           this.view.setResponse(path);
-           return this.view;
+            this.model.successMessage = path;
+            return this.view;
         }, (err) => {
-            this.view.setResponse('', err);
+            this.model.errorMessage = err;
             return this.view;
         });
     }
