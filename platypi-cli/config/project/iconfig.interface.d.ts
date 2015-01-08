@@ -1,4 +1,6 @@
-﻿declare module config {
+﻿/// <reference path="../../_references.d.ts" />
+
+declare module config {
 
     /**
      *  Interface for Platypi Project Config
@@ -15,87 +17,28 @@
         public?: string;
         cordova?: string;
         mainFile?: string;
-        viewcontrols?: Array<IViewControl>;
-        injectables?: Array<IInjectable>;
-        services?: Array<IService>;
-        models?: Array<IModel>;
-        repositories?: Array<IRepository>;
-        templatecontrols?: Array<ITemplateControl>;
-        attributecontrols?: Array<IAttributeControl>;
+        viewcontrols?: Array<IPlatypusControl>;
+        injectables?: Array<IPlatypusControl>;
+        services?: Array<IPlatypusControl>;
+        models?: Array<IPlatypusControl>;
+        repositories?: Array<IPlatypusControl>;
+        templatecontrols?: Array<IPlatypusControl>;
+        attributecontrols?: Array<IPlatypusControl>;
         cliDepend?: string;
 
-        addControl(name: string, type: string, registeredName?: string);
-        addViewControl(name: string, type: string, registeredName?: string);
-        addInjectable(name: string, type: string, registeredName?: string);
-        addService(name: string, type: string, registeredName?: string);
-        addModel(name: string, type: string, registeredName?: string);
-        addRepository(name: string, type: string, registeredName?: string);
-        addTemplateControl(name: string, type: string, registeredName?: string);
-        addAttributeControl(name: string, type: string, registeredName?: string);
+        addControl(control: IPlatypusControl);
+        removeControl(type: string, name: string);
 
         save(configPath?: string): Thenable<string>;
     }
 
     /**
-     *  Interface for Viewcontrol Config property
+     *  Interface for Control Config Property
      */
-    export interface IViewControl {
+    export interface IPlatypusControl {
         name: string;
         type: string;
-        registeredName?: string;
-    }
-
-    /**
-     *  Interface for Injectable Config property.
-     */
-    export interface IInjectable {
-        name: string;
-        type: string;
-        registeredName?: string;
-    }
-
-    /**
-     *  Interface for Repository Config property.
-     */
-    export interface IRepository {
-        name: string;
-        type: string;
-        registeredName?: string;
-    }
-
-    /**
-     *  Interface for Service Config property.
-     */
-    export interface IService {
-        name: string;
-        type: string;
-        registeredName?: string;
-    }
-
-    /**
-     *  Interface for Model Config property.
-     */
-    export interface IModel {
-        name: string;
-        type: string;
-        registeredName?: string;
-    }
-
-    /**
-     *  Interface for TemplateControl config property.
-     */
-    export interface ITemplateControl {
-        name: string;
-        type: string;
-        registeredName?: string;
-    }
-
-    /**
-     *  Interface for AttributeControl config property.
-     */
-    export interface IAttributeControl {
-        name: string;
-        type: string;
+        path?: string;
         registeredName?: string;
     }
 

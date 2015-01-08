@@ -120,73 +120,73 @@ class Config implements config.IPlatypi {
         this.mainFile = path.normalize(value);
     }
 
-    viewcontrols: Array<config.IViewControl> = new Array();
+    viewcontrols: Array<config.IPlatypusControl> = new Array();
 
-    get ViewControls(): Array<config.IViewControl> {
+    get ViewControls(): Array<config.IPlatypusControl> {
         return this.viewcontrols;
     }
 
-    set ViewControls(value: Array<config.IViewControl>) {
+    set ViewControls(value: Array<config.IPlatypusControl>) {
         this.viewcontrols = value;
     }
 
-    injectables: Array<config.IInjectable> = new Array();
+    injectables: Array<config.IPlatypusControl> = new Array();
 
-    get Injectables(): Array<config.IInjectable> {
+    get Injectables(): Array<config.IPlatypusControl> {
         return this.injectables;
     }
 
-    set Injectables(value: Array<config.IInjectable>) {
+    set Injectables(value: Array<config.IPlatypusControl>) {
         this.injectables = value;
     }
 
-    services: Array<config.IService> = new Array();
+    services: Array<config.IPlatypusControl> = new Array();
 
-    get Services(): Array<config.IService> {
+    get Services(): Array<config.IPlatypusControl> {
         return this.services;
     }
 
-    set Services(value: Array<config.IService>) {
+    set Services(value: Array<config.IPlatypusControl>) {
         this.services = value;
     }
 
-    repositories: Array<config.IRepository> = new Array();
+    repositories: Array<config.IPlatypusControl> = new Array();
 
-    get Repositories(): Array<config.IRepository> {
+    get Repositories(): Array<config.IPlatypusControl> {
         return this.repositories;
     }
 
-    set Repositories(value: Array<config.IRepository>) {
+    set Repositories(value: Array<config.IPlatypusControl>) {
         this.repositories = value;
     }
 
-    models: Array<config.IModel> = new Array();
+    models: Array<config.IPlatypusControl> = new Array();
 
-    get Models(): Array<config.IModel> {
+    get Models(): Array<config.IPlatypusControl> {
         return this.services;
     }
 
-    set Models(value: Array<config.IModel>) {
+    set Models(value: Array<config.IPlatypusControl>) {
         this.services = value;
     }
 
-    templatecontrols: Array<config.ITemplateControl> = new Array();
+    templatecontrols: Array<config.IPlatypusControl> = new Array();
 
-    get TemplateControls(): Array<config.ITemplateControl> {
+    get TemplateControls(): Array<config.IPlatypusControl> {
         return this.templatecontrols;
     }
 
-    set TemplateControls(value: Array<config.ITemplateControl>) {
+    set TemplateControls(value: Array<config.IPlatypusControl>) {
         this.templatecontrols = value;
     }
 
-    attributecontrols: Array<config.IAttributeControl> = new Array();
+    attributecontrols: Array<config.IPlatypusControl> = new Array();
 
-    get AttributeControls(): Array<config.IAttributeControl> {
+    get AttributeControls(): Array<config.IPlatypusControl> {
         return this.attributecontrols;
     }
 
-    set AttributeControls(value: Array<config.IAttributeControl>) {
+    set AttributeControls(value: Array<config.IPlatypusControl>) {
         this.attributecontrols = value;
     }
 
@@ -205,85 +205,32 @@ class Config implements config.IPlatypi {
      *  @param type The control type to be added.
      *  @param registeredName The name the control will register with the framework as.
      */
-    addControl(name: string, type: string, registeredName?: string) {
-        if (type === 'viewcontrol' || type === 'webviewcontrol') {
-            this.addViewControl(name, type, registeredName);
-        } else if (type === 'templatecontrol') {
-            this.addTemplateControl(name, type, registeredName);
-        } else if (type === 'service') {
-            this.addService(name, type, registeredName);
-        } else if (type === 'repository') {
-            this.addRepository(name, type, registeredName);
-        } else if (type === 'model') {
-            this.addModel(name, type, registeredName);
-        } else if (type === 'injectable') {
-            this.addInjectable(name, type, registeredName);
-        } else if (type === 'attribute') {
-            this.addAttributeControl(name, type, registeredName);
+    addControl(control: config.IPlatypusControl) {
+        var type = (control.type === 'webviewcontrol' ? 'viewcontrol' : control.type);
+        if (type.substr(type.length - 1, type.length) === 'y') {
+            type = type.replace('y', 'ie');
         }
+        this[type + 's'].push(control);
     }
 
-    addViewControl(name: string, type: string, registeredName?: string) {
-        var newViewControl: config.IViewControl = {
-            name: name,
-            type: type,
-            registeredName: registeredName || name
-        };
-        this.ViewControls.push(newViewControl);
-    }
+    removeControl(type: string, name: string): config.IPlatypusControl {
+        var controlArray = this[type + 's'],
+            deletedControl: config.IPlatypusControl;
 
-    addInjectable(name: string, type: string, registeredName?: string) {
-        var newInjectable: config.IInjectable = {
-            name: name,
-            type: type,
-            registeredName: registeredName || name
-        };
-        this.injectables.push(newInjectable);
-    }
+        controlArray = controlArray.filter((control) => {
+            if (control.name !== name) {
+                return true;
+            } else {
+                deletedControl = control;
+                return false;
+            }
+        });
 
-    addService(name: string, type: string, registeredName?: string) {
-        var newService: config.IService = {
-            name: name,
-            type: type,
-            registeredName: registeredName || name
-        };
-        this.services.push(newService);
-    }
+        if (!deletedControl) {
+            throw 'Control of type ' + type + ' with name: ' + name + ' not found.';
+        }
 
-    addModel(name: string, type: string, registeredName?: string) {
-        var newModel: config.IModel = {
-            name: name,
-            type: type,
-            registeredName: registeredName || name
-        };
-        this.models.push(newModel);
-    }
-
-    addTemplateControl(name: string, type: string, registeredName?: string) {
-        var newTemplateControl: config.ITemplateControl = {
-            name: name,
-            type: type,
-            registeredName: registeredName || name
-        };
-        this.templatecontrols.push(newTemplateControl);
-    }
-
-    addAttributeControl(name: string, type: string, registeredName?: string) {
-        var newAttributeControl: config.IAttributeControl = {
-            name: name,
-            type: type,
-            registeredName: registeredName || name
-        };
-        this.attributecontrols.push(newAttributeControl);
-    }
-
-    addRepository(name: string, type: string, registeredName?: string) {
-        var newRepository: config.IRepository = {
-            name: name,
-            type: type,
-            registeredName: registeredName || name
-        };
-        this.repositories.push(newRepository);
+        return deletedControl;
     }
 
     /**
@@ -294,16 +241,16 @@ class Config implements config.IPlatypi {
         mobileConfig.Type = 'mobile';
 
         // TODO: this should be configurable in the template version
-        mobileConfig.addModel('base', 'model');
-        mobileConfig.addModel('server', 'model');
+        mobileConfig.addControl({ name: 'base', type: 'model'});
+        mobileConfig.addControl({ name:'server', type: 'model'});
 
-        mobileConfig.addRepository('base', 'repository');
+        mobileConfig.addControl({ name: 'base', type: 'repository'});
 
-        mobileConfig.addService('base', 'service');
+        mobileConfig.addControl({ name:'base', type:'service' });
 
-        mobileConfig.addViewControl('base', 'viewcontrol');
+        mobileConfig.addControl({ name: 'base', type: 'viewcontrol'});
 
-        mobileConfig.addViewControl('home', 'viewcontrol');
+        mobileConfig.addControl({ name: 'home', type: 'viewcontrol'});
 
         return mobileConfig;
     }
@@ -316,16 +263,16 @@ class Config implements config.IPlatypi {
         webConfig.Type = 'web';
 
         // TODO: this should be configurable in the template version
-        webConfig.addModel('base', 'model');
-        webConfig.addModel('server', 'model');
+        webConfig.addControl({ name: 'base', type: 'model'});
+        webConfig.addControl({ name:'server', type: 'model' });
 
-        webConfig.addRepository('base', 'repository');
+        webConfig.addControl({ name: 'base', type: 'repository' });
 
-        webConfig.addService('base', 'service');
+        webConfig.addControl({ name: 'base', type: 'service' });
 
-        webConfig.addViewControl('base', 'webviewcontrol');
+        webConfig.addControl({ name: 'base', type: 'webviewcontrol'});
 
-        webConfig.addViewControl('home', 'webviewcontrol');
+        webConfig.addControl({ name: 'home', type: 'webviewcontrol'});
 
         return webConfig;
     }
