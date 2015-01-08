@@ -51,12 +51,15 @@ class CommandHandler {
                 var controller: IController;
 
                 if (args) {
-                    if ((<any>args).options) {
+                    var commanderArgs = args[commandObj.commandParameters.length];
+
+                    if (commanderArgs && commanderArgs.options && commanderArgs.options.length > 0) {
                         commandObj.commandOptions.forEach((option) => {
-                            optionsArguments.push((<any>args).options[option.longFlag]);
+                            optionsArguments.push(commanderArgs[option.longFlag]);
                         });
-                        args = args.splice(0, args.indexOf('options'));
-                        args = args.concat(args, optionsArguments);
+
+                        args = args.splice(0, commandObj.commandParameters.length);
+                        args = args.concat(optionsArguments);
                     } else {
                         args = args.splice(0, commandObj.commandParameters.length);
                     }
