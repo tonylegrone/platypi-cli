@@ -6,7 +6,7 @@ class CommandHandler {
     public registeredCommands = [];
     public commander: any;
 
-    constructor(commander: any, version: string, usage: string) {
+    constructor(commander: any, version: string, usage: string, private __logger: any) {
         this.commander = commander;
         this.commander.version(version);
         this.commander.usage(usage);
@@ -74,6 +74,29 @@ class CommandHandler {
         }
 
         this.registeredCommands[commandObj.command] = commandObj;
+    }
+
+    isRegistered(cmd: string): boolean {
+        if (this.registeredCommands[cmd]) {
+            return true;
+        }
+
+        return false;
+    }
+
+    runCommand(args: any) {
+        // No command issued, display help
+        if (args.length < 3) {
+            this.commander.help();
+            return;
+        }
+
+        if (!this.isRegistered(args[2])) {
+            this.__logger.error(util.format('Unknown command: %s', args[2]));
+            return;
+        }
+
+        this.commander.parse(args);
     }
 
 }
