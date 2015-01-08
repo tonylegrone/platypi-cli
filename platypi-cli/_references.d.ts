@@ -8,6 +8,7 @@
 
 /// <reference path="views/iview.d.ts" />
 /// <reference path="controllers/icontroller.d.ts" />
+/// <reference path="models/imodel.interface.d.ts" />
 
 /// <reference path="handlers/icommandparameter.interface.d.ts" />
 /// <reference path="handlers/icommandoption.interface.d.ts" />
