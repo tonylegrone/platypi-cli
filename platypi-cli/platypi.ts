@@ -1,5 +1,8 @@
 ﻿/// <reference path="_references.d.ts" />
 
+// Command Handler
+import CommandHandler = require('./handlers/command.handler');
+
 // CLI Lib
 import commander = require('commander');
 
@@ -19,93 +22,93 @@ import CliCacheCleanController = require('./controllers/cli/cacheclean.controlle
 
 globals.identifyApplication();
 
+var handler = new CommandHandler(commander, globals.package.version, '[command] [args..]', globals.console);
+
 /**
  *  New Project Command
  */
-commander
-    .version(globals.package.version)
-    .usage('[command] [parameters..]')
-    .command('create [type] [name]')
-    .description('Create a new PlatypusTS project of type mobile or web. Default: web')
-    .action((type, name) => {
-        var view = new NewProjectView()
-            , controller = new NewProjectController(view, type, name);
+var newProjectCommand: command.ICommand = {
+    command: 'create',
+    description: 'Create a new PlatypusTS project of type mobile or web. Default: web',
+    commandParameters: [
+        {
+            name: 'type'
+        },
+        {
+            name: 'name'
+        }
+    ],
+    CommandView: NewProjectView,
+    CommandController: NewProjectController
+};
 
-        controller.getResponseView().then((responseView) => {
-            responseView.display();
-            process.exit(0);
-        });
-    });
-
-/**
- * Add Control Command.
- */
-commander
-    .command('add <type> <name>')
-    .description('Add a new control to an existing project.')
-    .option('-r, --registername [value]', 'Register Name for Control with the framework')
-    .action((type:string, name: string, options: any) => {
-        var view = new AddControlsView()
-            , registerName = (<any>options).registername
-            , controller = new AddControlsController(view, type, name, registerName);
-
-        controller.getResponseView().then((responseView) => {
-            responseView.display();
-        });
-    });
+handler.registerCommand(newProjectCommand);
 
 /**
  * Initialize a New Project through prompts
  */
-commander
-    .command('init')
-    .description('initialize a new Platypi project through a series of prompts.')
-    .action(() => {
-        var view = new NewProjectView()
-            , controller = new NewProjectController(view, null, null, true);
+var newProjectInitCommand: command.ICommand = {
+    command: 'init',
+    description: 'initialize a new Platypi project through a series of prompts.',
+    commandParameters: [],
+    CommandView: NewProjectView,
+    CommandController: NewProjectController
+};
 
-        controller.getResponseView().then((responseView) => {
-            responseView.display();
-            process.exit(0);
-        });
-    });
+handler.registerCommand(newProjectInitCommand);
 
+/**
+ * Add Control Command.
+ */
+var addControlCommand: command.ICommand = {
+    command: 'add',
+    description: 'Add a new control to an existing project.',
+    commandParameters: [
+        {
+            name: 'type'
+        },
+        {
+            name: 'name'
+        }
+    ],
+    CommandView: AddControlsView,
+    CommandController: AddControlsController,
+    commandOptions: [
+        {
+            shortFlag: 'r',
+            longFlag: 'registername',
+            description: 'Register Name for Control with the framework'
+        }
+    ]
+};
+
+handler.registerCommand(addControlCommand);
 
 /**
  * Update templates command.
  */
-commander
-    .command('update')
-    .description('Update the cached CLI files.')
-    .action(() => {
-        var view = new CliGenericView()
-            , controller = new CliUpdateTemplatesController(view);
+var updateCommand: command.ICommand = {
+    command: 'update',
+    description: 'Update the cached CLI files.',
+    commandParameters: [],
+    CommandView: CliGenericView,
+    CommandController: CliUpdateTemplatesController
+};
 
-        controller.getResponseView().then((responseView) => {
-            responseView.display();
-            process.exit(0);
-        });
-    });
+handler.registerCommand(updateCommand);
 
 /**
  * Delete Cached Templates
  */
-commander
-    .command('cache-clean')
-    .description('Clean the CLI cache directory.')
-    .action(() => {
-        var view = new CliGenericView()
-            , controller = new CliCacheCleanController(view);
+var cleanCommand: command.ICommand = {
+    command: 'cache-clean',
+    description: 'Clean the CLI cache directory.',
+    commandParameters: [],
+    CommandView: CliGenericView,
+    CommandController: CliCacheCleanController
+};
 
-        controller.getResponseView().then((responseView) => {
-            responseView.display();
-            process.exit(0);
-        });
-    });
+handler.registerCommand(cleanCommand);
 
-commander.parse(process.argv);
+handler.runCommand(process.argv);
 
-// No command issued, display help
-if (!commander.args.length) {
-    commander.help();
-}
