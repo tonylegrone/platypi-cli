@@ -60,7 +60,7 @@ class CommandHandler {
 
                 if (commanderArgs && commanderArgs.options && commanderArgs.options.length > 0) {
                     commandObj.commandOptions.forEach((option) => {
-                        optionsArguments.push(commanderArgs[option.longFlag]);
+                        optionsArguments.push(commanderArgs[option.longFlag] || null);
                     });
 
                     args = args.splice(0, commandObj.commandParameters.length);
