@@ -13,7 +13,7 @@ class BaseView implements IView {
     constructor() {}
 
     display() {
-        if (this.model.errorMessage !== '') {
+        if (this.model.errorMessage && this.model.errorMessage !== '') {
             this.logger.error(util.format(this._errorText, this.model.errorMessage));
             return;
         }
