@@ -3,11 +3,13 @@
 // Views
 import NewProjectView = require('./views/project/new/new.project.view');
 import AddControlsView = require('./views/controls/add/add.controls.view');
+import DeleteControlView = require('./views/controls/delete/delete.controls.view');
 import CliGenericView = require('./views/cli/cli.view');
 
 // Controllers
 import NewProjectController = require('./controllers/project/new/new.project.controller');
 import AddControlsController = require('./controllers/controls/add/add.controls.controller');
+import DeleteControlController = require('./controllers/controls/delete/delete.control.controller');
 import CliUpdateTemplatesController = require('./controllers/cli/updatetemplates.controller');
 import CliCacheCleanController = require('./controllers/cli/cacheclean.controller');
 
@@ -66,6 +68,25 @@ commands.push({
             description: 'Register Name for Control with the framework'
         }
     ]
+});
+
+
+/**
+ * Delete Control Command.
+ */
+commands.push({
+    command: 'delete',
+    description: 'Delete a control from a project.',
+    commandParameters: [
+        {
+            name: 'type'
+        },
+        {
+            name: 'name'
+        }
+    ],
+    CommandView: DeleteControlView,
+    CommandController: DeleteControlController
 });
 
 /**
