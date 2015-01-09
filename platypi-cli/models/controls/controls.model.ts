@@ -34,7 +34,9 @@ class ControlsModel implements IModel {
         return this.__getConfig().then((config) => {
             var deletedControl: config.IPlatypusControl = config.removeControl(this.type, this.name);
             return DirUtils.deleteDirectoryRecursive(deletedControl.path).then(() => {
-                return deletedControl.path;
+                return config.save().then(() => {
+                    return deletedControl.path;
+                });
             });
         });
     }
