@@ -4,7 +4,7 @@ class DeleteControlsView extends BaseView {
     constructor() {
         super();
         this._errorText = 'Could not deleted control: %s';
-        this._responseText = 'Control deleted at: $s';
+        this._responseText = 'Control deleted at: %s';
     }
 }
 
