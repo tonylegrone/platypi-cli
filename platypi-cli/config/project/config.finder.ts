@@ -31,6 +31,7 @@ class ConfigFinder {
             var config: config.IPlatypi = JSON.parse(data);
 
             if (validator(config)) {
+                config.configPath = filePath;
                 config = PlatypiConfig.loadFromObject(config);
                 return config;
             } else {
