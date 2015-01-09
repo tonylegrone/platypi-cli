@@ -5,7 +5,7 @@ import fileutils = require('../../utils/file.utils');
  *  Contains methods and properties for the Platypi config file.
  */
 class Config implements config.IPlatypi {
-    private __configPath = '';
+    configPath = '';
 
     // required
     name: string = 'New Platypi Project';
@@ -191,7 +191,7 @@ class Config implements config.IPlatypi {
     }
 
     private __replacer(key, value) {
-        if (key === '__configPath') {
+        if (key === 'configPath') {
             return undefined;
         }
 
@@ -203,8 +203,8 @@ class Config implements config.IPlatypi {
      *  @param configPath String path to save the config file to.
      */
     save(configPath?: string): Thenable<string> {
-        this.__configPath = (configPath && configPath !== '' ? path.normalize(configPath) : this.__configPath);
-        return fileutils.writeFile(this.__configPath, JSON.stringify(this, this.__replacer, true));
+        this.configPath = (configPath && configPath !== '' ? path.normalize(configPath) : this.configPath);
+        return fileutils.writeFile(this.configPath, JSON.stringify(this, this.__replacer, true));
     }
 
     /**
@@ -299,7 +299,7 @@ class Config implements config.IPlatypi {
                 parsedConfig[key] = configData[key] || parsedConfig[key];
             });
 
-            parsedConfig.__configPath = configPath;
+            parsedConfig.configPath = configPath;
 
             return parsedConfig;
         }, (err) => {
@@ -319,7 +319,7 @@ class Config implements config.IPlatypi {
             parsedConfig[key] = configData[key] || parsedConfig[key];
         });
 
-        parsedConfig.__configPath = (configPath && configPath !== ''? path.normalize(configPath) : parsedConfig.__configPath);
+        parsedConfig.configPath = (configPath && configPath !== ''? path.normalize(configPath) : parsedConfig.configPath);
 
         return parsedConfig;
     }
