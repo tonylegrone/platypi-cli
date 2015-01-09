@@ -66,6 +66,11 @@ commands.push({
             shortFlag: 'r',
             longFlag: 'registername',
             description: 'Register Name for Control with the framework'
+        },
+        {
+            shortFlag: 'e',
+            longFlag: 'extendsClass',
+            description: 'Set the class this control should extend.'
         }
     ]
 });
