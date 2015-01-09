@@ -1,7 +1,11 @@
+/// <reference path="../../_references.d.ts" />
+
 import PlatypiConfig = require('../../config/project/platypi.config');
 import EnvironmentVariableHandler = require('../../handlers/environmentvariable.handler');
 
-class ProjectModel {
+class ProjectModel implements IModel {
+    public errorMessage: string = '';
+    public successMessage: string = '';
     public environmentVariables;
     public config;
 
