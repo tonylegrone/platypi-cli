@@ -190,13 +190,21 @@ class Config implements config.IPlatypi {
         this.attributecontrols = value;
     }
 
+    private __replacer(key, value) {
+        if (key === '__configPath') {
+            return undefined;
+        }
+
+        return value;
+    }
+
     /**
      *  Save the platypi config file to disk.
      *  @param configPath String path to save the config file to.
      */
     save(configPath?: string): Thenable<string> {
         this.__configPath = (configPath && configPath !== '' ? path.normalize(configPath) : this.__configPath);
-        return fileutils.writeFile(this.__configPath, JSON.stringify(this));
+        return fileutils.writeFile(this.__configPath, JSON.stringify(this, this.__replacer, true));
     }
 
     /**
