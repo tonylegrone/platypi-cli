@@ -217,7 +217,7 @@ class Config implements config.IPlatypi {
         var controlArray = this[type + 's'],
             deletedControl: config.IPlatypusControl;
 
-        controlArray = controlArray.filter((control) => {
+        this[type + 's'] = controlArray.filter((control) => {
             if (control.name !== name) {
                 return true;
             } else {
