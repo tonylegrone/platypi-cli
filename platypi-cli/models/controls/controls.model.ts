@@ -8,13 +8,15 @@ class ControlsModel implements IModel {
     public type: string;
     public name: string;
     public registeredName: string;
+    public extendsClass: string;
     public errorMessage: string;
     public successMessage: string;
 
-    constructor(type: string, name: string, registeredName?: string) {
+    constructor(type: string, name: string, registeredName?: string, extendsClass?: string) {
         this.type = type.toLowerCase().trim();
         this.name = name.trim();
         this.registeredName = (registeredName && registeredName !== '' ? registeredName.trim() : this.name);
+        this.extendsClass = (extendsClass && extendsClass !== '' ? extendsClass.trim() : '');
     }
 
     private __getConfig(): Thenable<config.IPlatypi> {
