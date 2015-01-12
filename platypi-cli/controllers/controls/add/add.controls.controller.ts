@@ -4,8 +4,8 @@ import Model = require('../../../models/controls/controls.model');
 class AddControlsController implements IController {
     public model;
 
-    constructor(public view: IView, type: string, name: string, registeredName?: string) {
-        this.model = new Model(type, name, registeredName);
+    constructor(public view: IView, type: string, name: string, registeredName?: string, extendsClass?: string) {
+        this.model = new Model(type, name, registeredName, extendsClass);
         this.view.model = this.model;
     }
 
