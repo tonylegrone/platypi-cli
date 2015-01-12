@@ -27,7 +27,7 @@ class ControlsModel implements IModel {
 
     create(): Thenable<string> {
         return this.__getConfig().then((config) => {
-            var generator = GeneratorHandler.getGenerator(this.type, this.name, this.registeredName, config.type);
+            var generator = GeneratorHandler.getGenerator(this.type, this.name, this.registeredName, this.extendsClass, config.type);
             return generator.generate(config);
         });
     }
