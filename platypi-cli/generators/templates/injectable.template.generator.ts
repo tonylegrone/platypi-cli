@@ -3,7 +3,7 @@
 import BaseTemplateGenerator = require('./base.template.generator');
 
 class InjectableTemplateGenerator extends BaseTemplateGenerator {
-    constructor(name: string, registeredName?: string) {
+    constructor(name: string, registeredName?: string, extendsClass?: string) {
         var environmentVariables: Array<config.IEnvironmentVariable> = [
             {
                 name: 'name',
@@ -12,6 +12,10 @@ class InjectableTemplateGenerator extends BaseTemplateGenerator {
             {
                 name: 'registername',
                 value: (registeredName && registeredName !== '' ? registeredName : name)
+            },
+            {
+                name: 'extendsClass',
+                value: (extendsClass && extendsClass != '' ? extendsClass : '')
             }];
         super('injectable', 'base', environmentVariables);
     }
