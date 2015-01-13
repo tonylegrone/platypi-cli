@@ -13,5 +13,6 @@
 /// <reference path="handlers/icommandparameter.interface.d.ts" />
 /// <reference path="handlers/icommandoption.interface.d.ts" />
 /// <reference path="handlers/icommand.interface.d.ts" />
+/// <reference path="handlers/iextendsclass.interface.d.ts" />
 
 /// <reference path="generators/templates/igenerator.interface.d.ts" />
