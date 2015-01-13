@@ -9,6 +9,7 @@ import fileUtils = require('../../utils/file.utils');
 import globals = require('../../globals');
 import ReferenceHandler = require('../../handlers/references.handler');
 import MainFileHandler = require('../../handlers/mainfile.handler');
+import ExtendsHandler = require('../../handlers/extends.handler');
 
 var Promise = promises.Promise;
 
@@ -18,6 +19,9 @@ var Promise = promises.Promise;
 class BaseTemplateGenerator implements generators.ITemplateGenerator {
     _provider: providers.ITemplateProvider = null;
     _config: CliConfig.PlatypiCliConfig = null;
+    _projectConfig: config.IPlatypi = null;
+    _extends: string;
+    _imports: Array<string>;
     location = null;
     instanceName = '';
     registeredName = '';
@@ -32,6 +36,16 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         this.__handleEnvironmentVariables();
     }
 
+    private __handleExtends(paramExtends: string) {
+        var extender = ExtendsHandler.extendClass(paramExtends, this.__controlName, this._projectConfig);
+        if (extender) {
+            this._extends = extender.extendsStatement;
+            this._imports.push(extender.importStatement);
+        } else {
+            throw 'Extended class not found in project.';
+        }
+    }
+
     /**
      * Parse environment variables for control values.
      */
@@ -39,12 +53,14 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         var name = ''
             , registerName = null;
 
-        this.environmentVariables.forEach((variable) => {
-            if (variable.name === 'name') {
-                name = variable.value;
-            } else if (variable.name === 'registername') {
-                registerName = variable.value;
-                this.registeredName = variable.value;
+        this.environmentVariables.map((env) => {
+            if (env.name === 'name') {
+                name = env.value;
+            } else if (env.name === 'registername') {
+                registerName = env.value;
+                this.registeredName = env.value;
+            } else if (env.name === 'extendsClass') {
+                this.__handleExtends(env.value);
             }
         });
 
@@ -122,7 +138,21 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
     private __fillEnvironmentVariables(data: string): string {
         this.environmentVariables.forEach((variable) => {
             var regex = new RegExp('%' + variable.name + '%', 'g');
-            data = data.replace(regex, variable.value);
+
+            if (variable.name === 'import') {
+                if (this._imports && this._imports.length > 0) {
+                    var importStrings = this._imports.reduce((prev, curr) => {
+                        return prev + '\r\n' + curr;
+                    }, '');
+                    data = data.replace(regex, importStrings);
+                } else {
+                    data = data.replace(regex, '');
+                }
+            } else if (variable.name === 'extendsClass') {
+                data = data.replace(regex, (this._extends && this._extends !== '' ? this._extends : ''));
+            } else {
+                data = data.replace(regex, variable.value);
+            }
         });
 
         data = data.replace(/%.*?%/g, '');
@@ -289,6 +319,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
      *  @param projectConfig The project config to add the control to.
      */
     generate(projectConfig: config.IPlatypi): Thenable<string> {
+        this._projectConfig = projectConfig;
         return this._config.getConfig().then((cliConfig) => {
             globals.console.log('Creating ' + this.__controlName + '..');
             var controlPath = path.join(projectConfig.public, cliConfig.templates.controlLocation[this.__controlName]);
