@@ -36,6 +36,10 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         this.__handleEnvironmentVariables();
     }
 
+    /**
+     * Generate import and extends statements when a control extends another control
+     * @param paramExtends The name of the control being extended.
+     */
     private __handleExtends(paramExtends: string) {
         var extender = ExtendsHandler.extendClass(paramExtends, this.__controlName, this._projectConfig);
         if (extender) {
