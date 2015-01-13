@@ -15,7 +15,7 @@ class ServiceTemplateGenerator extends BaseTemplateGenerator {
             },
             {
                 name: 'extendsClass',
-                value: (extendsClass && extendsClass != '' ? extendsClass : '')
+                value: (extendsClass && extendsClass !== '' ? extendsClass : '')
             }];
         super('service', 'base', environmentVariables);
     }

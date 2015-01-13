@@ -15,7 +15,7 @@ class InjectableTemplateGenerator extends BaseTemplateGenerator {
             },
             {
                 name: 'extendsClass',
-                value: (extendsClass && extendsClass != '' ? extendsClass : '')
+                value: (extendsClass && extendsClass !== '' ? extendsClass : '')
             }];
         super('injectable', 'base', environmentVariables);
     }
