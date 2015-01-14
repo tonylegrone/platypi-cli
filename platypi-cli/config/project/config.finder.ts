@@ -18,7 +18,7 @@ class ConfigFinder {
      *  @param name The name of the config file.
      *  @param currentDirectory the directory to start looking in.
      */
-    findConfig(name = 'platypi.json', currentDirectory = cwd): Thenable<config.IPlatypi> {
+    findConfig(name = 'package.json', currentDirectory = cwd): Thenable<config.IPlatypi> {
         return this.readFileRecursive(name, currentDirectory);
     }
 
@@ -27,8 +27,19 @@ class ConfigFinder {
      */
     readFileRecursive(name: string, currentDirectory: string): Thenable<any> {
         var filePath = path.join(currentDirectory, name);
-        return fileutils.readFile(filePath, { encoding: 'utf8' }).then((data) => {
-            var config: config.IPlatypi = JSON.parse(data);
+        return fileutils.readFile(filePath, { encoding: 'utf8' }).then((data): any => {
+            var parsedData = JSON.parse(data),
+                config: config.IPlatypi;
+
+            if (name === 'package.json') {
+                if (!parsedData.platypi) {
+                    return this.readFileRecursive('platypi.json', currentDirectory);
+                } else {
+                    config = parsedData.platypi;
+                }
+            } else {
+                config = JSON.parse(data);
+            }
 
             if (validator(config)) {
                 config.configPath = filePath;
