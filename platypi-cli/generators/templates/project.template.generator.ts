@@ -18,7 +18,7 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
                 , mainFile = path.join(publicPath, 'main.ts');
 
             if (!configPath || configPath === '') {
-                configPath = path.join(folder, 'platypi.json');
+                configPath = path.join(folder, 'package.json');
             }
 
             projectConfig.public = publicPath;
