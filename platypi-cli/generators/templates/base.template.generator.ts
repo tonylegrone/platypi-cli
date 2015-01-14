@@ -41,12 +41,14 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
      * @param paramExtends The name of the control being extended.
      */
     private __handleExtends(paramExtends: string) {
-        var extender = ExtendsHandler.extendClass(paramExtends, this.__controlName, this._projectConfig);
-        if (extender) {
-            this._extends = extender.extendsStatement;
-            this._imports.push(extender.importStatement);
-        } else {
-            throw 'Extended class not found in project.';
+        if (paramExtends !== '') {
+            var extender = ExtendsHandler.extendClass(paramExtends, this.__controlName, this._projectConfig);
+            if (extender) {
+                this._extends = extender.extendsStatement;
+                this._imports.push(extender.importStatement);
+            } else {
+                throw 'Extended class not found in project.';
+            }
         }
     }
 
@@ -169,6 +171,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
      */
     _resolveTemplateLocation(): Thenable<string> {
         if (!this.location) {
+
             return this.updateTemplates().then((config) => {
                 if (this.__controlName === 'project') {
                     this.location = path.join(config.templates.baseLocation, config.templates.projects[this.__projectType]);
