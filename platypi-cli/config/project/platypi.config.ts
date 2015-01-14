@@ -204,7 +204,7 @@ class Config implements config.IPlatypi {
      */
     save(configPath?: string): Thenable<string> {
         this.configPath = (configPath && configPath !== '' ? path.normalize(configPath) : this.configPath);
-        return fileutils.writeFile(this.configPath, JSON.stringify(this, this.__replacer, true));
+        return fileutils.writeFile(this.configPath, JSON.stringify(this, this.__replacer, 4));
     }
 
     /**
