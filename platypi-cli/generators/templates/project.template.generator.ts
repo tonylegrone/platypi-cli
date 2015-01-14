@@ -33,6 +33,34 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
         });
     }
 
+    private __mapGeneratedControls(projectConfig: config.IPlatypi): Thenable<any> {
+        
+    }
+
+    private pluralType(type: string): string {
+        var pluralType = (type === 'webviewcontrol' ? 'viewcontrol' : type);
+        if (pluralType.substr(pluralType.length - 1, pluralType.length) === 'y') {
+            pluralType = pluralType.replace('y', 'ie');
+        }
+        return pluralType + 's';
+    }
+
+    private __findAndFillPath(control: config.IPlatypusControl, publicPath: string): Thenable<config.IPlatypusControl> {
+        if (!control.path || control.path === '') {
+            var typePath: string = path.join(publicPath, this.pluralType(control.type));
+            return this.fileUtils.readdir(typePath).then((children) => {
+                if (children.indexOf(control.name) > -1) {
+                    control.path = path.join(typePath, control.name);
+                    return control;
+                } else {
+                    throw 'Cannot map path to ' + control.type + ' : ' + control.name;
+                }
+            });
+        } else {
+            return Promise.resolve(control);
+        }
+    }
+
     private __preserveStructure(publicPath: string): Thenable<any> {
         return this.__walkItOut(publicPath, publicPath).then((result) => {
             return this._config.getConfig().then((cliConfig) => {
