@@ -204,7 +204,17 @@ class Config implements config.IPlatypi {
      */
     save(configPath?: string): Thenable<string> {
         this.configPath = (configPath && configPath !== '' ? path.normalize(configPath) : this.configPath);
-        return fileutils.writeFile(this.configPath, JSON.stringify(this, this.__replacer, 4));
+
+        if (this.configPath.indexOf('package.json') > -1) {
+            // do not overwrite all config values in package.json, only those in the platypi object
+            return fileutils.readFile(this.configPath).then((data) => {
+                var package = JSON.parse(data);
+                package.platypi = this;
+                return fileutils.writeFile(this.configPath, JSON.stringify(package, this.__replacer, 4));
+            });
+        } else {
+            return fileutils.writeFile(this.configPath, JSON.stringify(this, this.__replacer, 4));
+        }
     }
 
     /**
