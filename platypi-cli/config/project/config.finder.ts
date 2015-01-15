@@ -18,14 +18,14 @@ class ConfigFinder {
      *  @param name The name of the config file.
      *  @param currentDirectory the directory to start looking in.
      */
-    findConfig(name = 'package.json', currentDirectory = cwd): Thenable<config.IPlatypi> {
-        return this.readFileRecursive(name, currentDirectory);
+    static findConfig(name = 'package.json', currentDirectory = cwd): Thenable<config.IPlatypi> {
+        return ConfigFinder.readFileRecursive(name, currentDirectory);
     }
 
     /**
      *  Recursive walk method.
      */
-    readFileRecursive(name: string, currentDirectory: string): Thenable<any> {
+    static readFileRecursive(name: string, currentDirectory: string): Thenable<any> {
         var filePath = path.join(currentDirectory, name);
         return fileutils.readFile(filePath, { encoding: 'utf8' }).then((data): any => {
             var parsedData = JSON.parse(data),
@@ -33,7 +33,7 @@ class ConfigFinder {
 
             if (name === 'package.json') {
                 if (!parsedData.platypi) {
-                    return this.readFileRecursive('platypi.json', currentDirectory);
+                    return ConfigFinder.readFileRecursive('platypi.json', currentDirectory);
                 } else {
                     config = parsedData.platypi;
                 }
@@ -52,7 +52,7 @@ class ConfigFinder {
             if (currentDirectory === root) {
                 throw 'A valid platypi config file was not found.';
             } else {
-                return this.readFileRecursive(name, utils.upOneLevel(currentDirectory));
+                return ConfigFinder.readFileRecursive(name, utils.upOneLevel(currentDirectory));
             }
         });
     }

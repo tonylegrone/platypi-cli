@@ -20,9 +20,7 @@ class ControlsModel implements IModel {
     }
 
     private __getConfig(): Thenable<config.IPlatypi> {
-        // TODO: get rid of finder constructor
-        var finder = new ConfigFinder();
-        return finder.findConfig().then(PlatypiConfig.loadFromObject);
+        return ConfigFinder.findConfig().then(PlatypiConfig.loadFromObject);
     }
 
     create(): Thenable<string> {
