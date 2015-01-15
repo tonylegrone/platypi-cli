@@ -7,9 +7,9 @@ declare module config {
      */
     export interface IPlatypi {
         configPath?: string;
-        name: string;
+        name?: string;
         description?: string;
-        author: string;
+        author?: string;
         email?: string;
         homepage?: string;
         type: string;

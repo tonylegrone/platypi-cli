@@ -7,27 +7,6 @@ import fileutils = require('../../utils/file.utils');
 class Config implements config.IPlatypi {
     configPath = '';
 
-    // required
-    name: string = 'New Platypi Project';
-
-    get Name(): string {
-        return this.name;
-    }
-
-    set Name(value: string) {
-        this.name = value;
-    }
-
-    author = 'Platypi';
-
-    get Author(): string {
-        return this.author;
-    }
-
-    set Author(value: string) {
-        this.author = value;
-    }
-
     type = 'web';
 
     get Type(): string {
@@ -36,28 +15,6 @@ class Config implements config.IPlatypi {
 
     set Type(value: string) {
         this.type = value.toLowerCase();
-    }
-
-    // optional
-
-    version: string = '0.0.1';
-
-    get Version(): string {
-        return this.version;
-    }
-
-    set Version(value: string) {
-        this.version = value;
-    }
-
-    description: string = 'A new PlatypusTS project.';
-
-    get Description(): string {
-        return this.description;
-    }
-
-    set Description(value: string) {
-        this.description = value;
     }
 
     email: string;
@@ -258,18 +215,6 @@ class Config implements config.IPlatypi {
         var mobileConfig = new Config();
         mobileConfig.Type = 'mobile';
 
-        // TODO: this should be configurable in the template version
-        mobileConfig.addControl({ name: 'base', type: 'model'});
-        mobileConfig.addControl({ name:'server', type: 'model'});
-
-        mobileConfig.addControl({ name: 'base', type: 'repository'});
-
-        mobileConfig.addControl({ name:'base', type:'service' });
-
-        mobileConfig.addControl({ name: 'base', type: 'viewcontrol'});
-
-        mobileConfig.addControl({ name: 'home', type: 'viewcontrol'});
-
         return mobileConfig;
     }
 
@@ -279,18 +224,6 @@ class Config implements config.IPlatypi {
     static CreateNewWebConfig(): config.IPlatypi {
         var webConfig = new Config();
         webConfig.Type = 'web';
-
-        // TODO: this should be configurable in the template version
-        webConfig.addControl({ name: 'base', type: 'model'});
-        webConfig.addControl({ name:'server', type: 'model' });
-
-        webConfig.addControl({ name: 'base', type: 'repository' });
-
-        webConfig.addControl({ name: 'base', type: 'service' });
-
-        webConfig.addControl({ name: 'base', type: 'webviewcontrol'});
-
-        webConfig.addControl({ name: 'home', type: 'webviewcontrol'});
 
         return webConfig;
     }
