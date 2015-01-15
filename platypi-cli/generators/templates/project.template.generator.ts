@@ -3,6 +3,7 @@
 import BaseTemplateGenerator = require('./base.template.generator');
 import path = require('path');
 import promises = require('es6-promise');
+import ProjectConfigFinder = require('../../config/project/config.finder');
 
 var Promise = promises.Promise;
 
@@ -11,24 +12,23 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
         super('project', type, environmentVariables);
     }
 
-    generate(projectConfig?: config.IPlatypi, configPath?: string): Thenable<string> {
+    generate(): Thenable<string> {
         console.log('Extracting templates to: ' + process.cwd());
         return this._copyTemplateTo(process.cwd()).then((folder) => {
-            var publicPath = path.join(folder, 'public')
-                , mainFile = path.join(publicPath, 'main.ts');
+            return ProjectConfigFinder.findConfig('package.json', folder).then((projectConfig) => {
+                var publicPath = path.join(folder, 'public')
+                    , mainFile = path.join(publicPath, 'main.ts')
+                    , configPath = path.join(folder, 'package.json');
 
-            if (!configPath || configPath === '') {
-                configPath = path.join(folder, 'package.json');
-            }
-
-            projectConfig.public = publicPath;
-            projectConfig.mainFile = mainFile;
-            projectConfig.root = folder;
-            return this.__mapGeneratedControls(projectConfig).then(() => {
-                console.log('config path: ', configPath);
-                return projectConfig.save(configPath).then(() => {
-                    return this.__preserveStructure(publicPath);
-                }).then(() => { return folder; });
+                projectConfig.public = publicPath;
+                projectConfig.mainFile = mainFile;
+                projectConfig.root = folder;
+                return this.__mapGeneratedControls(projectConfig).then(() => {
+                    console.log('config path: ', configPath);
+                    return projectConfig.save(configPath).then(() => {
+                        return this.__preserveStructure(publicPath);
+                    }).then(() => { return folder; });
+                });
             });
         });
     }
