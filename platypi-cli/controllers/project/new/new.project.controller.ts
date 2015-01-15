@@ -25,11 +25,11 @@ class NewProjectController implements IController {
             return ConfigGenerator().then((newConfig) => {
                 this.model = new Model(newConfig.type, newConfig.name, newConfig);
                 var generator = new ProjectGenerator(this.model.type, this.model.environmentVariables);
-                return generator.generate(this.model.config);
+                return generator.generate();
             });
         } else {
             var generator = new ProjectGenerator(this.model.type, this.model.environmentVariables);
-            return generator.generate(this.model.config);
+            return generator.generate();
         }
     }
 
