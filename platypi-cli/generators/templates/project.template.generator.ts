@@ -24,17 +24,37 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
             projectConfig.public = publicPath;
             projectConfig.mainFile = mainFile;
             projectConfig.root = folder;
-            console.log('config path: ', configPath);
-            return projectConfig.save(configPath).then(() => {
-                return this.__preserveStructure(publicPath);
-            }).then(() => {
-                return folder;
+            return this.__mapGeneratedControls(projectConfig).then(() => {
+                console.log('config path: ', configPath);
+                return projectConfig.save(configPath).then(() => {
+                    return this.__preserveStructure(publicPath);
+                }).then(() => { return folder; });
             });
         });
     }
 
     private __mapGeneratedControls(projectConfig: config.IPlatypi): Thenable<any> {
-        
+        var controlCollections = [
+            { name: 'attributecontrols', controls: projectConfig.attributecontrols },
+            { name: 'injectables', controls: projectConfig.injectables },
+            { name: 'models', controls: projectConfig.models },
+            { name: 'repositories', controls: projectConfig.repositories },
+            { name: 'services', controls: projectConfig.services },
+            { name: 'templatecontrols', controls: projectConfig.templatecontrols },
+            { name: 'viewcontrols', controls: projectConfig.viewcontrols }
+        ];
+
+        return Promise.all(controlCollections.map((collection) => {
+            return <Promise<any>>(this.__mapControlCollection(collection.controls, projectConfig.public).then((newCollection) => {
+                return projectConfig[collection.name] = newCollection;
+            }));
+        }));
+    }
+
+    private __mapControlCollection(controlCollection: Array<config.IPlatypusControl>, publicPath: string): Thenable<any> {
+        return Promise.all(controlCollection.map((control) => {
+            return <Promise<config.IPlatypusControl>>this.__findAndFillPath(control, publicPath);
+        }));
     }
 
     private pluralType(type: string): string {
