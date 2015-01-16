@@ -9,6 +9,8 @@ var chai = require('chai')
     , ProjectConfig = require('../../../platypi-cli/config/project/platypi.config')
     , ConfigFinder = require('../../../platypi-cli/config/project/config.finder');
 
+chai.use(sinonChai);
+
 describe('Project Config Finder', function () {
     it('should return an object', function (done) {
         expect(new ConfigFinder()).to.be.an.object;
@@ -26,22 +28,23 @@ describe('Project Config Finder', function () {
             readFile = sandbox.stub(fileutils, 'readFile', function (filepath, props) {
                 if (filepath === path.join('path1', 'package.json')) {
                     return Promise.resolve(JSON.stringify({
-                        test: "test",
+                        test: 'test',
+                        props: props,
                         platypi: {
                             type: "web"
                         }
                     }));
                 } else if (filepath === path.join('path2', 'package.json')) {
                     return Promise.resolve(JSON.stringify({
-                        test: "test"
+                        test: 'test'
                     }));
                 } else if (filepath === path.join('good', 'platypi.json')) {
                     return Promise.resolve(JSON.stringify({
-                        type: "web"
+                        type: 'web'
                     }));
                 } else if (filepath === path.join('bad', 'platypi.json')) {
                     return Promise.resolve(JSON.stringify({
-                        type: "badvalue"
+                        type: 'badvalue'
                     }));
                 }
                 return Promise.reject('not found');
