@@ -16,7 +16,7 @@ module EnvironmentVariableHandler {
             var value = newConfig[key];
             if (!(value instanceof Array)) {
                 var envVar: config.IEnvironmentVariable = {
-                    name: key,
+                    name: key.toLowerCase(),
                     value: value
                 };
                 environmentVariables.push(envVar);
