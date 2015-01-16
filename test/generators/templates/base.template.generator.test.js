@@ -1,4 +1,5 @@
 var chai = require('chai')
+    , path = require('path')
     , fs = require('fs')
     , sinon = require('sinon')
     , sinonChai = require('sinon-chai')
@@ -29,7 +30,7 @@ describe('Base Template Generator', function() {
 
             // mock project config
             mockProjectConfig = {
-                public: 'fake/public/dir',
+                public: path.normalize('fake/public/dir'),
                 save: function() {
                     return Promise.resolve('');
                 },
@@ -45,20 +46,20 @@ describe('Base Template Generator', function() {
                     templates: {
                         lastUpdated: new Date(2012, 01, 01),
                         controlLocation: {
-                            model: 'fake/location'
+                            model: path.normalize('fake/location')
                         },
                         controls: {
                             base: {
-                                model: './fake/model/location'
+                                model: path.normalize('./fake/model/location')
                             }
                         },
-                        baseLocation:'fake/base/location'
+                        baseLocation: path.normalize('fake/base/location')
                     }
                 });
             });
 
             sandbox.stub(generator._provider, 'update', function() {
-                return Promise.resolve('fake/template/location');
+                return Promise.resolve(path.normalize('fake/template/location'));
             });
 
             sandbox.stub(fs, 'readdir', function(dirPath, callback) {
@@ -109,7 +110,7 @@ describe('Base Template Generator', function() {
         it('should copy the template to the desired location.', function(done) {
             generator.generate(mockProjectConfig).then(function(newPath) {
                 // add checks for each stub that should be called/not called
-                expect(newPath).to.equal('fake/public/dir/fake/location/test');
+                expect(newPath).to.equal(path.normalize('fake/public/dir/fake/location/test'));
                 done();
             });
         });

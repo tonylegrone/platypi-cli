@@ -1,4 +1,5 @@
 var chai = require('chai')
+    , path = require('path')
     , fs = require('fs')
     , sinon = require('sinon')
     , sinonChai = require('sinon-chai')
@@ -33,9 +34,9 @@ describe('Template Helper', function() {
             sandbox = sinon.sandbox.create();
 
             mkdirFunc = sandbox.stub(fs, 'mkdir', function(folder, mode, callback) {
-                if (folder === 'folder/doesnt/exist/cache') {
+                if (folder === path.normalize('folder/doesnt/exist/cache')) {
                     callback(null);
-                } else if (folder === 'folder/already/exists/cache') {
+                } else if (folder === path.normalize('folder/already/exists/cache')) {
                     callback({ code : 'EEXIST' });
                 } else {
                     callback({ code : 'OTHERERROR' });
@@ -51,7 +52,7 @@ describe('Template Helper', function() {
         });
 
         it('should return an error since something went wrong', function(done) {
-            helper.__makeCacheDir('cause/an/error').then(function(cacheDir) {
+            helper.__makeCacheDir(path.normalize('cause/an/error')).then(function(cacheDir) {
                 try {
                     expect(cacheDir).to.not.exist;
                     done();
@@ -70,9 +71,9 @@ describe('Template Helper', function() {
         });
 
         it('should return the cachefolder that exists', function(done) {
-            helper.__makeCacheDir('folder/already/exists').then(function(cacheFolder) {
+            helper.__makeCacheDir(path.normalize('folder/already/exists')).then(function(cacheFolder) {
                 try {
-                    expect(cacheFolder).to.equal('folder/already/exists/cache');
+                    expect(cacheFolder).to.equal(path.normalize('folder/already/exists/cache'));
                     done();
                 } catch(e) {
                     done(e);
@@ -81,9 +82,9 @@ describe('Template Helper', function() {
         });
 
         it('should create a cacheFolder', function(done) {
-            helper.__makeCacheDir('folder/doesnt/exist').then(function(cacheFolder) {
+            helper.__makeCacheDir(path.normalize('folder/doesnt/exist')).then(function(cacheFolder) {
                 try {
-                    expect(cacheFolder).to.equal('folder/doesnt/exist/cache');
+                    expect(cacheFolder).to.equal(path.normalize('folder/doesnt/exist/cache'));
                     done();
                 } catch(e) {
                     done(e);
@@ -98,9 +99,9 @@ describe('Template Helper', function() {
             sandbox = sinon.sandbox.create();
 
             mkdirFunc = sandbox.stub(fs, 'mkdir', function(folder, mode, callback) {
-                if (folder === 'folder/doesnt/exist/archives/') {
+                if (folder === path.normalize('folder/doesnt/exist/archives/')) {
                     callback(null);
-                } else if (folder === 'folder/already/exists/archives/') {
+                } else if (folder === path.normalize('folder/already/exists/archives/')) {
                     callback({ code : 'EEXIST' });
                 } else {
                     callback({ code : 'OTHERERROR' });
@@ -116,7 +117,7 @@ describe('Template Helper', function() {
         });
 
         it('should return an error since something went wrong', function(done) {
-            helper.__makeArchiveCacheDir('cause/an/error').then(function(archiveDir) {
+            helper.__makeArchiveCacheDir(path.normalize('cause/an/error')).then(function(archiveDir) {
                 try {
                     expect(archiveDir).to.not.exist;
                     done();
@@ -135,9 +136,9 @@ describe('Template Helper', function() {
         });
 
         it('should return the archive folder that exists', function(done) {
-            helper.__makeArchiveCacheDir('folder/already/exists').then(function(archiveDir) {
+            helper.__makeArchiveCacheDir(path.normalize('folder/already/exists')).then(function(archiveDir) {
                 try {
-                    expect(archiveDir).to.equal('folder/already/exists/archives/');
+                    expect(archiveDir).to.equal(path.normalize('folder/already/exists/archives/'));
                     done();
                 } catch(e) {
                     done(e);
@@ -146,9 +147,9 @@ describe('Template Helper', function() {
         });
 
         it('should create a archive folder', function(done) {
-            helper.__makeArchiveCacheDir('folder/doesnt/exist').then(function(archiveDir) {
+            helper.__makeArchiveCacheDir(path.normalize('folder/doesnt/exist')).then(function(archiveDir) {
                 try {
-                    expect(archiveDir).to.equal('folder/doesnt/exist/archives/');
+                    expect(archiveDir).to.equal(path.normalize('folder/doesnt/exist/archives/'));
                     done();
                 } catch(e) {
                     done(e);
@@ -192,7 +193,7 @@ describe('Template Helper', function() {
             });
 
             sandbox.stub(ZipUtil.prototype, 'extractAll', function(extractDir) {
-                if (extractDir === 'test/dir/fail/cache/0.0.1') {
+                if (extractDir === path.normalize('test/dir/fail/cache/0.0.1')) {
                     throw 'Error';
                 }
                 return extractDir;
@@ -213,9 +214,9 @@ describe('Template Helper', function() {
         });
 
         it('should download, unzip, and update the cli config', function(done) {
-            helper.updateTemplates('test/dir').then(function(extractDir) {
+            helper.updateTemplates(path.normalize('test/dir')).then(function(extractDir) {
                 try {
-                    expect(extractDir).to.equal('test/dir/cache/0.0.1/platypi-cli-templates-0.0.1');
+                    expect(extractDir).to.equal(path.normalize('test/dir/cache/0.0.1/platypi-cli-templates-0.0.1'));
                     done();
                 } catch (e) {
                     done(e);
@@ -226,9 +227,9 @@ describe('Template Helper', function() {
         });
 
         it('should download, unzip, and update the cli config defaulting to a version number', function(done) {
-            helper.updateTemplates('test/dir').then(function(extractDir) {
+            helper.updateTemplates(path.normalize('test/dir')).then(function(extractDir) {
                 try {
-                    expect(extractDir).to.equal('test/dir/cache/0.0.1/platypi-cli-templates-0.0.1');
+                    expect(extractDir).to.equal(path.normalize('test/dir/cache/0.0.1/platypi-cli-templates-0.0.1'));
                     done();
                 } catch (e) {
                     done(e);
@@ -240,7 +241,7 @@ describe('Template Helper', function() {
 
 
         it('should fail because there was an error unzipping', function(done) {
-            helper.updateTemplates('test/dir/fail').then(function() {
+            helper.updateTemplates(path.normalize('test/dir/fail')).then(function() {
                 done('should not return from here');
             }, function(err) {
                 expect(err).to.equal('Error');
