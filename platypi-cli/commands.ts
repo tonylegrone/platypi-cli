@@ -30,7 +30,14 @@ commands.push({
         }
     ],
     CommandView: NewProjectView,
-    CommandController: NewProjectController
+    CommandController: NewProjectController,
+    commandOptions: [
+        {
+            shortFlag: 'c',
+            longFlag: 'cordovaid',
+            description: 'Set the cordova id for the project.'
+        }
+    ]
 });
 
 /**

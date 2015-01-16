@@ -7,16 +7,24 @@ class ProjectModel implements IModel {
     public errorMessage: string = '';
     public successMessage: string = '';
     public environmentVariables;
-    public config;
+    public projectConfig;
 
-    constructor(public type = 'web', public name = 'New Project', config?: config.IPlatypi) {
+    constructor(public type = 'web', public name = 'New Project', config?: config.IPlatypi, cordovaId?: string) {
         if (config) {
-            this.config = config;
+            this.projectConfig = config;
         } else {
-            this.config = (type === 'web' ? PlatypiConfig.CreateNewWebConfig() : PlatypiConfig.CreateNewMobileConfig());
+            this.projectConfig = (type === 'web' ? PlatypiConfig.CreateNewWebConfig() : PlatypiConfig.CreateNewMobileConfig());
         }
-        this.config.name = this.name;
-        this.environmentVariables = EnvironmentVariableHandler.parseVariables(this.config);
+
+        this.projectConfig.name = this.name;
+
+        if (cordovaId) {
+            this.projectConfig.cordovaId = cordovaId;
+        } else {
+            this.projectConfig.cordovaId = 'plat.' + name;
+        }
+
+        this.environmentVariables = EnvironmentVariableHandler.parseVariables(this.projectConfig);
     }
 }
 

@@ -6,6 +6,7 @@ declare module config {
      *  Interface for Platypi Project Config
      */
     export interface IPlatypi {
+        cordovaId?: string;
         configPath?: string;
         name?: string;
         description?: string;

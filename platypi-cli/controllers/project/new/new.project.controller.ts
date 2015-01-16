@@ -9,14 +9,14 @@ class NewProjectController implements IController {
     public model;
     public init = false;
 
-    constructor(public view: IView, type: string, name: string) {
+    constructor(public view: IView, type: string, name: string, cordovaId?: string) {
         if (!type || type === '') {
             type = 'web';
         }
         if (!name || name === '') {
             this.init = true;
         }
-        this.model = new Model(type, name);
+        this.model = new Model(type, name, null, cordovaId);
         this.view.model = this.model;
     }
 
