@@ -14,9 +14,29 @@ import globals = require('./globals');
 
 globals.identifyApplication();
 
-var handler = new CommandHandler(commander, globals.package.version, '[command] [args..]', globals.console);
+// Arguments passed from the user's command line.
+var argumentsFromCommandLine = process.argv;
 
-Commands.map(handler.registerCommand, handler);
+/*
+ *  Setup the CLI handler
+ *  @param commandsCollection A collection of ICommands
+ *  @param commandLineLibrary The command line library to handle command argument and options parsing.
+ *  @param versionNumber The version number of the Platypi Command Line Interface.
+ *  @param usage Default command usage example for display in --help.
+ *  @param logger Console log handler.
+ */
+var setupCli = (commandsCollection: Array<command.ICommand>, commandLineLibrary: any, versionNumber: string, usage: string, logger: any)
+    : CommandHandler => {
 
-handler.runCommand(process.argv);
+    var handler = new CommandHandler(commandLineLibrary, versionNumber, usage, logger);
 
+    commandsCollection.map(handler.registerCommand, handler);
+
+    return handler;
+};
+
+// Initialize the CLI
+var cli = setupCli(Commands, commander, globals.package.version, '[command] [args..]', globals.console);
+
+// Run the provided command.
+cli.runCommand(argumentsFromCommandLine);
