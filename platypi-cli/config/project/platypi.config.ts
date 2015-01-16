@@ -267,6 +267,14 @@ class Config implements config.IPlatypi {
         return parsedConfig;
     }
 
+    static isValid(config: any): boolean {
+        if (!config.type || config.type === '') {
+            return false;
+        }
+
+        return true;
+    }
+
 }
 
 export = Config;

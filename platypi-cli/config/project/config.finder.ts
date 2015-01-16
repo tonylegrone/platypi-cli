@@ -2,9 +2,8 @@
 
 import path = require('path');
 import utils = require('../../utils/directory.utils');
-import validator = require('./config.validator');
 import fileutils = require('../../utils/file.utils');
-import PlatypiConfig = require('./platypi.config');
+import ProjectConfig = require('./platypi.config');
 
 var cwd = process.cwd()
     , root = path.resolve('/');
@@ -19,13 +18,13 @@ class ConfigFinder {
      *  @param currentDirectory the directory to start looking in.
      */
     static findConfig(name = 'package.json', currentDirectory = cwd): Thenable<config.IPlatypi> {
-        return ConfigFinder.readFileRecursive(name, currentDirectory);
+        return ConfigFinder.__readFileRecursive(name, currentDirectory);
     }
 
     /**
      *  Recursive walk method.
      */
-    static readFileRecursive(name: string, currentDirectory: string): Thenable<any> {
+    private static __readFileRecursive(name: string, currentDirectory: string): Thenable<any> {
         var filePath = path.join(currentDirectory, name);
         return fileutils.readFile(filePath, { encoding: 'utf8' }).then((data): any => {
             var parsedData = JSON.parse(data),
@@ -33,7 +32,7 @@ class ConfigFinder {
 
             if (name === 'package.json') {
                 if (!parsedData.platypi) {
-                    return ConfigFinder.readFileRecursive('platypi.json', currentDirectory);
+                    return ConfigFinder.__readFileRecursive('platypi.json', currentDirectory);
                 } else {
                     config = parsedData.platypi;
                 }
@@ -41,9 +40,9 @@ class ConfigFinder {
                 config = JSON.parse(data);
             }
 
-            if (validator(config)) {
+            if (ProjectConfig.isValid(config)) {
                 config.configPath = filePath;
-                config = PlatypiConfig.loadFromObject(config);
+                config = ProjectConfig.loadFromObject(config);
                 return config;
             } else {
                 throw 'A valid platypi config file was not found.';
@@ -52,7 +51,7 @@ class ConfigFinder {
             if (currentDirectory === root) {
                 throw 'A valid platypi config file was not found.';
             } else {
-                return ConfigFinder.readFileRecursive(name, utils.upOneLevel(currentDirectory));
+                return ConfigFinder.__readFileRecursive(name, utils.upOneLevel(currentDirectory));
             }
         });
     }

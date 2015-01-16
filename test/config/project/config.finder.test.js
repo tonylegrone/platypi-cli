@@ -1,139 +1,146 @@
-var should = require('should') // jshint ignore:line
-    , ConfigFinder = require('../../../platypi-cli/config/project/config.finder')
-    , fs = require('fs')
-    , testFile = 'test123123.json';
+var chai = require('chai')
+    , path = require('path')
+    , sinon = require('sinon')
+    , sinonChai = require('sinon-chai')
+    , expect = chai.expect
+    , Promise = require('es6-promise').Promise
+    , utils = require('../../../platypi-cli/utils/directory.utils')
+    , fileutils = require('../../../platypi-cli/utils/file.utils')
+    , ProjectConfig = require('../../../platypi-cli/config/project/platypi.config')
+    , ConfigFinder = require('../../../platypi-cli/config/project/config.finder');
 
-describe('finder', function () {
-    it('should be a function', function () {
-        var finder = new ConfigFinder().findConfig;
-        finder.should.be.a.Function;
+describe('Project Config Finder', function () {
+    it('should return an object', function (done) {
+        expect(new ConfigFinder()).to.be.an.object;
+        done();
     });
 
-    describe('no config', function () {
-        var error = '';
+    describe('findConfig static method', function () {
+        var sandbox,
+            readFile,
+            upOneLevel;
 
-        before(function (done) {
-            var finder = new ConfigFinder();
+        beforeEach(function (done) {
+            sandbox = sinon.sandbox.create();
 
-            finder.findConfig(testFile).then(function () {
+            readFile = sandbox.stub(fileutils, 'readFile', function (filepath, props) {
+                if (filepath === path.join('path1', 'package.json')) {
+                    return Promise.resolve(JSON.stringify({
+                        test: "test",
+                        platypi: {
+                            type: "web"
+                        }
+                    }));
+                } else if (filepath === path.join('path2', 'package.json')) {
+                    return Promise.resolve(JSON.stringify({
+                        test: "test"
+                    }));
+                } else if (filepath === path.join('good', 'platypi.json')) {
+                    return Promise.resolve(JSON.stringify({
+                        type: "web"
+                    }));
+                } else if (filepath === path.join('bad', 'platypi.json')) {
+                    return Promise.resolve(JSON.stringify({
+                        type: "badvalue"
+                    }));
+                }
+                return Promise.reject('not found');
+            });
+
+            upOneLevel = sandbox.stub(utils, 'upOneLevel', function (currentDirectory) {
+                console.log(currentDirectory);
+                if (currentDirectory === 'path') {
+                    return 'path1';
+                } else {
+                    return path.resolve('/'); // return root
+                }
+            });
+
+            var validatorStub = sandbox.stub(ProjectConfig, 'isValid');
+            validatorStub.returns(true);
+            
+
+            validatorStub.withArgs({ type: "badvalue" }).returns(false);
+
+            sandbox.stub(ProjectConfig, 'loadFromObject', function (config) {
+                return Promise.resolve(config);
+            });
+
+            done();
+        });
+
+        afterEach(function (done) {
+            sandbox.restore();
+            done();
+        });
+
+        it('should find the project config in package.json ', function (done) {
+            ConfigFinder.findConfig('package.json', 'path').then(function (config) {
+                try {
+                    expect(config).to.be.an.object;
+                    expect(config.type).to.equal('web');
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            }, function (err) {
+                done(err);
+            });
+        });
+
+        it('should reject the promise with an error message', function (done) {
+            ConfigFinder.findConfig('platypi.json', 'path3').then(function (config) {
+                done(config);
+            }, function (err) {
+                try {
+                    expect(err).to.equal('A valid platypi config file was not found.');
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
+        });
+
+        it('should recursively look for platypi.json when package.json does not contain project config', function (done) {
+            ConfigFinder.findConfig('package.json', 'path2').then(function (config) {
+                done(config);
+            }, function (err) {
+                try {
+                    expect(err).to.equal('A valid platypi config file was not found.');
+                    done();
+                } catch (e) {
+                    done(e);
+                }
+            });
+        });
+
+        it('should find config values in platypi.json', function (done) {
+            ConfigFinder.findConfig('platypi.json', 'good').then(function (config) {
+                expect(config).to.be.an.object;
+                expect(config.type).to.equal('web');
                 done();
             }, function (err) {
-                error = err;
-                done();
+                done(err);
             });
         });
 
-        it('should reject promise', function () {
-            error.should.not.equal('');
-        });
-    });
-
-    describe('with config', function () {
-        var exists = false
-            , error = ''
-            , result = null 
-            , config = {
-                name: 'project',
-                type: 'mobile',
-                author: 'Donald Jones'
-            };
-
-        before(function (done) {
-            var finder = new ConfigFinder();
-
-            fs.writeFile(testFile, JSON.stringify(config), function (err) {
-                if (err) {
-                    console.log(err);
-                }
-                finder.findConfig(testFile).then(function (c) {
-                    result = c;
-                    done();
-                }, function (err) {
-                    error = err;
-                    done();
-                });
-            });
-        });
-
-        it('should not reject promise', function () {
-            error.should.equal('');
-        });
-
-        it('should equal input', function () {
-            should.exist(result);
-        });
-
-        after(function () {
-            if (!exists) {
-                fs.unlink(testFile);
-            }
-        });
-    });
-
-    describe('with config in parent (recursive)', function () {
-        var exists = false
-            , error = ''
-            , result = null 
-            , config = {
-                name: 'project',
-                type: 'mobile',
-                author: 'Donald Jones'
-            };
-
-        before(function (done) {
-            var finder = new ConfigFinder();
-
-            fs.writeFile('../' + testFile, JSON.stringify(config), function (err) {
-                if (err) {
-                    console.log(err);
-                }
-                finder.findConfig('../' + testFile).then(function (c) {
-                    result = c;
-                    done();
-                }, function (err) {
-                    error = err;
-                    done();
-                });
-            });
-        });
-
-        it('should not reject promise', function () {
-            error.should.equal('');
-        });
-
-        it('should equal input', function () {
-            should.exist(result);
-        });
-
-        after(function () {
-            if (!exists) {
-                fs.unlink('../' + testFile);
-            }
-        });
-    });
-
-
-    describe('with config NOT in parent (recursive)', function () {
-        var error = ''
-            , result = {};
-
-        before(function (done) {
-            var finder = new ConfigFinder();
-            finder.findConfig('../' + testFile).then(function (c) {
-                result = c;
-                done();
+        it('should find an invalid config file', function (done) {
+            ConfigFinder.findConfig('platypi.json', 'bad').then(function (config) {
+                done(config);
             }, function (err) {
-                error = err;
+                expect(err).to.equal('A valid platypi config file was not found.');
                 done();
             });
         });
 
-        it('should reject promise', function () {
-            error.should.not.equal('');
+        it('should fail to find a config using default values', function (done) {
+            ConfigFinder.findConfig().then(function (config) {
+                done(config);
+            }, function (err) {
+                expect(err).to.equal('A valid platypi config file was not found.');
+                done();
+            });
         });
 
-        it('should equal input', function () {
-            result.should.eql({});
-        });
     });
 });
