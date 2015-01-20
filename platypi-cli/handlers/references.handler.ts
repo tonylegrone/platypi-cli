@@ -56,6 +56,7 @@ class ReferencesHandler {
      *  @param referencePath The relative path to the interface to be referenced.
      */
     static newReferenceString(referencePath: string): string {
+        referencePath = referencePath.replace(/\\/g, '/');
         return '/// <reference path=\"' + referencePath + '\" />';
     }
 
