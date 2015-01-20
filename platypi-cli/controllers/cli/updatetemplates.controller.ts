@@ -10,6 +10,7 @@ class UpdateTemplatesController implements IController {
     constructor(public view: IView) {
         this.__provider = new TemplateProvider();
         this.model = new Model();
+        this.view.model = this.model;
     }
 
     update(): Thenable<any> {
