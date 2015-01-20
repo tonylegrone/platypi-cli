@@ -58,6 +58,7 @@ class MainFileHandler {
      *  @param controlPath The relative path to the control to be required.
      */
     static newRequireString(controlPath: string): string {
+        controlPath = controlPath.replace(/\\/g, '/');
         return 'require(\'' + controlPath + '\');\n';
     }
 
