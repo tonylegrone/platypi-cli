@@ -1,4 +1,6 @@
-﻿import path = require('path');
+﻿/// <reference path="../../_references.d.ts" />
+
+import path = require('path');
 import fileutils = require('../../utils/file.utils');
 
 /**
@@ -11,34 +13,14 @@ class Config implements config.IPlatypi {
         return this.configPath.slice(0, this.configPath.indexOf(path.basename(this.configPath)));
     }
 
-    type = 'web';
+    projectType = 'web';
 
-    get Type(): string {
-        return this.type;
+    get type(): string {
+        return this.projectType;
     }
 
-    set Type(value: string) {
-        this.type = value.toLowerCase();
-    }
-
-    email: string;
-
-    get Email(): string {
-        return this.email;
-    }
-
-    set Email(value: string) {
-        this.email = value;
-    }
-
-    homepage: string = 'http://getplatypi.com';
-
-    get Homepage(): string {
-        return this.homepage;
-    }
-
-    set Homepage(value: string) {
-        this.homepage = value;
+    set type(value: string) {
+        this.projectType = value.toLowerCase();
     }
 
     publicPath: string;
@@ -51,13 +33,13 @@ class Config implements config.IPlatypi {
         this.publicPath = path.normalize(value);
     }
 
-    cordova: string;
+    cordovaPath: string;
 
-    get Cordova(): string {
-        return this.cordova;
+    get cordova(): string {
+        return path.resolve(this.getAbsolutePath(), this.cordovaPath);
     }
 
-    set Cordova(value: string) {
+    set cordova(value: string) {
         this.cordova = path.normalize(value);
     }
 
@@ -73,73 +55,17 @@ class Config implements config.IPlatypi {
 
     viewcontrols: Array<config.IPlatypusControl> = new Array();
 
-    get ViewControls(): Array<config.IPlatypusControl> {
-        return this.viewcontrols;
-    }
-
-    set ViewControls(value: Array<config.IPlatypusControl>) {
-        this.viewcontrols = value;
-    }
-
     injectables: Array<config.IPlatypusControl> = new Array();
-
-    get Injectables(): Array<config.IPlatypusControl> {
-        return this.injectables;
-    }
-
-    set Injectables(value: Array<config.IPlatypusControl>) {
-        this.injectables = value;
-    }
 
     services: Array<config.IPlatypusControl> = new Array();
 
-    get Services(): Array<config.IPlatypusControl> {
-        return this.services;
-    }
-
-    set Services(value: Array<config.IPlatypusControl>) {
-        this.services = value;
-    }
-
     repositories: Array<config.IPlatypusControl> = new Array();
-
-    get Repositories(): Array<config.IPlatypusControl> {
-        return this.repositories;
-    }
-
-    set Repositories(value: Array<config.IPlatypusControl>) {
-        this.repositories = value;
-    }
 
     models: Array<config.IPlatypusControl> = new Array();
 
-    get Models(): Array<config.IPlatypusControl> {
-        return this.services;
-    }
-
-    set Models(value: Array<config.IPlatypusControl>) {
-        this.services = value;
-    }
-
     templatecontrols: Array<config.IPlatypusControl> = new Array();
 
-    get TemplateControls(): Array<config.IPlatypusControl> {
-        return this.templatecontrols;
-    }
-
-    set TemplateControls(value: Array<config.IPlatypusControl>) {
-        this.templatecontrols = value;
-    }
-
     attributecontrols: Array<config.IPlatypusControl> = new Array();
-
-    get AttributeControls(): Array<config.IPlatypusControl> {
-        return this.attributecontrols;
-    }
-
-    set AttributeControls(value: Array<config.IPlatypusControl>) {
-        this.attributecontrols = value;
-    }
 
     private __replacer(key, value) {
         if (key === 'configPath') {
@@ -207,7 +133,7 @@ class Config implements config.IPlatypi {
      */
     static CreateNewMobileConfig(): config.IPlatypi {
         var mobileConfig = new Config();
-        mobileConfig.Type = 'mobile';
+        mobileConfig.type = 'mobile';
 
         return mobileConfig;
     }
@@ -217,7 +143,7 @@ class Config implements config.IPlatypi {
      */
     static CreateNewWebConfig(): config.IPlatypi {
         var webConfig = new Config();
-        webConfig.Type = 'web';
+        webConfig.type = 'web';
 
         return webConfig;
     }
