@@ -1,7 +1,9 @@
 /// <reference path="../../_references.d.ts" />
+import path = require('path');
 import PlatypiConfig = require('../../config/project/platypi.config');
 import ConfigFinder = require('../../config/project/config.finder');
 import GeneratorHandler = require('../../handlers/generator.handler');
+import MainFileHandler = require('../../handlers/mainfile.handler');
 import DirUtils = require('../../utils/directory.utils');
 
 class ControlsModel implements IModel {
@@ -33,9 +35,11 @@ class ControlsModel implements IModel {
     delete(): Thenable<any> {
         return this.__getConfig().then((config) => {
             var deletedControl: config.IPlatypusControl = config.removeControl(this.type, this.name);
-            return DirUtils.deleteDirectoryRecursive(deletedControl.path).then(() => {
-                return config.save().then(() => {
-                    return deletedControl.path;
+            return MainFileHandler.removeControl(path.resolve(config.public, deletedControl.path), config).then(() => {
+                return DirUtils.deleteDirectoryRecursive(deletedControl.path).then(() => {
+                    return config.save().then(() => {
+                        return deletedControl.path;
+                    });
                 });
             });
         });
