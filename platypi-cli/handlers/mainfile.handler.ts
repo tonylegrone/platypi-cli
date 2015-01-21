@@ -1,5 +1,6 @@
 /// <reference path="../_references.d.ts" />
 
+import util = require('util');
 import path = require('path');
 import fileutils = require('../utils/file.utils');
 import promises = require('es6-promise');
@@ -15,13 +16,12 @@ class MainFileHandler {
      *  @param controlFolderPath The absolute path to the folder containing the control.
      *  @param projectCOnfig The absolute path to the project's config file.
      */
-    static addControl(controlFolderPath: string, projectConfig: config.IPlatypi, controlType?: string) {
+    static addControl(controlFolderPath: string, projectConfig: config.IPlatypi, controlType?: string): Thenable<string> {
         var relativePathToControl = path.relative(projectConfig.mainFile, controlFolderPath);
 
         return this.findTypeScriptFiles(controlFolderPath).then((tsFiles) => {
             if (tsFiles.length > 0) {
                 return Promise.all(<Array<Promise<string>>>tsFiles.map((file) => {
-                    console.log('mainfile: ' + projectConfig.mainFile);
                     return fileutils.readFile(projectConfig.mainFile, { encoding: 'utf8' }).then((mainData: string) => {
                         var typePos = -1,
                             relativePathToControlFile = path.join(relativePathToControl, file);
@@ -48,6 +48,49 @@ class MainFileHandler {
                 })).then(() => {
                     return '';
                 });
+            } else {
+                return Promise.resolve('');
+            }
+        });
+    }
+
+    /**
+     *  Remove a 'require' reference for a control to the current project's main.ts file.
+     *  @param controlFolderPath The absolute path to the folder containing the control.
+     *  @param projectCOnfig The absolute path to the project's config file.
+     */
+    static removeControl(controlFolderPath: string, projectConfig: config.IPlatypi): Thenable<any> {
+        var relativePathToControl = path.relative(projectConfig.mainFile, controlFolderPath);
+
+        return this.findTypeScriptFiles(controlFolderPath).then((tsFiles) => {
+            if (tsFiles.length > 0) {
+                return Promise.all(<Array<Promise<string>>>tsFiles.map((file) => {
+                    return fileutils.readFile(projectConfig.mainFile, { encoding: 'utf8' }).then((mainData: string) => {
+                        var relativePathToControlFile = path.join(relativePathToControl, file);
+
+                        // remove ../ fomr beginning of path for require statement
+                        relativePathToControlFile = relativePathToControlFile.slice(3);
+
+                        // remove .ts from the end of path for require statement (node will find it)
+                        relativePathToControlFile = relativePathToControlFile.slice(0, relativePathToControlFile.indexOf('.ts'));
+
+                        // append './' to the beginning of the path (could be combined with the first step but let's be safe)
+                        relativePathToControlFile = './' + relativePathToControlFile;
+
+                        // the require statement to look for
+                        var requireStatement = this.newRequireString(relativePathToControlFile);
+
+                        // the new MainFile data to write to disk
+                        var newMainFile: string = mainData.slice(0, mainData.indexOf(requireStatement));
+
+                        // concat the two halves
+                        newMainFile = util.format('%s\n%s', newMainFile, mainData.slice(newMainFile.length + requireStatement.length));
+
+                        return fileutils.writeFile(projectConfig.mainFile, newMainFile);
+                    });
+                })).then(() => {
+                        return '';
+                    });
             } else {
                 return Promise.resolve('');
             }
