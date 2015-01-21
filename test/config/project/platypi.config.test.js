@@ -1,4 +1,5 @@
 var chai = require('chai')
+    , path = require('path')
     , fs = require('fs')
     , sinon = require('sinon')
     , sinonChai = require('sinon-chai')
@@ -24,12 +25,16 @@ describe('Platypi Config Implementation', function() {
     });
 
     describe('save method', function() {
-        var sandbox, writeFileFunc;
+        var sandbox, writeFileFunc, readFileFunc;
         beforeEach(function(done) {
             sandbox = sinon.sandbox.create();
 
             writeFileFunc = sandbox.stub(fs, 'writeFile', function(filename, data, callback) {
                 callback(null);
+            });
+
+            readFileFunc = sandbox.stub(fs, 'readFile', function(filename, options, callback) {
+                callback(null, JSON.stringify({"test":"test"}));
             });
 
             done();
@@ -52,6 +57,19 @@ describe('Platypi Config Implementation', function() {
             configInstance.save('test.json').then(function() {
                 expect(writeFileFunc.args[0][0]).to.equal('test.json');
                 done();
+            });
+        });
+
+        it('should update and save config values in package.json', function (done) {
+            var configInstance2 = new ProjectConfig();
+            configInstance2.save('package.json').then(function () {
+                try {
+                    expect(readFileFunc.args[0][0]).to.equal('package.json');
+                    expect(writeFileFunc.args[0][0]).to.equal('package.json');
+                    done();
+                } catch (e){
+                    done(e);
+                }
             });
         });
     });
@@ -116,6 +134,76 @@ describe('Platypi Config Implementation', function() {
                 expect(err).to.equal('Not Found');
                 done();
             });
+        });
+    });
+
+    describe('Load from Object', function () {
+        it('should load values from an object', function (done) {
+            var config = ProjectConfig.loadFromObject({
+                configPath: path.resolve('../base/package.json'),
+                projectType: 'mobile',
+                publicPath: 'newPublic',
+                mainFilePath: 'public/main.ts',
+                cordovaPath: 'test/Cordova'
+            });
+
+            try {
+                expect(config).to.be.an.object;
+                expect(config.public).to.equal(path.join(path.resolve('../base/'), 'newPublic'));
+                expect(config.type).to.equal('mobile');
+                expect(config.mainFile).to.equal(path.resolve('../base', 'public/main.ts'));
+                expect(config.cordova).to.equal(path.resolve('../base', 'test/Cordova'));
+                done();
+            } catch (e) {
+                done(e);
+            }
+        });
+    });
+
+    describe('isValid method', function () {
+        it('should return true', function (done) {
+            var validity = ProjectConfig.isValid({
+                "type": "web"
+            });
+
+            expect(validity).to.be.true;
+            done();
+        });
+
+        it('should return false', function (done) {
+            var validity = ProjectConfig.isValid({
+                "type": ""
+            });
+
+            expect(validity).to.be.false;
+            done();
+        });
+    });
+
+    describe('addControl method', function () {
+        it('should add a control to the project', function (done) {
+            var config = ProjectConfig.CreateNewWebConfig(),
+                control = {
+                    name: 'testcontrol',
+                    type: 'viewcontrol'
+                };
+
+            config.addControl(control);
+            expect(config.viewcontrols).to.contain(control);
+            done();
+        });
+
+        it('should remove a control from the project', function (done) {
+            var config = ProjectConfig.CreateNewWebConfig(),
+                control = {
+                    name: 'testcontrol',
+                    type: 'viewcontrol'
+                };
+
+            config.addControl(control);
+            config.removeControl("viewcontrol", "testcontrol");
+            expect(config.viewcontrols).not.to.contain(control);
+            done();
         });
     });
 
