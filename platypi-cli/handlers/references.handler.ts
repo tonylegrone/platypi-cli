@@ -1,6 +1,7 @@
 /// <reference path="../_references.d.ts" />
 
 import path = require('path');
+import util = require('util');
 import fileutils = require('../utils/file.utils');
 import promises = require('es6-promise');
 
@@ -45,6 +46,43 @@ class ReferencesHandler {
                 })).then(() => {
                     return '';
                 });
+            } else {
+                return Promise.resolve('');
+            }
+        });
+    }
+
+    /**
+     *  Remove a reference to the current project's _references.d.ts file.
+     *  @param referenceFolderPath The absolute path to the folder containing an interface to be referenced.
+     *  @param referenceType The control type of the interface.
+     */
+    static removeReference(referenceFolderPath: string, projectConfig: config.IPlatypi): Thenable<any> {
+        var relativePathToReference = path.relative(projectConfig.public, referenceFolderPath),
+            referenceFileLocation = path.join(projectConfig.public, '_references.d.ts');
+
+        return this.findInterfaceFiles(referenceFolderPath).then((interfaceFiles) => {
+            if (interfaceFiles.length > 0) {
+                return Promise.all(<Array<Promise<string>>>interfaceFiles.map((file) => {
+                    if (file.indexOf('.d.ts') > -1) {
+                        return fileutils.readFile(referenceFileLocation, { encoding: 'utf8' }).then((referenceData: string) => {
+                            var relativePathToReferenceFile = path.join(relativePathToReference, file);
+
+                            var referenceString = this.newReferenceString(relativePathToReferenceFile);
+
+                            var newReferenceFile = referenceData.slice(0, referenceData.indexOf(referenceString));
+
+                            newReferenceFile = util.format('%s%s', newReferenceFile
+                                , referenceData.slice(newReferenceFile.length + referenceString.length));
+
+                            return fileutils.writeFile(referenceFileLocation, newReferenceFile);
+                        });
+                    } else {
+                        return Promise.resolve('');
+                    }
+                })).then(() => {
+                        return '';
+                    });
             } else {
                 return Promise.resolve('');
             }
