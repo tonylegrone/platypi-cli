@@ -16,17 +16,17 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
         console.log('Extracting templates to: ' + process.cwd());
         return this._copyTemplateTo(process.cwd()).then((folder) => {
             return ProjectConfigFinder.findConfig('package.json', folder).then((projectConfig) => {
-                var publicPath = path.join(folder, 'public')
-                    , mainFile = path.join(publicPath, 'main.ts')
+                var publicPath = path.relative(folder, path.join(folder, 'public'))
+                    , mainFile = path.relative(folder, path.join(publicPath, 'main.ts'))
                     , configPath = path.join(folder, 'package.json');
 
                 projectConfig.public = publicPath;
                 projectConfig.mainFile = mainFile;
-                projectConfig.root = folder;
+
                 return this.__mapGeneratedControls(projectConfig).then(() => {
                     console.log('config path: ', configPath);
                     return projectConfig.save(configPath).then(() => {
-                        return this.__preserveStructure(publicPath);
+                        return this.__preserveStructure(projectConfig);
                     }).then(() => { return folder; });
                 });
             });
@@ -45,15 +45,15 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
         ];
 
         return Promise.all(controlCollections.map((collection) => {
-            return <Promise<any>>(this.__mapControlCollection(collection.controls, projectConfig.public).then((newCollection) => {
+            return <Promise<any>>(this.__mapControlCollection(collection.controls, projectConfig).then((newCollection) => {
                 return projectConfig[collection.name] = newCollection;
             }));
         }));
     }
 
-    private __mapControlCollection(controlCollection: Array<config.IPlatypusControl>, publicPath: string): Thenable<any> {
+    private __mapControlCollection(controlCollection: Array<config.IPlatypusControl>, projectConfig: config.IPlatypi): Thenable<any> {
         return Promise.all(controlCollection.map((control) => {
-            return <Promise<config.IPlatypusControl>>this.__findAndFillPath(control, publicPath);
+            return <Promise<config.IPlatypusControl>>this.__findAndFillPath(control, projectConfig);
         }));
     }
 
@@ -65,12 +65,12 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
         return pluralType + 's';
     }
 
-    private __findAndFillPath(control: config.IPlatypusControl, publicPath: string): Thenable<config.IPlatypusControl> {
+    private __findAndFillPath(control: config.IPlatypusControl, projectConfig: config.IPlatypi): Thenable<config.IPlatypusControl> {
         if (!control.path || control.path === '') {
-            var typePath: string = path.join(publicPath, this.pluralType(control.type));
+            var typePath: string = path.join(projectConfig.public, this.pluralType(control.type));
             return this.fileUtils.readdir(typePath).then((children) => {
                 if (children.indexOf(control.name) > -1) {
-                    control.path = path.join(typePath, control.name);
+                    control.path = path.relative(projectConfig.public, path.join(typePath, control.name));
                     return control;
                 } else {
                     throw 'Cannot map path to ' + control.type + ' : ' + control.name;
@@ -81,7 +81,8 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
         }
     }
 
-    private __preserveStructure(publicPath: string): Thenable<any> {
+    private __preserveStructure(projectConfig: config.IPlatypi): Thenable<any> {
+        var publicPath = projectConfig.public;
         return this.__walkItOut(publicPath, publicPath).then((result) => {
             return this._config.getConfig().then((cliConfig) => {
                 var projectStruct = cliConfig.templates.projectStruct;
