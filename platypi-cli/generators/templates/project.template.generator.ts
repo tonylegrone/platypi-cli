@@ -4,6 +4,7 @@ import BaseTemplateGenerator = require('./base.template.generator');
 import path = require('path');
 import promises = require('es6-promise');
 import ProjectConfigFinder = require('../../config/project/config.finder');
+import globals = require('../../globals');
 
 var Promise = promises.Promise;
 
@@ -13,7 +14,7 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
     }
 
     generate(): Thenable<string> {
-        console.log('Extracting templates to: ' + process.cwd());
+        globals.console.log('Extracting templates to: ' + process.cwd());
         return this._copyTemplateTo(process.cwd()).then((folder) => {
             return ProjectConfigFinder.findConfig('package.json', folder).then((projectConfig) => {
                 var publicPath = path.relative(folder, path.join(folder, 'public'))
@@ -24,7 +25,6 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
                 projectConfig.mainFile = mainFile;
 
                 return this.__mapGeneratedControls(projectConfig).then(() => {
-                    console.log('config path: ', configPath);
                     return projectConfig.save(configPath).then(() => {
                         return this.__preserveStructure(projectConfig);
                     }).then(() => { return folder; });
