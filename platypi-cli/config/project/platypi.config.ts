@@ -7,6 +7,10 @@ import fileutils = require('../../utils/file.utils');
 class Config implements config.IPlatypi {
     configPath = '';
 
+    getAbsolutePath(): string {
+        return this.configPath.slice(0, this.configPath.indexOf(path.basename(this.configPath)));
+    }
+
     type = 'web';
 
     get Type(): string {
@@ -37,24 +41,14 @@ class Config implements config.IPlatypi {
         this.homepage = value;
     }
 
-    root: string;
+    publicPath: string;
 
-    get Root(): string {
-        return this.root;
+    get public(): string {
+        return path.resolve(this.getAbsolutePath(), this.publicPath);
     }
 
-    set Root(value: string) {
-        this.root = path.normalize(value);
-    }
-
-    public: string;
-
-    get Public(): string {
-        return this.public;
-    }
-
-    set Public(value: string) {
-        this.public = path.normalize(value);
+    set public(value: string) {
+        this.publicPath = path.normalize(value);
     }
 
     cordova: string;

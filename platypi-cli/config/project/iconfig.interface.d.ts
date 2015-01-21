@@ -15,7 +15,6 @@ declare module config {
         homepage?: string;
         type: string;
         version?: string;
-        root?: string;
         public?: string;
         cordova?: string;
         mainFile?: string;
@@ -28,6 +27,7 @@ declare module config {
         attributecontrols?: Array<IPlatypusControl>;
         cliDepend?: string;
 
+        getAbsolutePath(): string;
         addControl(control: IPlatypusControl);
         removeControl(type: string, name: string);
 
