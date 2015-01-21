@@ -265,7 +265,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         var newControl: config.IPlatypusControl = {
             name: this.instanceName,
             type: this.__controlName,
-            path: controlPath,
+            path: path.relative(config.public, controlPath),
             registeredName: this.registeredName
         };
         config.addControl(newControl);
@@ -331,7 +331,6 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
             globals.console.log('Creating ' + this.__controlName + '..');
             var controlPath = path.join(projectConfig.public, cliConfig.templates.controlLocation[this.__controlName]);
             return this._copyTemplateTo(controlPath).then((newPath) => {
-                newPath = path.relative(projectConfig.getAbsolutePath(), newPath);
                 return this._addReferences(projectConfig, newPath).then(() => {
                     return this._addRequireToMain(projectConfig, newPath);
                 }).then(() => {
