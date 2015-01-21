@@ -61,14 +61,14 @@ class Config implements config.IPlatypi {
         this.cordova = path.normalize(value);
     }
 
-    mainFile: string;
+    mainFilePath: string;
 
-    get MainFile(): string {
-        return this.mainFile;
+    get mainFile(): string {
+        return path.resolve(this.getAbsolutePath(), this.mainFilePath);
     }
 
-    set MainFile(value: string) {
-        this.mainFile = path.normalize(value);
+    set mainFile(value: string) {
+        this.mainFilePath = path.normalize(value);
     }
 
     viewcontrols: Array<config.IPlatypusControl> = new Array();
