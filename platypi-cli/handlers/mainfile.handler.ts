@@ -84,7 +84,7 @@ class MainFileHandler {
                         var newMainFile: string = mainData.slice(0, mainData.indexOf(requireStatement));
 
                         // concat the two halves
-                        newMainFile = util.format('%s\n%s', newMainFile, mainData.slice(newMainFile.length + requireStatement.length));
+                        newMainFile = util.format('%s%s', newMainFile, mainData.slice(newMainFile.length + requireStatement.length));
 
                         return fileutils.writeFile(projectConfig.mainFile, newMainFile);
                     });
