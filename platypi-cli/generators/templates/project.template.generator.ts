@@ -17,7 +17,7 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
         return this._copyTemplateTo(process.cwd()).then((folder) => {
             return ProjectConfigFinder.findConfig('package.json', folder).then((projectConfig) => {
                 var publicPath = path.relative(folder, path.join(folder, 'public'))
-                    , mainFile = path.relative(folder, path.join(publicPath, 'main.ts'))
+                    , mainFile = path.join(publicPath, 'main.ts')
                     , configPath = path.join(folder, 'package.json');
 
                 projectConfig.public = publicPath;

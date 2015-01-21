@@ -21,6 +21,7 @@ class MainFileHandler {
         return this.findTypeScriptFiles(controlFolderPath).then((tsFiles) => {
             if (tsFiles.length > 0) {
                 return Promise.all(<Array<Promise<string>>>tsFiles.map((file) => {
+                    console.log('mainfile: ' + projectConfig.mainFile);
                     return fileutils.readFile(projectConfig.mainFile, { encoding: 'utf8' }).then((mainData: string) => {
                         var typePos = -1,
                             relativePathToControlFile = path.join(relativePathToControl, file);
