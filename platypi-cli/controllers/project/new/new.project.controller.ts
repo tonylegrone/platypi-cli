@@ -2,12 +2,12 @@
 
 import ProjectGenerator = require('../../../generators/templates/project.template.generator');
 import Model = require('../../../models/project/project.model');
-
 import ConfigGenerator = require('../../../generators/platypiconfig.generator');
 
 class NewProjectController implements IController {
     public model;
     public init = false;
+    configGen = ConfigGenerator;
 
     constructor(public view: IView, type: string, name: string, cordovaId?: string) {
         if (!type || type === '') {
@@ -22,7 +22,7 @@ class NewProjectController implements IController {
 
     create(): Thenable<string> {
         if (this.init) {
-            return ConfigGenerator().then((newConfig) => {
+            return this.configGen().then((newConfig) => {
                 this.model = new Model(newConfig.type, newConfig.name, newConfig);
                 var generator = new ProjectGenerator(this.model.type, this.model.environmentVariables);
                 return generator.generate();
