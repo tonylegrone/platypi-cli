@@ -3,7 +3,7 @@
     , sinonChai = require('sinon-chai')
     , expect = chai.expect
     , Promise = require('es6-promise').Promise
-    , CacheCleanController = require('../../platypi-cli/controllers/cli/cacheclean.controller');
+    , CacheCleanController = require('../../../platypi-cli/controllers/cli/cacheclean.controller');
 
 chai.use(sinonChai);
 

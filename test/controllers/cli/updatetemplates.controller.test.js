@@ -3,7 +3,7 @@
     , sinonChai = require('sinon-chai')
     , expect = chai.expect
     , Promise = require('es6-promise').Promise
-    , UpdateTemplatesController = require('../../platypi-cli/controllers/cli/updatetemplates.controller');
+    , UpdateTemplatesController = require('../../../platypi-cli/controllers/cli/updatetemplates.controller');
 
 chai.use(sinonChai);
 
