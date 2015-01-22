@@ -74,7 +74,7 @@ describe('TemplateUpdate controller', function () {
                     done(e);
                 }
             }, function (err) {
-                done('Unexpectedly successful.');
+                done(err);
             });
         });
     });

@@ -73,7 +73,7 @@ describe('CacheClean Controller', function () {
                     done(e);
                 }
             }, function (err) {
-                done('Unexpectedly successful.');
+                done(err);
             });
         });
 
