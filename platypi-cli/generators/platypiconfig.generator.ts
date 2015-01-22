@@ -2,7 +2,7 @@
 import promises = require('es6-promise');
 import PlatypiConfig = require('../config/project/platypi.config');
 
-var prompt = require('prompt')
+var consolePrompt = require('prompt')
     , Promise = promises.Promise;
 
 /**
@@ -52,7 +52,7 @@ var generateConfig = (): Thenable<config.IPlatypi> => {
     };
 
     return new Promise((resolve, reject) => {
-        prompt.get(schema, (err, response) => {
+        consolePrompt.get(schema, (err, response) => {
             var config: config.IPlatypi = (response.type === 'web' ? PlatypiConfig.CreateNewWebConfig()
                 : PlatypiConfig.CreateNewMobileConfig());
 
