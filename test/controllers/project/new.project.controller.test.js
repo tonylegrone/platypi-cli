@@ -28,7 +28,7 @@ describe('New Project Controller', function () {
             generateFunc = sandbox.stub(ProjectGenerator.prototype, 'generate');
             generateFunc.returns(Promise.resolve('newPath'));
 
-            configGeneratorFunc = sandbox.stub(controller.configGen);
+            configGeneratorFunc = sandbox.stub(controller, 'configGen');
             configGeneratorFunc.returns(Promise.resolve({
                 type: 'web',
                 name: 'test'
