@@ -21,6 +21,17 @@ platypi add <type> <name>
 ```
 Types: viewcontrol, injectable, repository, service, model, templatecontrol, attributecontrol
 
+###Removing a Control
+```
+platypi delete <type> <name>
+```
+Types: viewcontrol, injectable, repository, service, model, templatecontrol, attributecontrol
+
+###List Controls
+```
+platypi list
+```
+
 ###Forcing Updates
 ```
 platypi update
