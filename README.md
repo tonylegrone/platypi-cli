@@ -6,6 +6,10 @@
 ```
 git clone https://github.com/Platypi/platypi-cli.git
 ```
+####then
+```
+npm install
+```
 
 ###Building
 ```
