@@ -16,8 +16,8 @@ class ControlsModel implements IModel {
     public successMessage: string;
     public controlsTable: Array<string>;
 
-    constructor(type: string, name?: string, registeredName?: string, extendsClass?: string) {
-        this.type = type.toLowerCase().trim();
+    constructor(type?: string, name?: string, registeredName?: string, extendsClass?: string) {
+        this.type = (type && type !== '' ? type.toLowerCase().trim() : '');
         this.name = (name && name !== '' ? name.trim() : 'new' + type);
         this.registeredName = (registeredName && registeredName !== '' ? registeredName.trim() : this.name);
         this.extendsClass = (extendsClass && extendsClass !== '' ? extendsClass.trim() : '');
