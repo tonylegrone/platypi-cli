@@ -90,11 +90,7 @@ commands.push({
 commands.push({
     command: 'list',
     description: 'List controls in a project.',
-    commandParameters: [
-        {
-            name: 'type'
-        }
-    ],
+    commandParameters: [],
     CommandView: ListControlsView,
     CommandController: ListControlsController
 });
