@@ -39,6 +39,7 @@ describe('Add Controls Controller', function () {
                 try {
                     expect(createFunc).to.have.been.called;
                     expect(controller.model.successMessage).to.equal('newPath');
+                    expect(view).to.be.an.object;
                     done();
                 } catch (e) {
                     done(e);
@@ -54,6 +55,7 @@ describe('Add Controls Controller', function () {
                 try {
                     expect(createFunc).to.have.been.called;
                     expect(controller.model.errorMessage).to.equal('Intended Error');
+                    expect(view).to.be.an.object;
                     done();
                 } catch (e) {
                     done(e);

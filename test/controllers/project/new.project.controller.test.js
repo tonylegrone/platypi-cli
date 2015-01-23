@@ -4,7 +4,6 @@
     , expect = chai.expect
     , Promise = require('es6-promise').Promise
     , ProjectGenerator = require('../../../platypi-cli/generators/templates/project.template.generator')
-    , ConfigGenerator = require('../../../platypi-cli/generators/platypiconfig.generator')
     , NewProjectController = require('../../../platypi-cli/controllers/project/new/new.project.controller');
 
 chai.use(sinonChai);
@@ -47,6 +46,7 @@ describe('New Project Controller', function () {
                 try {
                     expect(generateFunc).to.have.been.called;
                     expect(controller.model.successMessage).to.equal('newPath');
+                    expect(view).to.be.an.object;
                     done();
                 } catch (e) {
                     done(e);
@@ -62,6 +62,7 @@ describe('New Project Controller', function () {
                 try {
                     expect(generateFunc).to.have.been.called;
                     expect(controller.model.errorMessage).to.equal('Intended Error');
+                    expect(view).to.be.an.object;
                     done();
                 } catch (e) {
                     done(e);

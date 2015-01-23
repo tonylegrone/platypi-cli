@@ -1,7 +1,6 @@
 ﻿var chai = require('chai')
     , sinon = require('sinon')
     , sinonChai = require('sinon-chai')
-    , path = require('path')
     , expect = chai.expect
     , Promise = require('es6-promise').Promise
     , ProjectConfigFinder = require('../../../platypi-cli/config/project/config.finder')
@@ -88,7 +87,7 @@ describe('Project Template Generator', function () {
         });
 
         it('should generate a project template at the cwd', function (done) {
-            generator.generate().then(function (path) {
+            generator.generate().then(function () {
                 try {
                     expect(copyTemplateFunc).to.have.been.called;
                     expect(configFindFunc).to.have.been.called;
