@@ -26,7 +26,7 @@ class ListControlsView extends BaseView {
 
             controlsTable.forEach((controlString) => {
                 if (controlString.indexOf('path') < 0) {
-                    this.logger.label(controlString);
+                    this.logger.label('Type: ' + controlString);
                 } else {
                     this.logger.log(controlString);
                 }
