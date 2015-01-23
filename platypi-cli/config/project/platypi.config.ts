@@ -188,7 +188,7 @@ class Config implements config.IPlatypi {
     }
 
     static isValid(config: any): boolean {
-        if (!config.type || config.type === '') {
+        if (!config.projectType || config.projectType === '') {
             return false;
         }
 
