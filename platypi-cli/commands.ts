@@ -5,6 +5,7 @@ import NewProjectView = require('./views/project/new/new.project.view');
 import AddControlsView = require('./views/controls/add/add.controls.view');
 import DeleteControlView = require('./views/controls/delete/delete.controls.view');
 import CliGenericView = require('./views/cli/cli.view');
+import ListControlsView = require('./views/controls/list/list.controls.view');
 
 // Controllers
 import NewProjectController = require('./controllers/project/new/new.project.controller');
@@ -12,6 +13,7 @@ import AddControlsController = require('./controllers/controls/add/add.controls.
 import DeleteControlController = require('./controllers/controls/delete/delete.control.controller');
 import CliUpdateTemplatesController = require('./controllers/cli/updatetemplates.controller');
 import CliCacheCleanController = require('./controllers/cli/cacheclean.controller');
+import ListControlsController = require('./controllers/controls/list/list.controls.controller');
 
 var commands: Array<command.ICommand> = [];
 
@@ -80,6 +82,21 @@ commands.push({
             description: 'Set the class this control should extend.'
         }
     ]
+});
+
+/**
+ * List Controls Command.
+ */
+commands.push({
+    command: 'list',
+    description: 'List controls in a project.',
+    commandParameters: [
+        {
+            name: 'type'
+        }
+    ],
+    CommandView: ListControlsView,
+    CommandController: ListControlsController
 });
 
 
