@@ -32,46 +32,25 @@ class ControlsModel implements IModel {
 
         return this.__getConfig().then((config) => {
             // attributecontrols
-            controlsTable.push('Attribute Controls');
-            config.attributecontrols.forEach((attributecontrol) => {
-                controlsTable.push(this.__formatControlString(attributecontrol));
-            });
+            controlsTable = controlsTable.concat(this.__formatControlTypeString('Attribute Controls', config.attributecontrols));
 
             // injectables
-            controlsTable.push('Injectable Controls');
-            config.injectables.forEach((injectable) => {
-                controlsTable.push(this.__formatControlString(injectable));
-            });
+            controlsTable = controlsTable.concat(this.__formatControlTypeString('Injectables', config.injectables));
 
             // models
-            controlsTable.push('Models');
-            config.models.forEach((model) => {
-                controlsTable.push(this.__formatControlString(model));
-            });
+            controlsTable = controlsTable.concat(this.__formatControlTypeString('Models', config.models));
 
             // repositories
-            controlsTable.push('Repositories');
-            config.repositories.forEach((repository) => {
-                controlsTable.push(this.__formatControlString(repository));
-            });
+            controlsTable = controlsTable.concat(this.__formatControlTypeString('Repositories', config.repositories));
 
             // services
-            controlsTable.push('Services');
-            config.services.forEach((service) => {
-                controlsTable.push(this.__formatControlString(service));
-            });
+            controlsTable = controlsTable.concat(this.__formatControlTypeString('Services', config.services));
 
             // templatecontrols
-            controlsTable.push('Template Controls');
-            config.templatecontrols.forEach((template) => {
-                controlsTable.push(this.__formatControlString(template));
-            });
+            controlsTable = controlsTable.concat(this.__formatControlTypeString('Template Controls', config.templatecontrols));
 
             // viewcontrols
-            controlsTable.push('View Controls');
-            config.viewcontrols.forEach((viewcontrol) => {
-                controlsTable.push(this.__formatControlString(viewcontrol));
-            });
+            controlsTable = controlsTable.concat(this.__formatControlTypeString('View Controls', config.viewcontrols));
 
             this.controlsTable = controlsTable;
 
@@ -79,8 +58,25 @@ class ControlsModel implements IModel {
         });
     }
 
+    private __formatControlTypeString(controlTypeName: string, controlCollection: Array<config.IPlatypusControl>): Array<string> {
+        if (controlCollection.length > 0) {
+            var controlTypeString: Array<string> = [],
+                count = 1;
+
+            controlTypeString.push(controlTypeName + '(' + controlCollection.length + ')');
+            controlCollection.forEach((control) => {
+                controlTypeString.push(count + '. ' + this.__formatControlString(control));
+                count++;
+            });
+
+            return controlTypeString;
+        } else {
+            return [];
+        }
+    }
+
     private __formatControlString(control: config.IPlatypusControl): string {
-        return control.name + ' path: ' + control.path;
+        return 'name: ' + control.name + ' path: ' + control.path;
     }
 
     create(): Thenable<string> {
