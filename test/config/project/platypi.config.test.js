@@ -163,7 +163,7 @@ describe('Platypi Config Implementation', function() {
     describe('isValid method', function () {
         it('should return true', function (done) {
             var validity = ProjectConfig.isValid({
-                "type": "web"
+                "projectType": "web"
             });
 
             expect(validity).to.be.true;
@@ -172,7 +172,7 @@ describe('Platypi Config Implementation', function() {
 
         it('should return false', function (done) {
             var validity = ProjectConfig.isValid({
-                "type": ""
+                "projectType": ""
             });
 
             expect(validity).to.be.false;
