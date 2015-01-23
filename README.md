@@ -7,6 +7,16 @@
 npm install -g platypi-cli
 ```
 
+###Building
+```
+grunt build
+```
+
+###Testing
+```
+npm test
+```
+
 ##Usage
 
 ###Generating a Project
