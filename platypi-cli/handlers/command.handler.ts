@@ -6,7 +6,14 @@ class CommandHandler {
     public registeredCommands = [];
     public commander: any;
 
-    constructor(commander: any, version: string, usage: string, private __logger: any) {
+    public defaultCommands = [
+        '-h',
+        '--help',
+        '-V',
+        '--version'
+    ];
+
+    constructor(commander: any, version: string, usage: string, private __logger: any, private __identifyApplication: any) {
         this.commander = commander;
         this.commander.version(version);
         this.commander.usage(usage);
@@ -111,10 +118,17 @@ class CommandHandler {
             return;
         }
 
+        if (this.defaultCommands.indexOf(args[2]) > -1) {
+            this.commander.parse(args);
+            return;
+        }
+
         if (!this.isRegistered(args[2])) {
             this.__logger.error(util.format('Unknown command: %s', args[2]));
             return;
         }
+
+        this.__identifyApplication();
 
         this.commander.parse(args);
     }

@@ -6,22 +6,22 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "20e56f1f30cb6b9249df06184fc04ba9c3c63340"
+      "commit": "231eb882c1e98876d329753f8b7133a6f4536f50"
     },
     "commander/commander.d.ts": {
-      "commit": "20e56f1f30cb6b9249df06184fc04ba9c3c63340"
+      "commit": "231eb882c1e98876d329753f8b7133a6f4536f50"
     },
     "es6-promise/es6-promise.d.ts": {
-      "commit": "20e56f1f30cb6b9249df06184fc04ba9c3c63340"
+      "commit": "231eb882c1e98876d329753f8b7133a6f4536f50"
     },
     "request/request.d.ts": {
-      "commit": "20e56f1f30cb6b9249df06184fc04ba9c3c63340"
+      "commit": "231eb882c1e98876d329753f8b7133a6f4536f50"
     },
     "form-data/form-data.d.ts": {
-      "commit": "20e56f1f30cb6b9249df06184fc04ba9c3c63340"
+      "commit": "231eb882c1e98876d329753f8b7133a6f4536f50"
     },
     "rimraf/rimraf.d.ts": {
-      "commit": "20e56f1f30cb6b9249df06184fc04ba9c3c63340"
+      "commit": "231eb882c1e98876d329753f8b7133a6f4536f50"
     }
   }
 }

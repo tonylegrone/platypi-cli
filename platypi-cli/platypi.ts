@@ -12,8 +12,6 @@ import commander = require('commander');
 // Global Variables
 import globals = require('./globals');
 
-globals.identifyApplication();
-
 // Arguments passed from the user's command line.
 var argumentsFromCommandLine = process.argv;
 
@@ -28,7 +26,7 @@ var argumentsFromCommandLine = process.argv;
 var setupCli = (commandsCollection: Array<command.ICommand>, commandLineLibrary: any, versionNumber: string, usage: string, logger: any)
     : CommandHandler => {
 
-    var handler = new CommandHandler(commandLineLibrary, versionNumber, usage, logger);
+    var handler = new CommandHandler(commandLineLibrary, versionNumber, usage, logger, globals.identifyApplication);
 
     commandsCollection.map(handler.registerCommand, handler);
 
