@@ -4,7 +4,7 @@
 
 ###Install
 ```
-npm install -g platypi-cli
+git clone https://github.com/Platypi/platypi-cli.git
 ```
 
 ###Building
