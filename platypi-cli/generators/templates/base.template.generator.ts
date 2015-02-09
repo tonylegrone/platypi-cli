@@ -112,8 +112,6 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
                 })).then(() => {
                     return newFolder;
                 });
-            }, (err) => {
-                throw err;
             });
         });
     }

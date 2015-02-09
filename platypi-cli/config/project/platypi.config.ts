@@ -153,7 +153,7 @@ class Config implements config.IPlatypi {
      *  @param configPath Path to the config file to be loaded from disk.
      */
     static loadFromFile(configPath: string): Thenable<config.IPlatypi> {
-        return fileutils.readFile(configPath, { encoding: 'utf8' }).then((data) => {
+        return fileutils.readFile(configPath, { encoding: 'utf8' }).then<config.IPlatypi>((data) => {
             var configData: config.IPlatypi = JSON.parse(data)
                 , parsedConfig = new Config()
                 , keys = Object.keys(configData);
@@ -165,8 +165,6 @@ class Config implements config.IPlatypi {
             parsedConfig.configPath = configPath;
 
             return parsedConfig;
-        }, (err) => {
-            throw err;
         });
     }
 

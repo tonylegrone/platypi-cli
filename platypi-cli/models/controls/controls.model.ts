@@ -19,7 +19,7 @@ class ControlsModel implements IModel {
     constructor(type?: string, name?: string, registeredName?: string, extendsClass?: string) {
         this.type = (type && type !== '' ? type.toLowerCase().trim() : '');
         this.name = (name && name !== '' ? name.trim() : 'new' + type);
-        this.registeredName = (registeredName && registeredName !== '' ? registeredName.trim() : this.name);
+        this.registeredName = (registeredName && registeredName !== '' ? registeredName.trim() : this.name.toLowerCase() + '-vc');
         this.extendsClass = (extendsClass && extendsClass !== '' ? extendsClass.trim() : '');
     }
 

@@ -9,10 +9,11 @@ class NewProjectController implements IController {
     public init = false;
     configGen = ConfigGenerator;
 
-    constructor(public view: IView, type: string, name: string, cordovaId?: string) {
-        if (!type || type === '') {
-            type = 'web';
-        }
+    constructor(public view: IView, name: string, cordovaId?: string) {
+
+        // hotfix to remove type parameter
+        var type = 'mobile';
+
         if (!name || name === '') {
             this.init = true;
         }
