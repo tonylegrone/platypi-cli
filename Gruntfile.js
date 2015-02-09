@@ -38,7 +38,7 @@ module.exports = function (grunt) {
             }
             , all: ['Gruntfile.js'].concat(tests)
         }
-        , typescript: {
+        , ts: {
             options: {
                 module: 'commonjs',
                 target: 'es5'
@@ -64,14 +64,14 @@ module.exports = function (grunt) {
         }
         , watch: {
             files: tsFiles
-            , tasks: ['lint', 'typescript', 'file_append:bin', 'shell:link']
+            , tasks: ['lint', 'ts', 'file_append:bin', 'shell:link']
         }
     });
 
 
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-tslint');
-    grunt.loadNpmTasks('grunt-typescript');
+    grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-file-append');
@@ -81,7 +81,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', ['mochaTest']);
 
-    grunt.registerTask('build', ['shell:tsd', 'lint', 'typescript', 'file_append:bin', 'shell:link']);
+    grunt.registerTask('build', ['shell:tsd', 'lint', 'ts', 'file_append:bin', 'shell:link']);
 
     grunt.registerTask('default', ['watch']);
 
