@@ -18,8 +18,10 @@ class ControlsModel implements IModel {
 
     constructor(type?: string, name?: string, registeredName?: string, extendsClass?: string) {
         this.type = (type && type !== '' ? type.toLowerCase().trim() : '');
-        this.name = (name && name !== '' ? name.trim() : 'new' + type);
-        this.registeredName = (registeredName && registeredName !== '' ? registeredName.trim() : this.name.toLowerCase() + '-vc');
+        this.name = (name && name !== '' ? name.substr(0,1).toUpperCase() + name.trim().substr(1) : 'New' + type);
+        this.registeredName = (registeredName && registeredName !== ''
+            ? registeredName.trim()
+            : this.name.toLowerCase() + (this.type === 'viewcontrol' ? '-vc' : ''));
         this.extendsClass = (extendsClass && extendsClass !== '' ? extendsClass.trim() : '');
     }
 
