@@ -73,7 +73,7 @@ commands.push({
         },
         {
             shortFlag: 'e',
-            longFlag: 'extendsClass',
+            longFlag: 'extends',
             description: 'Set the class this control should extend.'
         }
     ]
