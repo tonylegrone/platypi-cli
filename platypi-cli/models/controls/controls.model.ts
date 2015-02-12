@@ -18,7 +18,9 @@ class ControlsModel implements IModel {
 
     constructor(type?: string, name?: string, registeredName?: string, extendsClass?: string) {
         this.type = (type && type !== '' ? type.toLowerCase().trim() : '');
-        this.name = (name && name !== '' ? name.substr(0,1).toUpperCase() + name.trim().substr(1) : 'New' + type);
+
+        this.name = this.__sanitizeInstanceName(name);
+
         this.registeredName = (registeredName && registeredName !== ''
             ? registeredName.trim()
             : this.name.toLowerCase() + (this.type === 'viewcontrol' ? '-vc' : ''));
@@ -27,6 +29,20 @@ class ControlsModel implements IModel {
 
     private __getConfig(): Thenable<config.IPlatypi> {
         return ConfigFinder.findConfig().then(PlatypiConfig.loadFromObject);
+    }
+
+    private __sanitizeInstanceName(instanceName: string): string {
+        instanceName = instanceName.toLowerCase().trim();
+
+        var typeIndex = instanceName.indexOf(this.type);
+
+        if (typeIndex > -1) {
+            instanceName = instanceName.substr(0, typeIndex);
+        }
+
+        instanceName = (instanceName && instanceName !== '' ? instanceName : 'new' + this.type);
+
+        return instanceName;
     }
 
     list(): Thenable<Array<string>> {

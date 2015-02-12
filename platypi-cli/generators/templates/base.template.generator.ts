@@ -61,7 +61,9 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
 
         this.environmentVariables.map((env) => {
             if (env.name === 'name') {
-                name = env.value;
+                name = this._handleClassNameValue(env.value);
+                env.value = this._handleClassNameValue(env.value);
+                console.log('changed name: ' + name);
             } else if (env.name === 'registername') {
                 registerName = env.value;
                 this.registeredName = env.value;
@@ -87,6 +89,10 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
             });
             this.registeredName = this.instanceName;
         }
+    }
+
+    _handleClassNameValue(instanceName: string): string {
+        return instanceName.substr(0, 1).toUpperCase() + instanceName.substr(1).toLowerCase();
     }
 
     /**
@@ -218,7 +224,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
             baseName = baseName.slice(1);
         }
 
-        output += this.instanceName;
+        output += this.instanceName.toLowerCase();
 
         return util.format('%s.%s.%s', output, type, fileType);
     }
@@ -230,7 +236,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
     _copyTemplateTo(destination: string): Thenable<any> {
         return this._resolveTemplateLocation().then((templateLocation) => {
             return fileUtils.readdir(templateLocation).then((files) => {
-                var newFolder = path.join(destination, this.instanceName);
+                var newFolder = path.join(destination, this.instanceName.toLowerCase());
 
                 if (files && files.length > 0) {
                     return fileUtils.mkdir(newFolder).then(() => {
@@ -261,7 +267,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
      */
     _addToProjectConfig(config: config.IPlatypi, controlPath: string): Thenable<any> {
         var newControl: config.IPlatypusControl = {
-            name: this.instanceName,
+            name: this.instanceName.toLowerCase(),
             type: this.__controlName,
             path: path.relative(config.public, controlPath),
             registeredName: this.registeredName
