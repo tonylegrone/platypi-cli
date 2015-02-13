@@ -112,6 +112,23 @@ class CommandHandler {
     }
 
     runCommand(args: any) {
+        // register custom help
+        this.commander.on('--help', function () {
+            console.log('  Examples:');
+            console.log('');
+            console.log('    platypi add viewcontrol [name]');
+            console.log('    platypi add templatecontrol [name]');
+            console.log('    platypi add attributecontrol [name]');
+            console.log('    platypi add repository [name]');
+            console.log('    platypi add injectable [name]');
+            console.log('    platypi add service [name]');
+            console.log('');
+            console.log('  You may also extend components from existing components: ');
+            console.log('    platypi add [type] [name] --extends [name]');
+            console.log('    platypi add viewcontrol [name] --extends [name]');
+            console.log('    platypi add model [name] --extends [name]');
+        });
+
         // No command issued, display help
         if (args.length < 3) {
             this.commander.help();

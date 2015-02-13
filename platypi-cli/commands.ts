@@ -54,7 +54,7 @@ commands.push({
  */
 commands.push({
     command: 'add',
-    description: 'Add a new control to an existing project.',
+    description: 'Add a new component to an existing project.',
     commandParameters: [
         {
             name: 'type'
@@ -69,22 +69,22 @@ commands.push({
         {
             shortFlag: 'r',
             longFlag: 'registername',
-            description: 'Register Name for Control with the framework'
+            description: 'Register Name for the component with the framework'
         },
         {
             shortFlag: 'e',
             longFlag: 'extends',
-            description: 'Set the class this control should extend.'
+            description: 'Set the class this component should extend.'
         }
     ]
 });
 
 /**
- * List Controls Command.
+ * List Components Command.
  */
 commands.push({
     command: 'list',
-    description: 'List controls in a project.',
+    description: 'List components in a project.',
     commandParameters: [],
     CommandView: ListControlsView,
     CommandController: ListControlsController

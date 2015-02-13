@@ -24,10 +24,6 @@ class ExtendsHandler {
             }
             type = type + 's';
 
-            console.log('extends type: ' + type);
-            console.log('exnteds name: ' + extendsName);
-            console.log('controls: ' + JSON.stringify(projectConfig[type]));
-
             if (projectConfig && projectConfig[type]) {
                 var _control: config.IPlatypusControl;
 

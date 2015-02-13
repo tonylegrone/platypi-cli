@@ -77,7 +77,6 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
             if (env.name === 'name') {
                 name = this._handleClassNameValue(env.value);
                 env.value = this._handleClassNameValue(env.value);
-                console.log('changed name: ' + name);
             } else if (env.name === 'registername') {
                 registerName = env.value;
                 this.registeredName = env.value;

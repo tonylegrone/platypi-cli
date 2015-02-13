@@ -27,7 +27,7 @@ class ControlsModel implements IModel {
                 : this.name.toLowerCase() + (this.type === 'viewcontrol' ? '-vc' : ''));
         }
 
-        this.extendsClass = (extendsClass && extendsClass !== '' ? extendsClass.trim() : '');
+        this.extendsClass = (extendsClass && extendsClass !== '' ? extendsClass.trim() : 'base');
     }
 
     private __getConfig(): Thenable<config.IPlatypi> {
