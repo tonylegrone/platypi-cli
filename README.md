@@ -25,23 +25,23 @@ npm test
 
 ###Generating a Project
 ```
-platypi create <type> <name>
+platypi create <name>
 ```
-Types: mobile / web
 
-###Adding a Control
+###Adding a component
 ```
 platypi add <type> <name>
 ```
 Types: viewcontrol, injectable, repository, service, model, templatecontrol, attributecontrol
 
-###Removing a Control
+####Extending a component
+You may extend a component with an existing component using the '--extends <name>' flag. '-e' for short.
 ```
-platypi delete <type> <name>
+platypi add <type> <name> --extends <name>
+platypi add <type> <name> -e <name>
 ```
-Types: viewcontrol, injectable, repository, service, model, templatecontrol, attributecontrol
 
-###List Controls
+###List Components
 ```
 platypi list
 ```
