@@ -24,10 +24,38 @@ class ControlsModel implements IModel {
 
             this.registeredName = (registeredName && registeredName !== ''
                 ? registeredName.trim()
-                : this.name.toLowerCase() + (this.type === 'viewcontrol' ? '-vc' : ''));
+                : this.name.toLowerCase() + this.__registerTag(this.type));
         }
 
         this.extendsClass = (extendsClass && extendsClass !== '' ? extendsClass.trim() : 'base');
+    }
+
+    private __registerTag(type: string): string {
+        switch (type) {
+            case 'attributecontrol':
+                return '-ac';
+
+            case 'injectable':
+                return '-inj';
+
+            case 'model':
+                return '-model';
+
+            case 'repository':
+                return '-repo';
+
+            case 'service':
+                return '-service';
+
+            case 'templatecontrol':
+                return '-tc';
+
+            case 'viewcontrol':
+                return '-vc';
+
+            default:
+                break;
+        }
     }
 
     private __getConfig(): Thenable<config.IPlatypi> {
