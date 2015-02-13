@@ -27,6 +27,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
     registeredName = '';
     fileUtils = fileUtils;
     dirUtils = dirutils;
+    __externalClasses: Array<config.IEnvironmentVariable> = [];
 
     constructor(private __controlName
         , private __projectType
@@ -40,15 +41,28 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
      * Generate import and extends statements when a control extends another control
      * @param paramExtends The name of the control being extended.
      */
-    private __handleExtends(paramExtends: string) {
-        if (paramExtends !== '') {
-            var extender = ExtendsHandler.extendClass(paramExtends, this.__controlName, this._projectConfig);
-            if (extender) {
-                this._extends = extender.extendsStatement;
-                this._imports.push(extender.importStatement);
-            } else {
-                throw 'Extended class not found in project.';
-            }
+    private __handleExtends(env: config.IEnvironmentVariable): Thenable<any> {
+        if (env.name === 'extendsClass') {
+            var paramExtends = env.value;
+            return ExtendsHandler.extendClass(paramExtends, this.__controlName, this._projectConfig).then((extendClass) => {
+                if (extendClass) {
+                    if (!this._extends) {
+                        this._extends = '';
+                    }
+
+                    if (!this._imports) {
+                        this._imports = [];
+                    }
+
+                    this._extends = extendClass.extendsStatement;
+                    this._imports.push(extendClass.importStatement);
+                    return Promise.resolve();
+                } else {
+                    return Promise.reject('Extended class not found in project.');
+                }
+            });
+        } else {
+            return Promise.resolve();
         }
     }
 
@@ -68,7 +82,13 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
                 registerName = env.value;
                 this.registeredName = env.value;
             } else if (env.name === 'extendsClass') {
-                this.__handleExtends(env.value);
+                if (env.value !== '') {
+                    if (!this.__externalClasses) {
+                        this.__externalClasses = [];
+                    }
+
+                    this.__externalClasses.push(env);
+                }
             }
         });
 
@@ -159,6 +179,8 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
                     data = data.replace(regex, '');
                 }
             } else if (variable.name === 'extendsClass') {
+                regex = new RegExp('%extends%', 'g');
+                console.log('this._extends: ' + this._extends);
                 data = data.replace(regex, (this._extends && this._extends !== '' ? this._extends : ''));
             } else {
                 data = data.replace(regex, variable.value);
@@ -325,22 +347,30 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         });
     }
 
+    private __handleAllExternalClasses(): Thenable<any> {
+        return Promise.all(this.__externalClasses.map((classOrInterface) => {
+            return <Promise<any>>(this.__handleExtends(classOrInterface));
+        }));
+    }
+
     /**
      *  Generate the template and reference it in the project config.
      *  @param projectConfig The project config to add the control to.
      */
     generate(projectConfig: config.IPlatypi): Thenable<string> {
-        this._projectConfig = projectConfig;
-        return this._config.getConfig().then((cliConfig) => {
-            globals.console.log('Creating ' + this.__controlName + '..');
-            var controlPath = path.join(projectConfig.public, cliConfig.templates.controlLocation[this.__controlName]);
-            return this._copyTemplateTo(controlPath).then((newPath) => {
-                return this._addReferences(projectConfig, newPath).then(() => {
-                    return this._addRequireToMain(projectConfig, newPath);
-                }).then(() => {
-                    return this._addToProjectConfig(projectConfig, newPath);
-                }).then(() => {
-                    return newPath;
+        return this.__handleAllExternalClasses().then(() => {
+            this._projectConfig = projectConfig;
+            return this._config.getConfig().then((cliConfig) => {
+                globals.console.log('Creating ' + this.__controlName + '..');
+                var controlPath = path.join(projectConfig.public, cliConfig.templates.controlLocation[this.__controlName]);
+                return this._copyTemplateTo(controlPath).then((newPath) => {
+                    return this._addReferences(projectConfig, newPath).then(() => {
+                        return this._addRequireToMain(projectConfig, newPath);
+                    }).then(() => {
+                        return this._addToProjectConfig(projectConfig, newPath);
+                    }).then(() => {
+                        return newPath;
+                    });
                 });
             });
         });
