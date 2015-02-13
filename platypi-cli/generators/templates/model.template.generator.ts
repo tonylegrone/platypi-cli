@@ -4,6 +4,8 @@ import BaseTemplateGenerator = require('./base.template.generator');
 
 class ModelTemplateGenerator extends BaseTemplateGenerator {
     constructor(name: string, registeredName: string, extendsClass?: string) {
+        name = name.toLowerCase().replace(' ', '');
+
         var environmentVariables: Array<config.IEnvironmentVariable> = [
             {
                 name: 'name',
