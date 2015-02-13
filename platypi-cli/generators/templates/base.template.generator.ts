@@ -179,7 +179,6 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
                 }
             } else if (variable.name === 'extendsClass') {
                 regex = new RegExp('%extends%', 'g');
-                console.log('this._extends: ' + this._extends);
                 data = data.replace(regex, (this._extends && this._extends !== '' ? this._extends : ''));
             } else {
                 data = data.replace(regex, variable.value);
