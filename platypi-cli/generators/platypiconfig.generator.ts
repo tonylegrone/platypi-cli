@@ -16,6 +16,7 @@ var generateConfig = (): Thenable<config.IPlatypi> => {
                 type: 'string',
                 pattern: /^[^\s]+$/,
                 message: 'Spaces not allowed in name.',
+                default: 'newproject',
                 required: true
             }
             , description: {
@@ -25,44 +26,25 @@ var generateConfig = (): Thenable<config.IPlatypi> => {
             , author: {
                 description: 'Project Author',
                 type: 'string',
-                required: true
+                required: true,
+                default: 'Platypi'
             }
             , version: {
                 description: 'Version',
                 type: 'string',
-                required: false
-            }
-            , email: {
-                description: 'Contact Email',
-                type: 'string'
-            }
-            , website: {
-                description: 'Project Website',
-                type: 'string'
-            }
-            , type: {
-                description: 'Project Type',
-                default: 'web',
-                type: 'string',
-                pattern: /^web$|^mobile$/,
-                message: 'Valid choices are web or mobile.',
-                required: true
+                default: '0.0.1'
             }
         }
     };
 
     return new Promise((resolve, reject) => {
         consolePrompt.get(schema, (err, response) => {
-            var config: config.IPlatypi = (response.type === 'web' ? PlatypiConfig.CreateNewWebConfig()
-                : PlatypiConfig.CreateNewMobileConfig());
+            var config: config.IPlatypi = PlatypiConfig.CreateNewMobileConfig();
 
             config.name = response.name;
             config.description = response.description;
             config.author = response.author;
             config.version = response.version;
-            config.email = response.email;
-            config.homepage = response.homepage;
-            config.type = response.type;
 
             resolve(config);
         });
