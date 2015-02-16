@@ -23,7 +23,6 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
 
                 projectConfig.public = publicPath;
                 projectConfig.mainFile = mainFile;
-
                 return this.__mapGeneratedControls(projectConfig).then(() => {
                     return projectConfig.save(configPath).then(() => {
                         return this.__preserveStructure(projectConfig);
@@ -67,14 +66,17 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
 
     private __findAndFillPath(control: config.IPlatypusControl, projectConfig: config.IPlatypi): Thenable<config.IPlatypusControl> {
         if (!control.path || control.path === '') {
-            var typePath: string = path.join(projectConfig.public, this.pluralType(control.type));
-            return this.fileUtils.readdir(typePath).then((children) => {
-                if (children.indexOf(control.name) > -1) {
-                    control.path = path.relative(projectConfig.public, path.join(typePath, control.name));
-                    return control;
-                } else {
-                    throw 'Cannot map path to ' + control.type + ' : ' + control.name;
-                }
+            return this._config.getConfig().then((cliConfig) => {
+                var typePath: string = path.join(projectConfig.public, cliConfig.templates.controlLocation[control.type]
+                    || this.pluralType(control.type));
+                return this.fileUtils.readdir(typePath).then((children) => {
+                    if (children.indexOf(control.name) > -1) {
+                        control.path = path.relative(projectConfig.public, path.join(typePath, control.name));
+                        return control;
+                    } else {
+                        throw 'Cannot map path to ' + control.type + ' : ' + control.name;
+                    }
+                });
             });
         } else {
             return Promise.resolve(control);

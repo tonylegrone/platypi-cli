@@ -286,6 +286,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
      *  @param controlPath The path to the newly created control.
      */
     _addToProjectConfig(config: config.IPlatypi, controlPath: string): Thenable<any> {
+        console.log('control path: ' + controlPath);
         var newControl: config.IPlatypusControl = {
             name: this.instanceName.toLowerCase(),
             type: this.__controlName,
