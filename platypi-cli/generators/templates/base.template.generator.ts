@@ -77,6 +77,10 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
             if (env.name === 'name') {
                 name = this._handleClassNameValue(env.value);
                 env.value = this._handleClassNameValue(env.value);
+                this.environmentVariables.push({
+                    name: 'lowername',
+                    value: env.value.toLowerCase()
+                });
             } else if (env.name === 'registername') {
                 registerName = env.value;
                 this.registeredName = env.value;
@@ -96,6 +100,10 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
             this.environmentVariables.push({
                 name: 'name',
                 value: this.__controlName
+            });
+            this.environmentVariables.push({
+                name: 'lowername',
+                value: this.__controlName.toLowerCase()
             });
         } else {
             this.instanceName = name;
