@@ -18,9 +18,7 @@ describe('Command Line Prompt Config Generator', function () {
                 name: 'Test',
                 description: 'Test',
                 author: 'Tester',
-                email: 'test@test.com',
-                homepage: 'getplatypi.com',
-                type: 'web'
+                version: '0.0.1'
             });
         });
 
@@ -37,7 +35,8 @@ describe('Command Line Prompt Config Generator', function () {
             try {
                 expect(promptFunc).to.have.been.called;
                 expect(config).to.be.an.object;
-                expect(config.type).to.equal('web');
+                expect(config.version).to.equal('0.0.1');
+                expect(config.type).to.equal('mobile');
                 done();
             } catch (e) {
                 done(e);
