@@ -58,7 +58,16 @@ describe('Project Template Generator', function () {
                         projectStruct: [
                             'app',
                             'stuff'
-                        ]
+                        ],
+                        controlLocation: {
+                            attribute: "common/controls",
+                            injectable: "common/injectables",
+                            model: "models",
+                            service: "services",
+                            repository: "repositories",
+                            templatecontrol: "common/controls",
+                            viewcontrol: "viewcontrols"
+                        }
                     }
                 }));
 
