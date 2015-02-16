@@ -34,8 +34,11 @@ class ExtendsHandler {
                 });
 
                 if (_control) {
+                    var controlName = _control.name.substring(0, 1).toUpperCase() + _control.name.substr(1),
+                        typeName = _control.type.substr(0, 1).toUpperCase() + _control.type.substr(1);
+
                     return {
-                        extendsStatement: util.format('extends %s', _control.name),
+                        extendsStatement: util.format('extends %s', controlName + typeName),
                         importStatement: util.format('import %s = require(\'%s\');', _control.name, _control.path)
                     };
                 }
