@@ -15,30 +15,30 @@ module.exports = function (grunt) {
     ];
 
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json')
-        , shell: {
+        pkg: grunt.file.readJSON('package.json'),
+        shell: {
             tsd: {
                 command: path.normalize('./node_modules/.bin/tsd') + ' update -so --config ./platypi-cli/tsd.json'
             },
             link: {
                 command: 'npm link'
             }
-        }
-        , tslint: {
+        },
+        tslint: {
             options: {
                 configuration: grunt.file.readJSON('tslint.json')
             }
             , default: {
                 src: tsFiles.concat(lintIgnore)
             }
-        }
-        , jshint: {
+        },
+        jshint: {
             options: {
                 jshintrc: 'jshint.json'
             }
             , all: ['Gruntfile.js'].concat(tests)
-        }
-        , ts: {
+        },
+        ts: {
             options: {
                 module: 'commonjs',
                 target: 'es5'
@@ -46,13 +46,13 @@ module.exports = function (grunt) {
             default: {
                 src: tsFiles
             }
-        }
-        , mochaTest: {
+        },
+        mochaTest: {
             test: {
                 src: tests
             }
-        }
-        , file_append: {
+        },
+        file_append: {
             bin: {
                 // add #! for npm link to transpiled js
                 files: {
@@ -61,8 +61,8 @@ module.exports = function (grunt) {
                     }
                 }
             }
-        }
-        , watch: {
+        },
+        watch: {
             files: tsFiles
             , tasks: ['lint', 'ts', 'file_append:bin', 'shell:link']
         }
@@ -82,6 +82,8 @@ module.exports = function (grunt) {
     grunt.registerTask('test', ['mochaTest']);
 
     grunt.registerTask('build', ['shell:tsd', 'lint', 'ts', 'file_append:bin', 'shell:link']);
+
+    grunt.registerTask('publish', ['shell:tsd', 'lint', 'ts', 'file_append:bin']);
 
     grunt.registerTask('default', ['watch']);
 
