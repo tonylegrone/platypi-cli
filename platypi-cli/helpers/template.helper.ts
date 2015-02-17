@@ -67,7 +67,7 @@ class TemplateHelper<T extends IBaseService> {
         return this.__makeCacheDir(appDataDir)
             .then(this.__makeArchiveCacheDir)
             .then((archivePath) => {
-                var version = package.version || '0.0.1'
+                var version = package.templates.version || '0.0.1'
                     , filePath = path.normalize(util.format('%s/%s.%s', archivePath, version, 'zip'));
 
                 return this.service.getRelease(version, filePath);
