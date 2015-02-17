@@ -3,8 +3,13 @@
 *.js.map
 tslint.json
 jshint.json
-tests/
+tsd.json
 Gruntfile.js
 node_modules/
 typings/
 platypi-cli/typings/
+test/
+coverage/
+.tscache/
+.gitignore
+.git/
