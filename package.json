@@ -2,7 +2,7 @@
   "name": "platypi-cli",
   "version": "0.1.9",
   "description": "A command line interface for working with PlatypusTS projects.",
-  "author": "Donald Jones <donald@getplatypi.com>",
+  "author": "Platypi <support@getplatypi.com>",
   "homepage": "http://getplatypi.com",
   "main": "platypi.js",
   "preferGlobal": true,
