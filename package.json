@@ -55,7 +55,7 @@
         "sinon-chai": "^2.6.0",
         "tsd": "^0.6.0-beta.3"
     },
-    templates: { 
+    "templates": {
         "version": "0.1.9"
     }
 }
