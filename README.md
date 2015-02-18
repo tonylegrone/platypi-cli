@@ -28,7 +28,7 @@ platypi create <name>
 ```
 platypi add <type> <name>
 ```
-Types: viewcontrol, injectable, repository, service, model, templatecontrol, attributecontrol
+Types: viewcontrol, injectable, repository, service, factory, templatecontrol, attributecontrol
 
 #### Extending a component
 You may extend a component with an existing component using the '--extends <name>' flag. '-e' for short.
