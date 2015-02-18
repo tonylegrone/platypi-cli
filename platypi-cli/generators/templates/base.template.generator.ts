@@ -294,7 +294,6 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
      *  @param controlPath The path to the newly created control.
      */
     _addToProjectConfig(config: config.IPlatypi, controlPath: string): Thenable<any> {
-        console.log('control path: ' + controlPath);
         var newControl: config.IPlatypusControl = {
             name: this.instanceName.toLowerCase(),
             type: this.__controlName,
@@ -368,7 +367,6 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         return this.__handleAllExternalClasses().then(() => {
             this._projectConfig = projectConfig;
             return this._config.getConfig().then((cliConfig) => {
-                globals.console.log('Creating ' + this.__controlName + '..');
                 var controlPath = path.join(projectConfig.public, cliConfig.templates.controlLocation[this.__controlName]);
                 return this._copyTemplateTo(controlPath).then((newPath) => {
                     return this._addReferences(projectConfig, newPath).then(() => {
