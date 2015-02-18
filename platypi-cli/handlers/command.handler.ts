@@ -126,7 +126,7 @@ class CommandHandler {
             console.log('  You may also extend components from existing components: ');
             console.log('    platypi add [type] [name] --extends [name]');
             console.log('    platypi add viewcontrol [name] --extends [name]');
-            console.log('    platypi add model [name] --extends [name]');
+            console.log('    platypi add factory [name] --extends [name]');
         });
 
         // No command issued, display help

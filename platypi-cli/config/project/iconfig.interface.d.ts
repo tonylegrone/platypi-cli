@@ -21,7 +21,7 @@ declare module config {
         viewcontrols?: Array<IPlatypusControl>;
         injectables?: Array<IPlatypusControl>;
         services?: Array<IPlatypusControl>;
-        models?: Array<IPlatypusControl>;
+        factories?: Array<IPlatypusControl>;
         repositories?: Array<IPlatypusControl>;
         templatecontrols?: Array<IPlatypusControl>;
         attributecontrols?: Array<IPlatypusControl>;

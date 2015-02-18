@@ -5,7 +5,7 @@ import InjectableGenerator = require('../generators/templates/injectable.templat
 import RepositoryGenerator = require('../generators/templates/repository.template.generator');
 import ServiceGenerator = require('../generators/templates/service.template.generator');
 import TemplateControlGenerator = require('../generators/templates/templatecontrol.template.generator');
-import ModelGenerator = require('../generators/templates/model.template.generator');
+import FactoryGenerator = require('../generators/templates/factory.template.generator');
 import AttributeControlGenerator = require('../generators/templates/attributecontrol.template.generator');
 
 module GeneratorHandler {
@@ -35,8 +35,8 @@ module GeneratorHandler {
             controlGenerator = new ServiceGenerator(instanceName, registeredname, extendsClass);
         } else if (type === 'templatecontrol') {
             controlGenerator = new TemplateControlGenerator(instanceName, registeredname, extendsClass);
-        } else if (type === 'model') {
-            controlGenerator = new ModelGenerator(instanceName, registeredname, extendsClass);
+        } else if (type === 'factory') {
+            controlGenerator = new FactoryGenerator(instanceName, registeredname, extendsClass);
         } else if (type === 'attributecontrol') {
             controlGenerator = new AttributeControlGenerator(instanceName, registeredname, extendsClass);
         } else {

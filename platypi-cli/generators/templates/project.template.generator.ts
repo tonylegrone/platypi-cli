@@ -34,7 +34,7 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
         var controlCollections = [
             { name: 'attributecontrols', controls: projectConfig.attributecontrols },
             { name: 'injectables', controls: projectConfig.injectables },
-            { name: 'models', controls: projectConfig.models },
+            { name: 'factories', controls: projectConfig.factories },
             { name: 'repositories', controls: projectConfig.repositories },
             { name: 'services', controls: projectConfig.services },
             { name: 'templatecontrols', controls: projectConfig.templatecontrols },

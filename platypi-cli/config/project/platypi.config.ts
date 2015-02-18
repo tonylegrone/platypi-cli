@@ -61,7 +61,7 @@ class Config implements config.IPlatypi {
 
     repositories: Array<config.IPlatypusControl> = new Array();
 
-    models: Array<config.IPlatypusControl> = new Array();
+    factories: Array<config.IPlatypusControl> = new Array();
 
     templatecontrols: Array<config.IPlatypusControl> = new Array();
 

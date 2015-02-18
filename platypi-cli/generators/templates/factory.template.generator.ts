@@ -2,7 +2,7 @@
 
 import BaseTemplateGenerator = require('./base.template.generator');
 
-class ModelTemplateGenerator extends BaseTemplateGenerator {
+class FactoryTemplateGenerator extends BaseTemplateGenerator {
     constructor(name: string, registeredName: string, extendsClass?: string) {
         name = name.toLowerCase().replace(' ', '');
 
@@ -19,9 +19,9 @@ class ModelTemplateGenerator extends BaseTemplateGenerator {
                 name: 'extendsClass',
                 value: (extendsClass && extendsClass !== '' ? extendsClass : 'base')
             }];
-        super('model', 'base', environmentVariables);
+        super('factory', 'base', environmentVariables);
     }
 }
 
-export = ModelTemplateGenerator;
+export = FactoryTemplateGenerator;
 

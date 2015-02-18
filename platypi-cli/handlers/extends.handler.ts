@@ -20,6 +20,7 @@ class ExtendsHandler {
      *  @param projectConfig The config of the current project that contains all control settings.
      */
     static extendClass(extendsName: string, controlType: string, projectConfig?: config.IPlatypi): Thenable<IExtendsClass> {
+        console.log('extending: ' + extendsName + ' controlType: ' + controlType);
         return ExtendsHandler.FulfillConfig(projectConfig).then((projectConfig) => {
             return CliConfig.config.getConfig().then((cliConfig) => {
                 var type = controlType;
@@ -45,7 +46,6 @@ class ExtendsHandler {
 
                         return {
                             extendsStatement: util.format('extends %s', controlName + typeName),
-                            // importStatement: util.format('import %s = require(\'%s\');', _control.name, _control.path)
                             importStatement: util.format('import %s = %s', titleCaseName,
                                 pathsUtil.newRequireString(util.format('../%s',
                                     path.relative(controlLocation, _control.path + '//' + _control.name + '.' + _control.type))))
