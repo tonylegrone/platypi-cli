@@ -2,6 +2,7 @@
 
 import util = require('util');
 import path = require('path');
+import pathsUtil = require('../utils/paths.util');
 import fileutils = require('../utils/file.utils');
 import promises = require('es6-promise');
 
@@ -43,7 +44,7 @@ class MainFileHandler {
                         }
 
                         return fileutils.appendFileAt(projectConfig.mainFile, typePos, '\n'
-                            + this.newRequireString(relativePathToControlFile));
+                            + pathsUtil.newRequireString(relativePathToControlFile));
                     });
                 })).then(() => {
                     return '';
@@ -78,7 +79,7 @@ class MainFileHandler {
                         relativePathToControlFile = './' + relativePathToControlFile;
 
                         // the require statement to look for
-                        var requireStatement = this.newRequireString(relativePathToControlFile);
+                        var requireStatement = pathsUtil.newRequireString(relativePathToControlFile);
 
                         // the new MainFile data to write to disk
                         var newMainFile: string = mainData.slice(0, mainData.indexOf(requireStatement));
@@ -95,15 +96,6 @@ class MainFileHandler {
                 return Promise.resolve('');
             }
         });
-    }
-
-    /**
-     *  Creates a new 'require' string from the provided control path.
-     *  @param controlPath The relative path to the control to be required.
-     */
-    static newRequireString(controlPath: string): string {
-        controlPath = controlPath.replace(/\\/g, '/');
-        return 'require(\'' + controlPath + '\');\n';
     }
 
     /**
