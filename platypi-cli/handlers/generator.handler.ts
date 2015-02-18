@@ -37,7 +37,7 @@ module GeneratorHandler {
             controlGenerator = new TemplateControlGenerator(instanceName, registeredname, extendsClass);
         } else if (type === 'model') {
             controlGenerator = new ModelGenerator(instanceName, registeredname, extendsClass);
-        } else if (type === 'attribute') {
+        } else if (type === 'attributecontrol') {
             controlGenerator = new AttributeControlGenerator(instanceName, registeredname, extendsClass);
         } else {
             throw 'Unknown control type.';
