@@ -4,6 +4,7 @@ import path = require('path');
 import util = require('util');
 import fileutils = require('../utils/file.utils');
 import promises = require('es6-promise');
+import pathsUtil = require('../utils/paths.util');
 
 var Promise = promises.Promise;
 
@@ -38,7 +39,7 @@ class ReferencesHandler {
                             }
 
                             return fileutils.appendFileAt(referenceFileLocation, typePos, '\n'
-                                    + this.newReferenceString(relativePathToReferenceFile));
+                                + pathsUtil.newReferenceString(relativePathToReferenceFile));
                         });
                     } else {
                         return Promise.resolve('');
@@ -68,7 +69,7 @@ class ReferencesHandler {
                         return fileutils.readFile(referenceFileLocation, { encoding: 'utf8' }).then((referenceData: string) => {
                             var relativePathToReferenceFile = path.join(relativePathToReference, file);
 
-                            var referenceString = this.newReferenceString(relativePathToReferenceFile);
+                            var referenceString = pathsUtil.newReferenceString(relativePathToReferenceFile);
 
                             var newReferenceFile = referenceData.slice(0, referenceData.indexOf(referenceString));
 
@@ -87,15 +88,6 @@ class ReferencesHandler {
                 return Promise.resolve('');
             }
         });
-    }
-
-    /**
-     *  Creates a new TypeScript reference string from the provided path.
-     *  @param referencePath The relative path to the interface to be referenced.
-     */
-    static newReferenceString(referencePath: string): string {
-        referencePath = referencePath.replace(/\\/g, '/');
-        return '/// <reference path=\"' + referencePath + '\" />';
     }
 
     /**

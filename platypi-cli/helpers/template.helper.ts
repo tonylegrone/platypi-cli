@@ -81,7 +81,7 @@ class TemplateHelper<T extends IBaseService> {
     updateTemplates(appDataDir: string): Thenable<string> {
         return this.__downloadTemplates(appDataDir)
             .then((zipLocation) => {
-                var version = package.version || '0.0.1'
+                var version = package.templates.version || '0.0.1'
                     , extractDir = path.normalize(util.format('%s/%s', this.cacheDir, version));
 
                 var zip = new ZipUtil(zipLocation);

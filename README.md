@@ -1,57 +1,53 @@
 #Platypi Command Line Interface
 
-##Getting Started
+## Getting Started
 
-###Install
+### Install
 ```
-git clone https://github.com/Platypi/platypi-cli.git
-```
-####then
-```
-npm install
+npm install platypi-cli -g
 ```
 
-###Building
+### Building
 ```
 grunt build
 ```
 
-###Testing
+### Testing
 ```
 npm test
 ```
 
-##Usage
+## Usage
 
-###Generating a Project
+### Generating a Project
 ```
 platypi create <name>
 ```
 
-###Adding a component
+### Adding a component
 ```
 platypi add <type> <name>
 ```
-Types: viewcontrol, injectable, repository, service, model, templatecontrol, attributecontrol
+Types: viewcontrol, injectable, repository, service, factory, templatecontrol, attributecontrol
 
-####Extending a component
+#### Extending a component
 You may extend a component with an existing component using the '--extends <name>' flag. '-e' for short.
 ```
 platypi add <type> <name> --extends <name>
 platypi add <type> <name> -e <name>
 ```
 
-###List Components
+### List Components
 ```
 platypi list
 ```
 
-###Forcing Updates
+### Forcing Updates
 ```
 platypi update
 ```
 
-###Clearing Cache
+### Clearing Cache
 ```
 platypi cache-clean
 ```

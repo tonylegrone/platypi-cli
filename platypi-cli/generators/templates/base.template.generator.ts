@@ -43,7 +43,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
      */
     private __handleExtends(env: config.IEnvironmentVariable): Thenable<any> {
         if (env.name === 'extendsClass') {
-            var paramExtends = env.value;
+            var paramExtends = env.value.toLowerCase();
             return ExtendsHandler.extendClass(paramExtends, this.__controlName, this._projectConfig).then((extendClass) => {
                 if (extendClass) {
                     if (!this._extends) {
@@ -176,7 +176,8 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         this.environmentVariables.forEach((variable) => {
             var regex = new RegExp('%' + variable.name + '%', 'g');
 
-            if (variable.name === 'import') {
+            if (variable.name === 'extendsClass') {
+                regex = new RegExp('%import%', 'g');
                 if (this._imports && this._imports.length > 0) {
                     var importStrings = this._imports.reduce((prev, curr) => {
                         return prev + '\r\n' + curr;
@@ -185,7 +186,6 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
                 } else {
                     data = data.replace(regex, '');
                 }
-            } else if (variable.name === 'extendsClass') {
                 regex = new RegExp('%extends%', 'g');
                 data = data.replace(regex, (this._extends && this._extends !== '' ? this._extends : ''));
             } else {
@@ -294,7 +294,6 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
      *  @param controlPath The path to the newly created control.
      */
     _addToProjectConfig(config: config.IPlatypi, controlPath: string): Thenable<any> {
-        console.log('control path: ' + controlPath);
         var newControl: config.IPlatypusControl = {
             name: this.instanceName.toLowerCase(),
             type: this.__controlName,
@@ -368,7 +367,6 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         return this.__handleAllExternalClasses().then(() => {
             this._projectConfig = projectConfig;
             return this._config.getConfig().then((cliConfig) => {
-                globals.console.log('Creating ' + this.__controlName + '..');
                 var controlPath = path.join(projectConfig.public, cliConfig.templates.controlLocation[this.__controlName]);
                 return this._copyTemplateTo(controlPath).then((newPath) => {
                     return this._addReferences(projectConfig, newPath).then(() => {

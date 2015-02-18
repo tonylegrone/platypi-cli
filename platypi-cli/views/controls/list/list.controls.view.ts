@@ -7,8 +7,8 @@ class ListControlsView extends BaseView {
 
     constructor() {
         super();
-        this._errorText = 'Could not list controls: %s';
-        this._responseText = 'List of controls: %s';
+        this._errorText = 'Could not list components: %s';
+        this._responseText = 'List of components: %s';
     }
 
     display() {
@@ -34,7 +34,7 @@ class ListControlsView extends BaseView {
 
             return;
         } else {
-            this.logger.warning('No controls in project.');
+            this.logger.warning('No components in project.');
             return;
         }
     }

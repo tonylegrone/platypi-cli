@@ -15,7 +15,7 @@ class ViewControlTemplateGenerator extends BaseTemplateGenerator {
             },
             {
                 name: 'extendsClass',
-                value: (extendsClass && extendsClass !== '' ? extendsClass : '')
+                value: (extendsClass && extendsClass !== '' ? extendsClass : 'base')
             }];
         super('viewcontrol', type, environmentVariables);
     }

@@ -15,7 +15,7 @@ class TemplateControlTemplateGenerator extends BaseTemplateGenerator {
             },
             {
                 name: 'extendsClass',
-                value: (extendsClass && extendsClass !== '' ? extendsClass : '')
+                value: (extendsClass && extendsClass !== '' ? extendsClass : 'base')
             }];
         super('templatecontrol', 'base', environmentVariables);
     }

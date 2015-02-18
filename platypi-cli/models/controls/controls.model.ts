@@ -27,7 +27,7 @@ class ControlsModel implements IModel {
                 : this.name.toLowerCase() + this.__registerTag(this.type));
         }
 
-        this.extendsClass = (extendsClass && extendsClass !== '' ? extendsClass.trim() : 'base');
+        this.extendsClass = (extendsClass && extendsClass !== '' ? extendsClass.trim() : '');
     }
 
     private __registerTag(type: string): string {
@@ -38,8 +38,8 @@ class ControlsModel implements IModel {
             case 'injectable':
                 return '-inj';
 
-            case 'model':
-                return '-model';
+            case 'factory':
+                return '-factory';
 
             case 'repository':
                 return '-repo';
@@ -86,8 +86,8 @@ class ControlsModel implements IModel {
             // injectables
             controlsTable = controlsTable.concat(this.__formatControlTypeString('Injectables', config.injectables));
 
-            // models
-            controlsTable = controlsTable.concat(this.__formatControlTypeString('Models', config.models));
+            // factories
+            controlsTable = controlsTable.concat(this.__formatControlTypeString('Factories', config.factories));
 
             // repositories
             controlsTable = controlsTable.concat(this.__formatControlTypeString('Repositories', config.repositories));

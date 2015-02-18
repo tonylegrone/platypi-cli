@@ -15,7 +15,7 @@
                 base: {
                     attribute: string;
                     injectable: string;
-                    model: string;
+                    factory: string;
                     repository: string;
                     service: string;
                     templatecontrol: string;
@@ -31,7 +31,7 @@
             controlLocation: {
                 attribute: string;
                 injectable: string;
-                model: string;
+                factory: string;
                 repository: string;
                 service: string;
                 templatecontrol: string;
