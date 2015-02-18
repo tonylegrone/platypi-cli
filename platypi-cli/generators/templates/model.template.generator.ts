@@ -17,7 +17,7 @@ class ModelTemplateGenerator extends BaseTemplateGenerator {
             },
             {
                 name: 'extendsClass',
-                value: (extendsClass && extendsClass !== '' ? extendsClass : '')
+                value: (extendsClass && extendsClass !== '' ? extendsClass : 'base')
             }];
         super('model', 'base', environmentVariables);
     }

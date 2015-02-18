@@ -27,7 +27,7 @@ class ControlsModel implements IModel {
                 : this.name.toLowerCase() + this.__registerTag(this.type));
         }
 
-        this.extendsClass = (extendsClass && extendsClass !== '' ? extendsClass.trim() : (this.type !== 'attributecontrol' ? 'base' : ''));
+        this.extendsClass = (extendsClass && extendsClass !== '' ? extendsClass.trim() : '');
     }
 
     private __registerTag(type: string): string {
