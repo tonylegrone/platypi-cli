@@ -11,5 +11,6 @@ platypi-cli/typings/
 test/
 coverage/
 .tscache/
+.gitattributes
 .gitignore
 .git/
