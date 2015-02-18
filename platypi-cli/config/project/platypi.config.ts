@@ -105,7 +105,15 @@ class Config implements config.IPlatypi {
         if (type.substr(type.length - 1, type.length) === 'y') {
             type = type.replace('y', 'ie');
         }
-        this[type + 's'].push(control);
+        var configTypeConfig = this[type + 's'];
+        if (!configTypeConfig) {
+            if (this[type + 'controls']) {
+                configTypeConfig = this[type + 'controls'];
+            } else {
+                throw 'Control type: ' + configTypeConfig + ' not found in project config.';
+            }
+        }
+        configTypeConfig.push(control);
     }
 
     removeControl(type: string, name: string): config.IPlatypusControl {
