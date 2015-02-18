@@ -176,7 +176,8 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
         this.environmentVariables.forEach((variable) => {
             var regex = new RegExp('%' + variable.name + '%', 'g');
 
-            if (variable.name === 'import') {
+            if (variable.name === 'extendsClass') {
+                regex = new RegExp('%import%', 'g');
                 if (this._imports && this._imports.length > 0) {
                     var importStrings = this._imports.reduce((prev, curr) => {
                         return prev + '\r\n' + curr;
@@ -185,7 +186,6 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
                 } else {
                     data = data.replace(regex, '');
                 }
-            } else if (variable.name === 'extendsClass') {
                 regex = new RegExp('%extends%', 'g');
                 data = data.replace(regex, (this._extends && this._extends !== '' ? this._extends : ''));
             } else {
