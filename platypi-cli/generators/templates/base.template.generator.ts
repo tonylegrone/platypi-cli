@@ -43,7 +43,7 @@ class BaseTemplateGenerator implements generators.ITemplateGenerator {
      */
     private __handleExtends(env: config.IEnvironmentVariable): Thenable<any> {
         if (env.name === 'extendsClass') {
-            var paramExtends = env.value;
+            var paramExtends = env.value.toLowerCase();
             return ExtendsHandler.extendClass(paramExtends, this.__controlName, this._projectConfig).then((extendClass) => {
                 if (extendClass) {
                     if (!this._extends) {
