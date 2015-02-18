@@ -57,7 +57,7 @@ module.exports = function (grunt) {
                 // add #! for npm link to transpiled js
                 files: {
                     './platypi-cli/platypi.js': {
-                        prepend: '#!/usr/bin/env node\r\n'
+                        prepend: '#!/usr/bin/env node\n'
                     }
                 }
             }
