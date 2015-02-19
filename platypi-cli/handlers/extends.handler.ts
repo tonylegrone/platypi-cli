@@ -20,6 +20,15 @@ class ExtendsHandler {
      *  @param projectConfig The config of the current project that contains all control settings.
      */
     static extendClass(extendsName: string, controlType: string, projectConfig?: config.IPlatypi): Thenable<IExtendsClass> {
+        if (extendsName.indexOf('plat.') > -1) {
+            var extendsPlat = extendsName.replace('plat.', '');
+
+            return Promise.resolve({
+                extendsStatement: 'extends plat.' + ExtendsHandler.TitleCaseControlType(extendsPlat),
+                importStatement: ''
+            });
+        }
+
         return ExtendsHandler.FulfillConfig(projectConfig).then((projectConfig) => {
             return CliConfig.config.getConfig().then((cliConfig) => {
                 var type = controlType;
