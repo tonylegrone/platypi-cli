@@ -25,13 +25,10 @@ class ProjectModel implements IModel {
             this.projectConfig.cordovaId = 'plat.' + ProjectModel.SanitizeCordovaId(name);
         }
 
-        console.log('after : ' + this.projectConfig.cordovaId);
-
         this.environmentVariables = EnvironmentVariableHandler.parseVariables(this.projectConfig);
     }
 
     static SanitizeCordovaId(id: string): string {
-        console.log('before: ' + id);
         var illiegalCharacters: Array<string> = [
             '-',
             ' '
