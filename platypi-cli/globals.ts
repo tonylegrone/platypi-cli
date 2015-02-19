@@ -11,5 +11,6 @@ export var package = require('../package.json');
 export var identifyApplication = () => {
     msg.label('Platypi Command Line Interface');
     msg.log('Version ' + package.version);
+    msg.warning('Templates Version ' + package.templates.version);
 };
 
