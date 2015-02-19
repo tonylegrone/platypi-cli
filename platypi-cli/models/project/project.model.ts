@@ -17,6 +17,7 @@ class ProjectModel implements IModel {
         }
 
         this.projectConfig.name = this.name;
+        this.projectConfig.cordovaName = ProjectModel.SanitizeCordovaId(this.anem);
 
         if (cordovaId) {
             this.projectConfig.cordovaId = ProjectModel.SanitizeCordovaId(cordovaId);

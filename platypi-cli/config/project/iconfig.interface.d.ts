@@ -8,6 +8,7 @@ declare module config {
     export interface IPlatypi {
         templatesVersion?: string;
         cordovaId?: string;
+        cordovaName: string;
         configPath?: string;
         name?: string;
         description?: string;
