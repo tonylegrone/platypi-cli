@@ -39,11 +39,11 @@ describe('Attribute Control template Generator', function () {
                     templates: {
                         lastUpdated: new Date(2012, 01, 01),
                         controlLocation: {
-                            attribute: path.normalize('fake/location')
+                            attributecontrol: path.normalize('fake/location')
                         },
                         controls: {
                             base: {
-                                attribute: path.normalize('./fake/attribute/location')
+                                attributecontrol: path.normalize('./fake/attribute/location')
                             }
                         },
                         baseLocation: path.normalize('fake/base/location')

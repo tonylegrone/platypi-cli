@@ -17,7 +17,7 @@ class AttributeControlTemplateGenerator extends BaseTemplateGenerator {
                 name: 'extendsClass',
                 value: (extendsClass && extendsClass !== '' ? extendsClass : '')
             }];
-        super('attribute', 'base', environmentVariables);
+        super('attributecontrol', 'base', environmentVariables);
     }
 }
 

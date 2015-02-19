@@ -13,7 +13,7 @@
             };
             controls: {
                 base: {
-                    attribute: string;
+                    attributecontrol: string;
                     injectable: string;
                     factory: string;
                     repository: string;
@@ -29,7 +29,7 @@
             };
             projectStruct: Array<string>;
             controlLocation: {
-                attribute: string;
+                attributecontrol: string;
                 injectable: string;
                 factory: string;
                 repository: string;
