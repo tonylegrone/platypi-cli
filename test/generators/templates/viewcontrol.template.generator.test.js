@@ -9,6 +9,7 @@
     , ViewGenerator = require('../../../platypi-cli/generators/templates/viewcontrol.template.generator')
     , ReferenceHandler = require('../../../platypi-cli/handlers/references.handler')
     , MainFileHandler = require('../../../platypi-cli/handlers/mainfile.handler')
+    , Finder = require('../../../platypi-cli/config/project/config.finder')
     , globals = require('../../../platypi-cli/globals');
 
 chai.use(sinonChai);
@@ -29,7 +30,13 @@ describe('View Control template Generator', function () {
                 },
                 addControl: function () {
                     return;
-                }
+                },
+                viewcontrols: [
+                    {
+                        name: 'base',
+                        type: 'viewcontrol'
+                    }
+                ]
             };
 
             // stub methods
@@ -104,6 +111,10 @@ describe('View Control template Generator', function () {
             // suppress any logging from module
             sandbox.stub(globals.console, 'log', function () {
                 return;
+            });
+
+            sandbox.stub(Finder, 'findConfig', function () {
+                return Promise.resolve(mockProjectConfig);
             });
 
             done();
