@@ -42,16 +42,24 @@ class ProjectTemplateGenerator extends BaseTemplateGenerator {
         ];
 
         return Promise.all(controlCollections.map((collection) => {
-            return <Promise<any>>(this.__mapControlCollection(collection.controls, projectConfig).then((newCollection) => {
-                return projectConfig[collection.name] = newCollection;
-            }));
+            if (collection && collection.controls) {
+                return <Promise<any>>(this.__mapControlCollection(collection.controls, projectConfig).then((newCollection) => {
+                    return projectConfig[collection.name] = newCollection;
+                }));
+            } else {
+                return Promise.resolve();
+            }
         }));
     }
 
     private __mapControlCollection(controlCollection: Array<config.IPlatypusControl>, projectConfig: config.IPlatypi): Thenable<any> {
-        return Promise.all(controlCollection.map((control) => {
-            return <Promise<config.IPlatypusControl>>this.__findAndFillPath(control, projectConfig);
-        }));
+        if (controlCollection) {
+            return Promise.all(controlCollection.map((control) => {
+                return <Promise<config.IPlatypusControl>>this.__findAndFillPath(control, projectConfig);
+            }));
+        } else {
+            return Promise.resolve();
+        }
     }
 
     private pluralType(type: string): string {

@@ -9,6 +9,7 @@
     , TemplateGenerator = require('../../../platypi-cli/generators/templates/templatecontrol.template.generator')
     , ReferenceHandler = require('../../../platypi-cli/handlers/references.handler')
     , MainFileHandler = require('../../../platypi-cli/handlers/mainfile.handler')
+    , Finder = require('../../../platypi-cli/config/project/config.finder')
     , globals = require('../../../platypi-cli/globals');
 
 chai.use(sinonChai);
@@ -29,7 +30,13 @@ describe('Template Control template Generator', function () {
                 },
                 addControl: function () {
                     return;
-                }
+                },
+                templatecontrols: [
+                    {
+                        name: 'base',
+                        type: 'templatecontrol'
+                    }
+                ]
             };
 
             // stub methods
@@ -100,6 +107,10 @@ describe('Template Control template Generator', function () {
             // suppress any logging from module
             sandbox.stub(globals.console, 'log', function () {
                 return;
+            });
+
+            sandbox.stub(Finder, 'findConfig', function () {
+                return Promise.resolve(mockProjectConfig);
             });
 
             done();

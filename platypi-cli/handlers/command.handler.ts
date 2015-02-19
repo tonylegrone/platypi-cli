@@ -1,6 +1,7 @@
 /// <reference path="../_references.d.ts" />
 
 import util = require('util');
+var package = require('../../package.json');
 
 class CommandHandler {
     public registeredCommands = [];
@@ -127,6 +128,9 @@ class CommandHandler {
             console.log('    platypi add [type] [name] --extends [name]');
             console.log('    platypi add viewcontrol [name] --extends [name]');
             console.log('    platypi add factory [name] --extends [name]');
+            console.log('');
+            console.log('CLI version: ' + package.version);
+            console.log('  Templates: ' + package.templates.version);
         });
 
         // No command issued, display help
