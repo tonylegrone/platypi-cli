@@ -9,6 +9,7 @@
     , ServiceGenerator = require('../../../platypi-cli/generators/templates/service.template.generator')
     , ReferenceHandler = require('../../../platypi-cli/handlers/references.handler')
     , MainFileHandler = require('../../../platypi-cli/handlers/mainfile.handler')
+    , Finder = require('../../../platypi-cli/config/project/config.finder')
     , globals = require('../../../platypi-cli/globals');
 
 chai.use(sinonChai);
@@ -29,7 +30,13 @@ describe('Service Control template Generator', function () {
                 },
                 addControl: function () {
                     return;
-                }
+                },
+                services: [
+                    {
+                        name: 'base',
+                        type: 'service'
+                    }
+                ]
             };
 
             // stub methods
@@ -100,6 +107,10 @@ describe('Service Control template Generator', function () {
             // suppress any logging from module
             sandbox.stub(globals.console, 'log', function () {
                 return;
+            });
+
+            sandbox.stub(Finder, 'findConfig', function () {
+                return Promise.resolve(mockProjectConfig);
             });
 
             done();
