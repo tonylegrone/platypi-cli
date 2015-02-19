@@ -1,4 +1,4 @@
-#Platypi Command Line Interface
+# Platypi Command Line Interface
 
 ## Getting Started
 
@@ -16,6 +16,7 @@ grunt build
 ```
 npm test
 ```
+A test coverage report is generated in the coverage/ directory.
 
 ## Usage
 
@@ -41,13 +42,16 @@ platypi add <type> <name> -e <name>
 ```
 platypi list
 ```
+This command will list all platypi components currently configured to a project.
 
 ### Forcing Updates
 ```
 platypi update
 ```
+This command downloads the template files associated with the template version number in the package.json file to the OS specific AppData directory.
 
 ### Clearing Cache
 ```
 platypi cache-clean
 ```
+This command forces the CLI to clear the files stored in the OS specific AppData directory.
