@@ -39,12 +39,13 @@ class ExtendsHandler {
 
                     if (_control) {
                         var controlName = _control.name.substring(0, 1).toUpperCase() + _control.name.substr(1),
-                            typeName = _control.type.substr(0, 1).toUpperCase() + _control.type.substr(1),
                             controlLocation = cliConfig.templates.controlLocation[_control.type],
-                            titleCaseName = ExtendsHandler.TitleCaseString(_control.name) + ExtendsHandler.TitleCaseString(_control.type);
+                            titleCaseControlType = ExtendsHandler.TitleCaseControlType(_control.type),
+                            titleCaseName = ExtendsHandler.TitleCaseControlType(_control.name)
+                                + ExtendsHandler.TitleCaseControlType(_control.type);
 
                         return {
-                            extendsStatement: util.format('extends %s', controlName + typeName),
+                            extendsStatement: util.format('extends %s', controlName + titleCaseControlType),
                             importStatement: util.format('import %s = %s', titleCaseName,
                                 pathsUtil.newRequireString(util.format('../%s',
                                     path.relative(controlLocation, _control.path + '//' + _control.name + '.' + _control.type))))
@@ -59,8 +60,16 @@ class ExtendsHandler {
         });
     }
 
-    static TitleCaseString(str: string): string {
-        return str.substr(0, 1).toUpperCase() + str.substr(1);
+    static TitleCaseControlType(str: string): string {
+        var controlIndex = str.indexOf('control');
+
+        str = str.substr(0, 1).toUpperCase() + str.substr(1);
+
+        if (controlIndex > -1) {
+            str = str.substr(0, controlIndex) +  str.substr(controlIndex, 1).toUpperCase() + str.substr(controlIndex + 1);
+        }
+
+        return str;
     }
 
     static FulfillConfig(projectConfig?: config.IPlatypi): Thenable<config.IPlatypi> {
