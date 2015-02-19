@@ -3,6 +3,10 @@
 import ProjectGenerator = require('../../../generators/templates/project.template.generator');
 import Model = require('../../../models/project/project.model');
 import ConfigGenerator = require('../../../generators/platypiconfig.generator');
+import Finder = require('../../../config/project/config.finder');
+import promises = require('es6-promise');
+
+var Promise = promises.Promise;
 
 class NewProjectController implements IController {
     public model;
@@ -22,16 +26,20 @@ class NewProjectController implements IController {
     }
 
     create(): Thenable<string> {
-        if (this.init) {
-            return this.configGen().then((newConfig) => {
-                this.model = new Model(newConfig.type, newConfig.name, newConfig);
+        return Finder.findConfig().then((config) => {
+            return Promise.reject('A project already exists in this directory!');
+        },(err) => {
+            if (this.init) {
+                return this.configGen().then((newConfig) => {
+                    this.model = new Model(newConfig.type, newConfig.name, newConfig);
+                    var generator = new ProjectGenerator(this.model.type, this.model.environmentVariables);
+                    return generator.generate();
+                });
+            } else {
                 var generator = new ProjectGenerator(this.model.type, this.model.environmentVariables);
                 return generator.generate();
-            });
-        } else {
-            var generator = new ProjectGenerator(this.model.type, this.model.environmentVariables);
-            return generator.generate();
-        }
+            }
+        });
     }
 
     getResponseView(): Thenable<any> {
