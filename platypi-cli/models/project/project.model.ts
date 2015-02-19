@@ -19,12 +19,28 @@ class ProjectModel implements IModel {
         this.projectConfig.name = this.name;
 
         if (cordovaId) {
-            this.projectConfig.cordovaId = cordovaId;
+            this.projectConfig.cordovaId = ProjectModel.SanitizeCordovaId(cordovaId);
         } else {
-            this.projectConfig.cordovaId = 'plat.' + name;
+            this.projectConfig.cordovaId = 'plat.' + ProjectModel.SanitizeCordovaId(name);
         }
 
+        console.log('after : ' + this.projectConfig.cordovaId);
+
         this.environmentVariables = EnvironmentVariableHandler.parseVariables(this.projectConfig);
+    }
+
+    static SanitizeCordovaId(id: string): string {
+        console.log('before: ' + id);
+        var illiegalCharacters: Array<string> = [
+            '-',
+            ' '
+        ];
+
+        illiegalCharacters.forEach((illiegalChar) => {
+            id = id.replace(illiegalChar, '');
+        });
+
+        return id;
     }
 }
 
