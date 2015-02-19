@@ -12,6 +12,7 @@ import AddControlsController = require('./controllers/controls/add/add.controls.
 import CliUpdateTemplatesController = require('./controllers/cli/updatetemplates.controller');
 import CliCacheCleanController = require('./controllers/cli/cacheclean.controller');
 import ListControlsController = require('./controllers/controls/list/list.controls.controller');
+import TemplateVersionController = require('./controllers/cli/templateversion.controller');
 
 var commands: Array<command.ICommand> = [];
 
@@ -112,5 +113,17 @@ commands.push({
     CommandView: CliGenericView,
     CommandController: CliCacheCleanController
 });
+
+
+ /**
+  * Project Template Version
+  */
+ commands.push({
+     command: 'template',
+     description: 'Prints the template version number used to generate the project in the current working directory.',
+     commandParameters: [],
+     CommandView: CliGenericView,
+     CommandController: TemplateVersionController
+ });
 
 export = commands;
