@@ -56,8 +56,8 @@ platypi cache-clean
 ```
 This command forces the CLI to clear the files stored in the OS specific AppData directory.
 
-### Project Template Versions
+### Project Template Version
 ```
-platypi templates
+platypi template
 ```
-Lists the template version number used to generate the project in the current working directory.
+Prints the template version number used to generate the project in the current working directory.
