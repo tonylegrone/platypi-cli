@@ -6,16 +6,17 @@
     , expect = chai.expect
     , Promise = require('es6-promise').Promise
     , CliConfig = require('../../../platypi-cli/config/cli/platypicli.config')
-    , ModelGenerator = require('../../../platypi-cli/generators/templates/model.template.generator')
+    , FactoryGenerator = require('../../../platypi-cli/generators/templates/factory.template.generator')
     , ReferenceHandler = require('../../../platypi-cli/handlers/references.handler')
     , MainFileHandler = require('../../../platypi-cli/handlers/mainfile.handler')
+    , Finder = require('../../../platypi-cli/config/project/config.finder')
     , globals = require('../../../platypi-cli/globals');
 
 chai.use(sinonChai);
 
-describe('Model Control template Generator', function () {
+describe('Factory Control template Generator', function () {
     describe('generate method, no extends', function () {
-        var generator = new ModelGenerator('test', 'test', '');
+        var generator = new FactoryGenerator('test', 'test', '');
 
         var sandbox, mockProjectConfig;
         beforeEach(function (done) {
@@ -29,7 +30,13 @@ describe('Model Control template Generator', function () {
                 },
                 addControl: function () {
                     return;
-                }
+                },
+                factories: [
+                    {
+                        name: 'base',
+                        type: 'factory'
+                    }
+                ]
             };
 
             // stub methods
@@ -39,11 +46,11 @@ describe('Model Control template Generator', function () {
                     templates: {
                         lastUpdated: new Date(2012, 01, 01),
                         controlLocation: {
-                            model: path.normalize('fake/location')
+                            factory: path.normalize('fake/location')
                         },
                         controls: {
                             base: {
-                                model: path.normalize('./fake/model/location')
+                                factory: path.normalize('./fake/factory/location')
                             }
                         },
                         baseLocation: path.normalize('fake/base/location')
@@ -56,12 +63,12 @@ describe('Model Control template Generator', function () {
             });
 
             sandbox.stub(fs, 'readdir', function (dirPath, callback) {
-                if (dirPath === path.normalize("fake\\base\\location\\fake\\model\\location\\topLevel")) {
-                    callback(null, ['model.mock.ts', 'model.mock.d.ts']);
+                if (dirPath === path.normalize("fake\\base\\location\\fake\\factory\\location\\topLevel")) {
+                    callback(null, ['factory.mock.ts', 'factory.mock.d.ts']);
                 } else if (dirPath === path.normalize('fake/public/dir/fake/location/test')) {
                     callback(null, ['topLevel']);
                 } else {
-                    callback(null, ['model.mock.ts', 'model.mock.d.ts']);
+                    callback(null, ['factory.mock.ts', 'factory.mock.d.ts']);
                 }
             });
 
@@ -72,7 +79,7 @@ describe('Model Control template Generator', function () {
             sandbox.stub(fs, 'stat', function (statPath, callback) {
                 callback(null, {
                     isDirectory: function () {
-                        if (path.normalize(statPath) === path.normalize("fake\\base\\location\\fake\\model\\location\\topLevel")) {
+                        if (path.normalize(statPath) === path.normalize("fake\\base\\location\\fake\\factory\\location\\topLevel")) {
                             return true;
                         } else {
                             return false;
@@ -100,6 +107,10 @@ describe('Model Control template Generator', function () {
             // suppress any logging from module
             sandbox.stub(globals.console, 'log', function () {
                 return;
+            });
+
+            sandbox.stub(Finder, 'findConfig', function() {
+                return Promise.resolve(mockProjectConfig);
             });
 
             done();
